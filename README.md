@@ -7,4 +7,5 @@ npm install
 and then
 
 npm start
- 
+
+same steps folow for the back end
