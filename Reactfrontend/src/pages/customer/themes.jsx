@@ -1,7 +1,7 @@
 import React from "react";
-import Sidenav from "../../components/admin_nav/SuperadminSidenav";
 import Box from "@mui/material/Box";
-import TopNavbar from "../../components/admin_nav/topnav"; // Import the new Navbar component
+import Sidenav from "../../components/customer_nav/Customersidenav";
+import TopNavbar from "../../components/customer_nav/Topnavbar"; // Import the Navbar component
 
 const themes = [
   {

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import Sidenav from "../../components/admin_nav/SuperadminSidenav";
-import TopNavbar from "../../components/admin_nav/topnav"; // Import the new Navbar component
+import Sidenav from "../../components/customer_nav/Customersidenav";
+import TopNavbar from "../../components/customer_nav/Topnavbar"; // Import the Navbar component
 
 const Settings = () => {
   const [profileImage, setProfileImage] = useState(null);

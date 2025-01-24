@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import Navbar from "../../components/admin_nav/topnav"; // Adjust the path based on your file structure
-import Sidenav from "../../components/admin_nav/SuperadminSidenav";
+import Navbar from "../../components/customer_nav/Topnavbar"; // Adjust the path based on your file structure
+import Sidenav from "../../components/customer_nav/Customersidenav";
 
 const ProfilePage = () => {
   const [user, setUser] = useState(null);

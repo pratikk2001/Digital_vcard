@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import Sidenav from "../../components/admin_nav/SuperadminSidenav";
-import TopNavbar from "../../components/admin_nav/topnav"; // Import the Navbar component
+import Sidenav from "../../components/customer_nav/Customersidenav";
+import TopNavbar from "../../components/customer_nav/Topnavbar"; // Import the Navbar component
 
-const CostomerDetails = () => {
+const Getcard = () => {
   const [users, setUsers] = useState([
     { name: "Karan Sharma", email: "karanmitash@gmail.com", theme: "Political 1", status: "Active" },
     { name: "Sinan Mintaş", email: "sinanmintas04@gmail.com", theme: "Political 2", status: "Inactive" },
@@ -200,4 +200,4 @@ const CostomerDetails = () => {
   );
 };
 
-export default CostomerDetails;
+export default Getcard;

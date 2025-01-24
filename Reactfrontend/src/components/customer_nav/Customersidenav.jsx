@@ -17,10 +17,10 @@ export default function Sidenav() {
       <div className="w-60 bg-gray-800 text-white h-screen fixed top-0 left-0">
         <div className="p-4 flex items-center space-x-2">
           <SettingsIcon />
-          <h1 className="text-lg font-bold">E-CARD ADMIN</h1>
+          <h1 className="text-lg font-bold">E-CARD</h1>
         </div>
         <div className="mt-6">
-          <div className="space-y-2">
+          {/* <div className="space-y-2">
             {['Settings', 'My Profile'].map((text, index) => (
               <div key={text} onClick={() => navigate("/" + text)} className="px-4 py-2 hover:bg-gray-700 cursor-pointer rounded">
                 <div className="flex items-center space-x-2">
@@ -30,16 +30,16 @@ export default function Sidenav() {
                 </div>
               </div>
             ))}
-          </div>
+          </div> */}
           <div className="mt-6 space-y-2">
-            {['Dashboard', 'Customers', 'Customers Card', 'Themes',  'Logout'].map((text, index) => (
+            {['Dashboard', 'Customers', 'Customers Card', 'Themes'].map((text, index) => (
               <div key={text} onClick={() => navigate("/" + text)} className="px-4 py-2 hover:bg-gray-700 cursor-pointer rounded">
                 <div className="flex items-center space-x-2">
                   {index === 0 ? <DashboardIcon /> : null}
                   {index === 1 ? <InboxIcon /> : null}
                   {index === 2 ? <BarChartIcon /> : null}
                   {index === 3 ? <AccountTreeIcon /> : null}
-                  {index === 4 ? <PowerIcon /> : null}
+                  {/* {index === 4 ? <PowerIcon /> : null} */}
                   <span className="text-gray-400 text-sm">{text}</span>
                 </div>
 

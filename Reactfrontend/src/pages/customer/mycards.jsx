@@ -1,9 +1,8 @@
 import React from "react";
-import TopNavbar from "../../components/admin_nav/topnav"; // Import the new Navbar component
-import Sidenav from "../../components/admin_nav/SuperadminSidenav";
+import Sidenav from "../../components/customer_nav/Customersidenav";
+import TopNavbar from "../../components/customer_nav/Topnavbar"; // Import the Navbar component
 
-
-const SubscribersTable = () => {
+const Mycards = () => {
   const data = [
     {
       vCard: "PK",
@@ -115,4 +114,4 @@ const SubscribersTable = () => {
   );
 };
 
-export default SubscribersTable;
+export default Mycards;

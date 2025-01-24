@@ -12,6 +12,18 @@ import Costomer from './pages/admin/customer_details';
 import Login from './components/admin_auth/login_component/Login';
 import Signup from './components/admin_auth/signup_component/signup';
 
+import CustomerLogin from './components/customer_auth/login_component/Login';
+import CustomerSignup from './components/customer_auth/signup_component/signup';
+
+import CustomerDashboard from './pages/customer/dashboard';
+import CustomerProfile from './pages/customer/CustomerProfile'; 
+import CustomerSettings from './pages/customer/settings';
+import CustomerThemes from './pages/customer/themes';
+import CustomersMyCard from './pages/customer/mycards';
+import CustomerGetCard from './pages/customer/getcard';
+
+
+
 function App() {
   return (
     <BrowserRouter>
@@ -19,11 +31,24 @@ function App() {
         <Route path="/" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/Dashboard" element={<Home />} />
-        <Route path="/Settings" element={<Setting />} />  
-        <Route path="/My Profile" element={<Profile />} />
+        <Route path="/AdminSettings" element={<Setting />} />  
+        <Route path="/AdminProfile" element={<Profile />} />
         <Route path="/Themes" element={<Themes />} />
         <Route path="/Customers Card" element={<CustomerCard />} />
         <Route path="/Customers" element={<Costomer />} />
+
+
+        {/* Customer Routes */}
+        <Route path="/CustomerLogin" element={<CustomerLogin />} />
+        <Route path="/CustomerSignup" element={<CustomerSignup />} />
+        <Route path="/CustomerDashboard" element={<CustomerDashboard />} />
+        <Route path="/CustomerProfile" element={<CustomerProfile />} />
+        <Route path="/CustomerSettings" element={<CustomerSettings />} />
+        <Route path="/CustomerThemes" element={<CustomerThemes />} />
+        <Route path="/CustomerCard" element={<CustomersMyCard />} />
+        <Route path="/GetCard" element={<CustomerGetCard />} />
+
+
       </Routes>
     </BrowserRouter>
   );

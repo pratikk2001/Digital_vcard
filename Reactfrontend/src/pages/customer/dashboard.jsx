@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-import Sidenav from "../../components/admin_nav/SuperadminSidenav";
+import Sidenav from "../../components/customer_nav/Customersidenav";
 import BarAnimation from "./graph/Bar";
 import Product from "../../components/product";
 import CommunityFeedback from "./graph/feedback";
-import TopNavbar from "../../components/admin_nav/topnav"; // Import the new Navbar component
+import TopNavbar from "../../components/customer_nav/Topnavbar"; // Import the new Navbar component 
 
 export default function Home() {
   const [purchases, setPurchases] = useState(null);
