@@ -57,11 +57,12 @@ const themes = [
 export default function Themes() {
   return (
     <div>
-      <TopNavbar></TopNavbar>
+      <TopNavbar />
+  
       <Box sx={{ display: "flex" }}>
         {/* Sidenav */}
         <Sidenav />
-
+  
         {/* Main Content */}
         <Box
           component="main"
@@ -72,19 +73,20 @@ export default function Themes() {
             minHeight: "100vh",
           }}
         >
-          <h1 className="text-2xl font-bold mb-6">Themes</h1>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <h1 className="text-2xl sm:text-3xl font-bold mb-6">Themes</h1>
+  
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {themes.map((theme) => (
               <div
                 key={theme.id}
                 className={`relative rounded-lg shadow-md overflow-hidden ${theme.bgColor}`}
               >
                 <div className="p-4">
-                  <h3 className="font-bold text-lg mb-2">{theme.title}</h3>
+                  <h3 className="font-bold text-lg sm:text-xl mb-2">{theme.title}</h3>
                   <img
                     src={theme.previewImage}
                     alt={`Preview of ${theme.title}`}
-                    className="rounded-md w-full h-40 object-cover"
+                    className="rounded-md w-full h-40 sm:h-48 lg:h-56 object-cover"
                   />
                 </div>
                 <div className="absolute bottom-4 left-0 right-0 text-center">
@@ -99,4 +101,5 @@ export default function Themes() {
       </Box>
     </div>
   );
+  
 }

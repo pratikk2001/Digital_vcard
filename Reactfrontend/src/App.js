@@ -47,8 +47,6 @@ function App() {
         <Route path="/CustomerThemes" element={<CustomerThemes />} />
         <Route path="/CustomerCard" element={<CustomersMyCard />} />
         <Route path="/GetCard" element={<CustomerGetCard />} />
-
-
       </Routes>
     </BrowserRouter>
   );

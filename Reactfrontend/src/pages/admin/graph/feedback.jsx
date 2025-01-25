@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 
 const ProgressBar = ({ negativePercentage, positivePercentage, neutralPercentage }) => {
   return (
@@ -7,21 +7,21 @@ const ProgressBar = ({ negativePercentage, positivePercentage, neutralPercentage
         className="h-full float-left"
         style={{
           width: `${negativePercentage}%`,
-          backgroundColor: '#FF0000',
+          backgroundColor: "#FF0000",
         }}
       ></div>
       <div
         className="h-full float-left"
         style={{
           width: `${positivePercentage}%`,
-          backgroundColor: '#006400',
+          backgroundColor: "#006400",
         }}
       ></div>
       <div
         className="h-full float-left"
         style={{
           width: `${neutralPercentage}%`,
-          backgroundColor: '#90EE90',
+          backgroundColor: "#90EE90",
         }}
       ></div>
     </div>
@@ -30,7 +30,7 @@ const ProgressBar = ({ negativePercentage, positivePercentage, neutralPercentage
 
 const FeedbackSummary = ({ positiveCount, negativeCount, neutralCount }) => {
   return (
-    <div className="flex justify-between  text-gray-700 text-sm w-full space-x-6">
+    <div className="flex justify-between text-gray-700 text-sm w-full space-x-4 md:space-x-6">
       <p>
         Positive: <span className="font-semibold">{positiveCount}</span>
       </p>
@@ -54,22 +54,22 @@ const CommunityFeedback = () => {
     const fetchData = async () => {
       try {
         const response = await fetch(
-          'http://3.227.101.169:8020/api/v1/sample_assignment_api_5/',
+          "http://3.227.101.169:8020/api/v1/sample_assignment_api_5/",
           {
             headers: {
-              Authorization: 'Basic ' + btoa('trial:assignment123'),
+              Authorization: "Basic " + btoa("trial:assignment123"),
             },
           }
         );
         if (!response.ok) {
-          throw new Error('Failed to fetch data');
+          throw new Error("Failed to fetch data");
         }
         const responseData = await response.json();
         setNegativeCount(responseData.negative || 10);
         setPositiveCount(responseData.positive || 70);
         setNeutralCount(responseData.neutral || 20);
       } catch (error) {
-        console.error('Error fetching data:', error);
+        console.error("Error fetching data:", error);
       } finally {
         setLoading(false);
       }
@@ -85,12 +85,14 @@ const CommunityFeedback = () => {
   const neutralPercentage = (neutralCount / total) * 100;
 
   return (
-    <div className="flex flex-col items-center p-8 bg-white rounded-lg shadow-md w-full max-w-3xl mx-auto">
+    <div className="flex flex-col items-center p-4 sm:p-6 lg:p-8 bg-white rounded-lg shadow-md w-full max-w-3xl mx-auto">
       {loading ? (
         <p className="text-gray-600">Loading...</p>
       ) : (
-        <div className="text-center">
-          <h4 className="text-xl font-bold text-gray-800 mb-6">Community Feedback</h4>
+        <div className="w-full">
+          <h4 className="text-lg sm:text-xl lg:text-2xl font-bold text-gray-800 mb-6 text-center">
+            Community Feedback
+          </h4>
           <ProgressBar
             negativePercentage={negativePercentage || 10}
             positivePercentage={positivePercentage || 70}
@@ -105,6 +107,7 @@ const CommunityFeedback = () => {
       )}
     </div>
   );
+  
 };
 
 export default CommunityFeedback;
