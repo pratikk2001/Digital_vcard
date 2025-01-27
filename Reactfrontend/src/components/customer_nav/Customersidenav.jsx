@@ -14,53 +14,51 @@ export default function Sidenav() {
   return (
     <div className="flex">
       {/* Sidebar */}
-      <div className="w-60 bg-gray-800 text-white h-screen fixed top-0 left-0">
+      <div className="w-56 bg-gray-800 text-white h-screen fixed top-0 left-0">
         <div className="p-4 flex items-center space-x-2">
           <SettingsIcon />
           <h1 className="text-lg font-bold">E-CARD</h1>
         </div>
         <div className="mt-6">
-          {/* <div className="space-y-2">
-            {['Settings', 'My Profile'].map((text, index) => (
-              <div key={text} onClick={() => navigate("/" + text)} className="px-4 py-2 hover:bg-gray-700 cursor-pointer rounded">
-                <div className="flex items-center space-x-2">
-                  {index === 0 ? <SettingsIcon /> : null}
-                  {index === 1 ? <AccountCircleIcon /> : null}
-                  <span>{text}</span>
-                </div>
-              </div>
-            ))}
-          </div> */}
           <div className="mt-6 space-y-2">
-            {['Dashboard', 'Customers', 'Customers Card', 'Themes'].map((text, index) => (
-              <div key={text} onClick={() => navigate("/" + text)} className="px-4 py-2 hover:bg-gray-700 cursor-pointer rounded">
-                <div className="flex items-center space-x-2">
-                  {index === 0 ? <DashboardIcon /> : null}
-                  {index === 1 ? <InboxIcon /> : null}
-                  {index === 2 ? <BarChartIcon /> : null}
-                  {index === 3 ? <AccountTreeIcon /> : null}
-                  {/* {index === 4 ? <PowerIcon /> : null} */}
-                  <span className="text-gray-400 text-sm">{text}</span>
-                </div>
-
-                {/* PowerIcon */}
-                {/* InboxIcon */}
-                {/* PowerIcon */}
-                {/* InboxIcon */}
-                {/* BarChartIcon */}
-                {/* AccountTreeIcon */}
-
+            {/* Dashboard route */}
+            <div onClick={() => navigate("/CustomerDashboard")} className="px-4 py-2 hover:bg-gray-700 cursor-pointer rounded">
+              <div className="flex items-center space-x-2">
+                <DashboardIcon />
+                <span className="text-gray-400 text-sm">Dashboard</span>
               </div>
-            ))}
+            </div>
+
+            {/* Customers route */}
+            <div onClick={() => navigate("/CustomersForm")} className="px-4 py-2 hover:bg-gray-700 cursor-pointer rounded">
+              <div className="flex items-center space-x-2">
+                <InboxIcon />
+                <span className="text-gray-400 text-sm">Add Details</span>
+              </div>
+            </div>
+
+            {/* Customers Card route */}
+            <div onClick={() => navigate("/CustomerCard")} className="px-4 py-2 hover:bg-gray-700 cursor-pointer rounded">
+              <div className="flex items-center space-x-2">
+                <BarChartIcon />
+                <span className="text-gray-400 text-sm">My Cards</span>
+              </div>
+            </div>  
+
+            {/* Themes route */}
+            <div onClick={() => navigate("/CustomerThemes")} className="px-4 py-2 hover:bg-gray-700 cursor-pointer rounded">
+              <div className="flex items-center space-x-2">
+                <AccountTreeIcon />
+                <span className="text-gray-400 text-sm">Themes</span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
 
       {/* Main Content */}
       <div className="ml-60 flex-1 p-6">
-        {/* <div className="bg-white shadow-md rounded-lg p-6"> */}
-          {/* Your main content goes here */}
-        {/* </div> */}
+        {/* Your main content goes here */}
       </div>
     </div>
   );

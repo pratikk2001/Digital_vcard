@@ -21,7 +21,7 @@ const Navbar = () => {
           <button className="text-white text-2xl">
             <span className="material-icons">menu</span>
           </button>
-          <h1 className="text-white font-bold text-lg">Dashboard</h1>
+          {/* <h1 className="text-white font-bold text-lg">Dashboard</h1> */}
         </div>
 
         {/* Right Section */}
@@ -30,7 +30,7 @@ const Navbar = () => {
             <span className="material-icons"><CircleNotificationsIcon/></span>
           </button>
           <button  className="text-white">
-            <span onClick={()=>navigate("/AdminSettings")} className="material-icons"><SettingsIcon/></span>
+            <span onClick={()=>navigate("/CustomerSettings")} className="material-icons"><SettingsIcon/></span>
           </button>
 
           {/* Profile Dropdown */}
@@ -51,7 +51,7 @@ const Navbar = () => {
                   href="#profile"
                   className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
                 
-                  onClick={() => navigate("/AdminProfile")}
+                  onClick={() => navigate("/CustomerProfile")}
                 >
                   <span className="material-icons text-sm mr-2"><AccountBoxIcon/></span>
                   Profile

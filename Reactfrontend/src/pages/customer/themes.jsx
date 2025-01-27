@@ -4,7 +4,7 @@ import Sidenav from "../../components/customer_nav/Customersidenav";
 import TopNavbar from "../../components/customer_nav/Topnavbar"; // Import the Navbar component
 
 const themes = [
-  {
+  { 
     id: 1,
     title: "Theme One",
     bgColor: "bg-white",

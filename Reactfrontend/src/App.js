@@ -21,6 +21,8 @@ import CustomerSettings from './pages/customer/settings';
 import CustomerThemes from './pages/customer/themes';
 import CustomersMyCard from './pages/customer/mycards';
 import CustomerGetCard from './pages/customer/getcard';
+import Customerform from './pages/customer/profile';
+import CustomerHome from './pages/customer/home';
 
 
 
@@ -28,14 +30,17 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Login />} />
-        <Route path="/signup" element={<Signup />} />
+        <Route path="/" element={<CustomerHome />} />
+        <Route path="/Adminsignup" element={<Signup />} />
         <Route path="/Dashboard" element={<Home />} />
         <Route path="/AdminSettings" element={<Setting />} />  
         <Route path="/AdminProfile" element={<Profile />} />
         <Route path="/Themes" element={<Themes />} />
         <Route path="/Customers Card" element={<CustomerCard />} />
         <Route path="/Customers" element={<Costomer />} />
+
+        <Route path="/AdminLogin" element={<Login />} />
+        <Route path="/CustomersForm" element={<Customerform />} />
 
 
         {/* Customer Routes */}
