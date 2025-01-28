@@ -60,7 +60,7 @@ const Navbar = () => {
                 </button>
                 <button
                   className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100 flex items-center"
-                  onClick={() => navigate("/signup")}
+                  onClick={() => navigate("/")}
                 >
                   <LogoutIcon className="mr-2" />
                   Logout

@@ -59,7 +59,7 @@ const Navbar = () => {
                 <a
                   href="#logout"
                   className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
-                  onClick={() => navigate("/signup")}
+                  onClick={() => navigate("/")}
                 >
                   <span className="material-icons text-sm mr-2"><LogoutIcon></LogoutIcon></span>
                   Logout
