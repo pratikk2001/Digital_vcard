@@ -45,38 +45,6 @@ export default function Home() {
             <div className="flex justify-between items-center mb-8">
               <h1 className="text-4xl font-bold text-gray-800">Dashboard</h1>
             </div>
-
-            {/* Stats Section */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-              <div className="bg-white p-6 rounded-lg shadow-lg">
-                <p className="text-gray-500">Total Users</p>
-                <p className="text-2xl font-bold text-gray-700">{purchases || 200}</p>
-              </div>
-              <div className="bg-white p-6 rounded-lg shadow-lg">
-                <p className="text-gray-500">Active Users</p>
-                <p className="text-2xl font-bold text-gray-700">{revenue || 150}</p>
-              </div>
-              <div className="bg-white p-6 rounded-lg shadow-lg">
-                <p className="text-gray-500">Total Themes</p>
-                <p className="text-2xl font-bold text-gray-700">{refunds || 4}</p>
-              </div>
-            </div>
-
-            {/* Graph Section */}
-            <div className="bg-white p-8 rounded-lg shadow-lg mb-8">
-              <p className="text-xl font-semibold mb-4">Comparison</p>
-              <BarAnimation />
-            </div>
-
-            {/* Product Section */}
-            <div className="bg-white p-8 rounded-lg shadow-lg mb-8">
-              <Product />
-            </div>
-
-            {/* Feedback Section */}
-            <div className="bg-white p-8 rounded-lg shadow-lg">
-              <CommunityFeedback />
-            </div>
           </div>
         </main>
       </div>

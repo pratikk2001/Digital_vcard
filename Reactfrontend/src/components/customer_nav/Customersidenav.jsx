@@ -14,12 +14,12 @@ export default function Sidenav() {
   return (
     <div className="flex">
       {/* Sidebar */}
-      <div className="w-56 bg-gray-800 text-white h-screen fixed top-0 left-0">
+      <div className="w-48 bg-blue-950 text-white h-screen fixed top-0 left-0">
         <div className="p-4 flex items-center space-x-2">
           <SettingsIcon />
           <h1 className="text-lg font-bold">E-CARD</h1>
         </div>
-        <div className="mt-6">
+        <div className="mt-10">
           <div className="mt-6 space-y-2">
             {/* Dashboard route */}
             <div onClick={() => navigate("/CustomerDashboard")} className="px-4 py-2 hover:bg-gray-700 cursor-pointer rounded">
