@@ -44,7 +44,7 @@ const Home = () => {
           {/* Card 1 */}
           <div className="bg-white shadow-lg rounded-lg overflow-hidden">
             <img
-              src="https://via.placeholder.com/300x200"
+              src="https://mir-s3-cdn-cf.behance.net/projects/404/6b2a61183248679.Y3JvcCw4MDgsNjMyLDAsMA.jpg"
               alt="Card Theme"
               className="w-full h-48 object-cover"
             />
@@ -62,7 +62,7 @@ const Home = () => {
           {/* Card 2 */}
           <div className="bg-white shadow-lg rounded-lg overflow-hidden">
             <img
-              src="https://via.placeholder.com/300x200"
+              src="https://static.vecteezy.com/system/resources/previews/036/062/140/non_2x/modern-and-clean-business-id-card-template-vector.jpg"
               alt="Card Theme"
               className="w-full h-48 object-cover"
             />
@@ -80,7 +80,7 @@ const Home = () => {
           {/* Card 3 */}
           <div className="bg-white shadow-lg rounded-lg overflow-hidden">
             <img
-              src="https://via.placeholder.com/300x200"
+              src="https://thumbs.dreamstime.com/z/premium-employee-id-card-photo-placeholder-name-position-company-profile-template-premium-employee-id-card-photo-218475916.jpg"
               alt="Card Theme"
               className="w-full h-48 object-cover"
             />
