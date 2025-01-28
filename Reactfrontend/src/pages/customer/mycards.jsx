@@ -1,9 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import { FaUsers, FaChartBar, FaEdit } from "react-icons/fa";
 import Sidenav from "../../components/customer_nav/Customersidenav";
 import TopNavbar from "../../components/customer_nav/Topnavbar";
+import ProfileForm from "./popupForm"; // Import Profile Form
 
 const Mycards = () => {
+  const [selectedVCard, setSelectedVCard] = useState(null);
+  const [isFormOpen, setIsFormOpen] = useState(false);
+
   const data = [
     {
       avatar: "PK",
@@ -13,6 +17,12 @@ const Mycards = () => {
       createdAt: "12 Sep 2024",
     },
   ];
+
+  // Handle Edit Button Click
+  const handleEditClick = (vcard) => {
+    setSelectedVCard(vcard);
+    setIsFormOpen(true);
+  };
 
   return (
     <div className="min-h-screen flex flex-col bg-gray-100">
@@ -68,7 +78,7 @@ const Mycards = () => {
                       </td>
                       <td className="p-4 text-gray-500">{item.createdAt}</td>
                       <td className="p-4">
-                        <FaEdit className="text-blue-500 cursor-pointer" />
+                        <FaEdit className="text-blue-500 cursor-pointer" onClick={() => handleEditClick(item)} />
                       </td>
                     </tr>
                   ))}
@@ -76,6 +86,9 @@ const Mycards = () => {
               </table>
             </div>
           </div>
+
+          {/* Open Form when Editing */}
+          {isFormOpen && <ProfileForm vcardData={selectedVCard} onClose={() => setIsFormOpen(false)} />}
         </main>
       </div>
     </div>

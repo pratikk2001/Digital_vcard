@@ -24,7 +24,7 @@ function Login() {
 
       if (resp.status_code === 200) {
         setErrorMessage("");
-        navigate("/Dashboard"); 
+        navigate("/CustomerDashboard"); 
       } else {
         setErrorMessage("Invalid email or password. Please try again.");
       }

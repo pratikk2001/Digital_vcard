@@ -14,7 +14,7 @@ const Navbar = () => {
   
 
   return (
-    <nav className="bg-blue-950 p-4">
+    <nav className="bg-gradient-to-r from-pink-500 to-purple-500 text-white p-4 z-50">
       <div className="container mx-auto flex justify-between items-center">
         {/* Left Section */}
         <div className="flex items-center space-x-4">

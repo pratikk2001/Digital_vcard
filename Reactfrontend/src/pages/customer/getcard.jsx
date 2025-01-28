@@ -7,7 +7,7 @@ const Getcard = () => {
     { name: "Karan Sharma", email: "karanmitash@gmail.com", theme: "Political 1", status: "Active" },
     { name: "Sinan Mintaş", email: "sinanmintas04@gmail.com", theme: "Political 2", status: "Inactive" },
     { name: "Mondesign Web", email: "mondesignweb.agency@gmail.com", theme: "Personal 1", status: "Active" },
-    { name: "Hebron Lot", email: "karomfinger@gmail.com", theme: "Personal 2", status: "Inactive" },
+    { name: "Hebron Lot",    email: "karomfinger@gmail.com", theme: "Personal 2", status: "Inactive" },
     { name: "Vineeth Kumar", email: "printfastme@gmail.com", theme: "Personal 2", status: "Active" },
     { name: "Karan Sharma2", email: "karanmitash2@gmail.com", theme: "Political 1", status: "Active" },
     { name: "Sinan Mintaş2", email: "sinanmintas042@gmail.com", theme: "Political 2", status: "Inactive" },

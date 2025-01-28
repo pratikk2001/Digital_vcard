@@ -21,7 +21,7 @@ import CustomerSettings from './pages/customer/settings';
 import CustomerThemes from './pages/customer/themes';
 import CustomersMyCard from './pages/customer/mycards';
 import CustomerGetCard from './pages/customer/getcard';
-import Customerform from './pages/customer/profile';
+import Customerform from './pages/customer/Cardform';
 import CustomerHome from './pages/customer/home';
 
 

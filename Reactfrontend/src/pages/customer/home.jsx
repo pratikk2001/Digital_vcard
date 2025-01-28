@@ -7,7 +7,6 @@ const Home = () => {
 
   const navigate = useNavigate();
 
-
   return (
     <div className="min-h-screen bg-blue-100">
       {/* Navbar */}
