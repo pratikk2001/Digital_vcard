@@ -1,115 +1,83 @@
 import React from "react";
+import { FaUsers, FaChartBar, FaEdit } from "react-icons/fa";
 import Sidenav from "../../components/customer_nav/Customersidenav";
-import TopNavbar from "../../components/customer_nav/Topnavbar"; // Import the Navbar component
+import TopNavbar from "../../components/customer_nav/Topnavbar";
 
 const Mycards = () => {
   const data = [
     {
-      vCard: "PK",
+      avatar: "PK",
       name: "Pratik Kankarej",
-      email: "pratikkankarej2211@gmail.com",
-      views: 20,
-      scans: 0,
+      role: "Software Engineer",
+      url: "https://myviscards.xyz/pratikkankarej",
+      createdAt: "12 Sep 2024",
     },
-    {
-      vCard: "SM",
-      name: "Sinan Mintas",
-      email: "sinanmintas04@gmail.com",
-      views: 9,
-      scans: 0,
-    },{
-      vCard: "KS",
-      name: "Karan Sharma",
-      email: "karanmntash@gmail.com",
-      views: 29,
-      scans: 5,
-    },{
-      vCard: "KS",
-      name: "Karan Sharma",
-      email: "karanmntash@gmail.com",
-      views: 29,
-      scans: 5,
-    },{
-      vCard: "KS",
-      name: "Karan Sharma",
-      email: "karanmntash@gmail.com",
-      views: 29,
-      scans: 5,
-    },{
-      vCard: "KS",
-      name: "Karan Sharma",
-      email: "karanmntash@gmail.com",
-      views: 29,
-      scans: 5,
-    },
-    // Add more data as required
   ];
 
   return (
-
-    <div>
-    <TopNavbar></TopNavbar>
-    <div className="bg-blue-50 min-h-screen flex justify-center items-center p-5">
-      <Sidenav></Sidenav>
-      <div className="w-full max-w-6xl bg-white shadow-lg rounded-lg">
-        <table className="table-auto w-full border-collapse">
-          <thead className="bg-blue-500 text-white">
-            <tr>
-              <th className="px-4 text-white py-2 text-left">vCards</th>
-              <th className="px-4 text-white py-2 text-left">Subscribers</th>
-              <th className="px-4 text-white py-2 text-left">Stats</th>
-              <th className="px-4 text-white py-2">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {data.map((subscriber, index) => (
-              <tr
-                key={index}
-                className={`${
-                  index % 2 === 0 ? "bg-blue-100" : "bg-white"
-                } hover:bg-blue-200`}
-              >
-                <td className="px-4 py-3 flex items-center">
-                  <div className="bg-blue-500 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-semibold">
-                    {subscriber.vCard}
-                  </div>
-                </td>
-                <td className="px-4 py-3">
-                  <p className="font-semibold">{subscriber.name}</p>
-                  <p className="text-sm text-white-600">{subscriber.email}</p>
-                </td>
-                <td className="px-4 py-3">
-                  <p>Views: {subscriber.views}</p>
-                  <p>Scans: {subscriber.scans}</p>
-                </td>
-                <td className="px-4 py-3 text-center">
-                  <button className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-lg shadow-md">
-                    View
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-        <div className="px-4 py-3 bg-gray-100 flex justify-between items-center">
-          <p className="text-gray-700">Showing 1 to {data.length} of 40 rows</p>
-          <div className="flex space-x-2">
-            <button className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-md shadow">
-              &lt;
-            </button>
-            <button className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-md shadow">
-              1
-            </button>
-            <button className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-md shadow">
-              2
-            </button>
-            <button className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-md shadow">
-              &gt;
-            </button>
+    <div className="min-h-screen flex flex-col bg-gray-100">
+      <TopNavbar />
+      <div className="flex flex-grow">
+        <Sidenav />
+        <main className="flex-grow p-6 bg-gray-50">
+          <div className="max-w-7xl mx-auto">
+            <h1 className="text-2xl font-semibold text-gray-800 mb-6">VCards</h1>
+            <div className="bg-white shadow rounded-lg overflow-hidden">
+              <div className="p-4 border-b flex justify-between items-center">
+                <input
+                  type="text"
+                  placeholder="Search"
+                  className="w-1/3 p-2 border rounded-md"
+                />
+                <button className="bg-blue-500 text-white px-4 py-2 rounded-md">
+                  New VCard
+                </button>
+              </div>
+              <table className="w-full text-left">
+                <thead className="bg-gray-100 text-gray-700">
+                  <tr>
+                    <th className="p-4">VCARD NAME</th>
+                    <th className="p-4">PREVIEW URL</th>
+                    <th className="p-4">STATS</th>
+                    <th className="p-4">SUBSCRIBERS</th>
+                    <th className="p-4">STATUS</th>
+                    <th className="p-4">CREATED AT</th>
+                    <th className="p-4">ACTION</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {data.map((item, index) => (
+                    <tr key={index} className="border-b hover:bg-gray-100">
+                      <td className="p-4 flex items-center">
+                        <div className="w-10 h-10 bg-blue-500 text-white flex items-center justify-center rounded-full">
+                          {item.avatar}
+                        </div>
+                        <div className="ml-3">
+                          <p className="font-semibold text-blue-600">{item.name}</p>
+                          <p className="text-sm text-gray-500">{item.role}</p>
+                        </div>
+                      </td>
+                      <td className="p-4 text-blue-500 underline cursor-pointer">{item.url}</td>
+                      <td className="p-4"><FaChartBar className="text-blue-500" /></td>
+                      <td className="p-4"><FaUsers className="text-blue-500" /></td>
+                      <td className="p-4">
+                        <label className="switch">
+                          <input type="checkbox" defaultChecked />
+                          <span className="slider round"></span>
+                        </label>
+                      </td>
+                      <td className="p-4 text-gray-500">{item.createdAt}</td>
+                      <td className="p-4">
+                        <FaEdit className="text-blue-500 cursor-pointer" />
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
-        </div>
+        </main>
       </div>
-    </div>
     </div>
   );
 };
