@@ -1,85 +1,117 @@
-import { useState } from "react";
-import { FiSearch, FiUsers, FiBarChart2, FiEdit2 } from "react-icons/fi";
-import { Switch } from "@headlessui/react";
+import React from "react";
+import Sidenav from "../../components/customer_nav/Customersidenav";
+import TopNavbar from "../../components/customer_nav/Topnavbar"; // Import the Navbar component
 
-export default function VCardDashboard() {
-  const [enabled, setEnabled] = useState(true);
+const Mycards = () => {
+  const data = [
+    {
+      vCard: "PK",
+      name: "Pratik Kankarej",
+      email: "pratikkankarej2211@gmail.com",
+      views: 20,
+      scans: 0,
+    },
+    {
+      vCard: "SM",
+      name: "Sinan Mintas",
+      email: "sinanmintas04@gmail.com",
+      views: 9,
+      scans: 0,
+    },{
+      vCard: "KS",
+      name: "Karan Sharma",
+      email: "karanmntash@gmail.com",
+      views: 29,
+      scans: 5,
+    },{
+      vCard: "KS",
+      name: "Karan Sharma",
+      email: "karanmntash@gmail.com",
+      views: 29,
+      scans: 5,
+    },{
+      vCard: "KS",
+      name: "Karan Sharma",
+      email: "karanmntash@gmail.com",
+      views: 29,
+      scans: 5,
+    },{
+      vCard: "KS",
+      name: "Karan Sharma",
+      email: "karanmntash@gmail.com",
+      views: 29,
+      scans: 5,
+    },
+    // Add more data as required
+  ];
 
   return (
-    <div className="flex min-h-screen bg-gray-100">
-      {/* Sidebar */}
-      <aside className="w-64 bg-white p-4 border-r hidden md:block">
-        <h2 className="text-xl font-bold text-indigo-600 mb-4">My Viscards</h2>
-        <nav className="space-y-2">
-          <NavItem label="Dashboard" />
-          <NavItem label="VCards" active />
-          <NavItem label="Inquiries" />
-          <NavItem label="Appointments" />
-          <NavItem label="Product Orders" />
-          <NavItem label="Virtual Backgrounds" />
-          <NavItem label="Storage" />
-          <NavItem label="Settings" />
-        </nav>
-      </aside>
 
-      {/* Main Content */}
-      <div className="flex-1 flex flex-col">
-        {/* Top Navbar */}
-        <header className="bg-white p-4 shadow flex justify-between items-center">
-          <div className="relative">
-            <FiSearch className="absolute left-2 top-3 text-gray-400" />
-            <input type="text" placeholder="Search" className="pl-8 py-2 border rounded-lg w-72" />
-          </div>
-          <div className="flex items-center space-x-4">
-            <button className="bg-indigo-600 text-white px-4 py-2 rounded-lg">New VCard</button>
-            <div className="w-10 h-10 bg-gray-300 rounded-full"></div>
-          </div>
-        </header>
-
-        {/* VCard Table */}
-        <div className="p-6">
-          <div className="bg-white p-4 shadow-md rounded-lg">
-            <table className="w-full text-left">
-              <thead>
-                <tr className="text-gray-500 text-sm border-b">
-                  <th className="p-2">VCard Name</th>
-                  <th className="p-2">Preview URL</th>
-                  <th className="p-2">Stats</th>
-                  <th className="p-2">Subscribers</th>
-                  <th className="p-2">Status</th>
-                  <th className="p-2">Created At</th>
-                  <th className="p-2">Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr className="border-b">
-                  <td className="p-2 flex items-center space-x-2">
-                    <div className="w-10 h-10 bg-gray-300 rounded-full"></div>
-                    <span className="text-indigo-600 font-medium">Pratik</span>
-                  </td>
-                  <td className="p-2 text-indigo-500 cursor-pointer">https://myviscards.xyz/pratikkankarej</td>
-                  <td className="p-2"><FiBarChart2 className="text-blue-500" /></td>
-                  <td className="p-2"><FiUsers className="text-blue-500" /></td>
-                  <td className="p-2">
-                    <Switch checked={enabled} onChange={setEnabled} className={`${enabled ? 'bg-blue-600' : 'bg-gray-300'} relative inline-flex h-6 w-11 items-center rounded-full`}>
-                      <span className="sr-only">Enable notifications</span>
-                      <span className={`${enabled ? 'translate-x-6' : 'translate-x-1'} inline-block h-4 w-4 transform rounded-full bg-white`} />
-                    </Switch>
-                  </td>
-                  <td className="p-2 text-gray-500">12 Sep 2024</td>
-                  <td className="p-2"><FiEdit2 className="text-gray-500 cursor-pointer" /></td>
-                </tr>
-              </tbody>
-            </table>
+    <div>
+    <TopNavbar></TopNavbar>
+    <div className="bg-blue-50 min-h-screen flex justify-center items-center p-5">
+      <Sidenav></Sidenav>
+      <div className="w-full max-w-6xl bg-white shadow-lg rounded-lg">
+        <table className="table-auto w-full border-collapse">
+          <thead className="bg-blue-500 text-white">
+            <tr>
+              <th className="px-4 text-white py-2 text-left">vCards</th>
+              <th className="px-4 text-white py-2 text-left">Subscribers</th>
+              <th className="px-4 text-white py-2 text-left">Stats</th>
+              <th className="px-4 text-white py-2">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {data.map((subscriber, index) => (
+              <tr
+                key={index}
+                className={`${
+                  index % 2 === 0 ? "bg-blue-100" : "bg-white"
+                } hover:bg-blue-200`}
+              >
+                <td className="px-4 py-3 flex items-center">
+                  <div className="bg-blue-500 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-semibold">
+                    {subscriber.vCard}
+                  </div>
+                </td>
+                <td className="px-4 py-3">
+                  <p className="font-semibold">{subscriber.name}</p>
+                  <p className="text-sm text-white-600">{subscriber.email}</p>
+                </td>
+                <td className="px-4 py-3">
+                  <p>Views: {subscriber.views}</p>
+                  <p>Scans: {subscriber.scans}</p>
+                </td>
+                <td className="px-4 py-3 text-center">
+                  <button className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-lg shadow-md">
+                    View
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        <div className="px-4 py-3 bg-gray-100 flex justify-between items-center">
+          <p className="text-gray-700">Showing 1 to {data.length} of 40 rows</p>
+          <div className="flex space-x-2">
+            <button className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-md shadow">
+              &lt;
+            </button>
+            <button className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-md shadow">
+              1
+            </button>
+            <button className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-md shadow">
+              2
+            </button>
+            <button className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-md shadow">
+              &gt;
+            </button>
           </div>
         </div>
       </div>
     </div>
+    </div>
   );
-}
+};
 
-function NavItem({ label, active }) {
-  return (
-    <div className={`p-2 rounded-lg cursor-pointer ${active ? 'bg-indigo-100 text-indigo-600 font-semibold' : 'text-gray-700 hover:bg-gray-200'}`}>{label}</div>
-  );
-}
+export default Mycards;
