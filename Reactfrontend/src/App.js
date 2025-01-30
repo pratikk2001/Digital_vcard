@@ -23,7 +23,7 @@ import CustomersMyCard from './pages/customer/mycards';
 import CustomerGetCard from './pages/customer/getcard';
 import Customerform from './pages/customer/Cardform';
 import CustomerHome from './pages/customer/home';
-
+import DigitalCard from './components/customerCard/custumerCardDisplay';
 
 
 function App() {
@@ -52,7 +52,8 @@ function App() {
         <Route path="/CustomerThemes" element={<CustomerThemes />} />
         <Route path="/CustomerCard" element={<CustomersMyCard />} />
         <Route path="/GetCard" element={<CustomerGetCard />} />
-        
+         {/* New DigitalCard Route */}
+         <Route path="/:username" element={<DigitalCard />} />
       </Routes>
     </BrowserRouter>
   );

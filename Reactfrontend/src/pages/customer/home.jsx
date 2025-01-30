@@ -1,11 +1,9 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
-
-
 const Home = () => {
 
-  const navigate = useNavigate();
+const navigate = useNavigate();
 
   return (
     <div className="min-h-screen bg-blue-100">
@@ -105,6 +103,8 @@ const Home = () => {
       </footer>
     </div>
   );
+
+
 };
 
 export default Home;
