@@ -16,19 +16,19 @@ const VCard = () => {
   const socialWorkImages = [
     "BJP.png",
     "NCP.jpg",
-    "Shiv.jpg",
+    "https://marathonpune.com/img/media/2022/11.jpg"
   ];
 
   const momentsImages = [
     "BJP.png",
     "NCP.jpg",
-    "Shiv.jpg",
+    "https://marathonpune.com/img/media/2022/11.jpg"
   ];
 
   const newsImages = [
     "BJP.png",
     "NCP.jpg",
-    "Shiv.jpg",
+    "https://marathonpune.com/img/media/2022/11.jpg"
   ];
 
   // State to handle image preview modal
@@ -155,11 +155,13 @@ const VCard = () => {
     rel="noopener noreferrer" 
     aria-label="Scan QR Code"
   >
+    <div className="bg-white">
     <img
-      src="QR_code.png"  // Replace with the actual QR code image URL
+      src="https://upload.wikimedia.org/wikipedia/commons/d/d0/QR_code_for_mobile_English_Wikipedia.svg"  // Replace with the actual QR code image URL
       alt="QR Code"
       className="w-32 h-32 mx-auto"
     />
+    </div>
   </a>
   <p className="text-large">QR Code</p>
 </div>

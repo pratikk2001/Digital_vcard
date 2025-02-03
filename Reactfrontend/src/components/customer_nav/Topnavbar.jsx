@@ -13,7 +13,7 @@ const Navbar = () => {
   const navigate = useNavigate();
 
   return (
-    <nav className="bg-gradient-to-r from-pink-500 to-purple-500 p-4 shadow-md">
+    <nav className="bg-gradient-to-r z-0 from-pink-500 to-purple-500 p-4 shadow-md">
       <div className="container mx-auto flex justify-between items-center">
         {/* Left Section: Logo & Menu Button */}
         <div className="flex items-center space-x-4">

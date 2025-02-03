@@ -21,7 +21,7 @@ export default function Sidenav() {
   ];
 
   return (
-    <div className="flex">
+    <div className="flex z-10">
       {/* Mobile Menu Button */}
       <button
         className="md:hidden p-4 text-white bg-gradient-to-r from-pink-500 to-purple-500 fixed top-1 right-2 z-30 rounded-lg"
