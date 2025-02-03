@@ -2,7 +2,7 @@ for the frontend code
 pull the code and where the package.json file is present 
 run this cmd 
 
-npm install
+npm install and npm install swiper or yarn add swiper
 
 and then
 
