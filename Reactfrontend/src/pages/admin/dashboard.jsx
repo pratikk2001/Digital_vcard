@@ -1,44 +1,39 @@
 import React, { useState, useEffect } from "react";
 import Sidenav from "../../components/admin_nav/SuperadminSidenav";
 import BarAnimation from "./graph/Bar";
-import Product from "../../components/product";
 import CommunityFeedback from "./graph/feedback";
-import TopNavbar from "../../components/admin_nav/topnav"; // Import the new Navbar component
+import TopNavbar from "../../components/admin_nav/topnav";
 
 export default function Home() {
   const [purchases, setPurchases] = useState(null);
   const [revenue, setRevenue] = useState(null);
   const [refunds, setRefunds] = useState(null);
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false); // State to manage sidebar toggle
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
   useEffect(() => {
-    const fetchData1 = async () => {
+    const fetchData = async () => {
       try {
         const response = await fetch(
           "http://3.227.101.169:8020/api/v1/sample_assignment_api_1/",
           {
-            headers: {
-              Authorization: "Basic " + btoa("trial:assignment123"),
-            },
+            headers: { Authorization: "Basic " + btoa("trial:assignment123") },
           }
         );
-        if (!response.ok) {
-          throw new Error("Failed to fetch data");
-        }
-        const responseData = await response.json();
-        setPurchases(responseData.purchases);
-        setRevenue(responseData.revenue);
-        setRefunds(responseData.refunds);
+        if (!response.ok) throw new Error("Failed to fetch data");
+        const data = await response.json();
+        setPurchases(data.purchases);
+        setRevenue(data.revenue);
+        setRefunds(data.refunds);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     };
 
-    fetchData1();
+    fetchData();
   }, []);
 
   return (
-    <div className="flex flex-col bg-gray-100">
+    <div className="flex flex-col bg-gray-50 min-h-screen">
       {/* Navbar */}
       <TopNavbar />
 
@@ -48,51 +43,40 @@ export default function Home() {
 
         {/* Main Content */}
         <div
-          className={`flex-1 p-2 sm:p-4 transition-all duration-300 ${
-            isSidebarOpen ? "ml-64" : "ml-0"
+          className={`flex-1 p-4 transition-all duration-300 ${
+            isSidebarOpen ? "lg:ml md:ml sm:ml-0" : "ml-0"
           }`}
         >
-          <main className="bg-gray-50">
-            <div className="max-w-4xl mx-auto">
-              {/* Header */}
-              <div className="flex justify-between items-center mb-4">
-                <h1 className="text-xl sm:text-2xl font-bold text-gray-800">
-                  Dashboard
-                </h1>
-              </div>
+          <main className="bg-white shadow-lg rounded-lg p-6">
+            {/* Header */}
+            <div className="flex justify-between items-center mb-6">
+              <h1 className="text-2xl font-bold text-gray-800">Dashboard Overview</h1>
+            </div>
 
-              {/* Stats Section */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
-                {[
-                  { label: "Total Users", value: 200 },
-                  { label: "Active Users", value: 150 },
-                  { label: "Total Themes", value: 4 },
-                ].map((stat, index) => (
-                  <div
-                    key={index}
-                    className="bg-white p-4 rounded-lg shadow-lg text-center"
-                  >
-                    <p className="text-gray-500 text-sm">{stat.label}</p>
-                    <p className="text-lg font-bold text-gray-700">{stat.value}</p>
-                  </div>
-                ))}
-              </div>
+            {/* Stats Section */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+              {[
+                { label: "Total Users", value: 200, color: "bg-blue-500" },
+                { label: "Active Users", value: 150, color: "bg-green-500" },
+                { label: "Total Themes", value: 4, color: "bg-purple-500" },
+              ].map((stat, index) => (
+                <div key={index} className={`${stat.color} p-5 rounded-lg text-white shadow-md`}>
+                  <p className="text-lg font-semibold">{stat.label}</p>
+                  <p className="text-2xl font-bold">{stat.value}</p>
+                </div>
+              ))}
+            </div>
 
-              {/* Graph Section */}
-              <div className="bg-white p-3 rounded-lg shadow mb-4">
-                <p className="text-base font-semibold mb-2">Comparison</p>
-                <BarAnimation />
-              </div>
+            {/* Graph Section */}
+            <div className="bg-gray-100 p-5 rounded-lg shadow-lg mb-6">
+              <p className="text-lg font-semibold mb-3">User Growth Statistics</p>
+              <BarAnimation />
+            </div>
 
-              {/* Product Section */}
-              <div className="bg-white p-3 rounded-lg shadow mb-4">
-                {/* <Product /> */}
-              </div>
-
-              {/* Feedback Section */}
-              <div className="bg-white p-3 rounded-lg shadow">
-                <CommunityFeedback />
-              </div>
+            {/* Feedback Section */}
+            <div className="bg-gray-100 p-5 rounded-lg shadow-lg">
+              <p className="text-lg font-semibold mb-3">User Feedback</p>
+              <CommunityFeedback />
             </div>
           </main>
         </div>

@@ -1,9 +1,7 @@
-// App.js
-
 import React from 'react';
 import { Routes, Route, BrowserRouter } from 'react-router-dom';
 import Home from './pages/admin/dashboard';
-import Setting from './pages/admin/settings';
+import Settings from './pages/admin/AdminSettings';
 import Profile from './pages/admin/adminProfile';
 import Themes from './pages/admin/themes';
 import CustomerCard from './pages/admin/customer_card';
@@ -23,7 +21,7 @@ import CustomersMyCard from './pages/customer/mycards';
 import CustomerGetCard from './pages/customer/getcard';
 import Customerform from './pages/customer/Cardform';
 import CustomerHome from './pages/customer/home';
-import DigitalCard from './components/customerCard/custumerCardDisplay';
+import DigitalCard from './components/customerCard/CustumerCardDisplay';
 
 
 function App() {
@@ -33,7 +31,7 @@ function App() {
         <Route path="/" element={<CustomerHome />} />
         <Route path="/Adminsignup" element={<Signup />} />
         <Route path="/Dashboard" element={<Home />} />
-        <Route path="/AdminSettings" element={<Setting />} />  
+        <Route path="/AdminSettings" element={<Settings />} />  
         <Route path="/AdminProfile" element={<Profile />} />
         <Route path="/Themes" element={<Themes />} />
         <Route path="/Customers Card" element={<CustomerCard />} />

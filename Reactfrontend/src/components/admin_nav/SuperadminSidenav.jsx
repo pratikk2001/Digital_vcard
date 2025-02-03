@@ -17,37 +17,52 @@ export default function Sidenav() {
     <div className="flex">
       {/* Sidebar */}
       <div
-        className={`bg-gray-800 text-white h-screen fixed top-0 left-0 ${
-          isSidebarOpen ? "w-64" : "w-0"
-        } sm:w-64 transition-all duration-300 z-50 overflow-hidden`}
+        className={`bg-gray-800 text-white h-screen fixed top-0 left-0 transform ${
+          isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+        } lg:translate-x-0 transition-transform duration-300 z-50 overflow-hidden shadow-2xl rounded-r-lg`}
       >
-        <div className="p-4 flex items-center space-x-2">
-          <SettingsIcon />
-          <h1 className="text-lg font-bold">E-CARD ADMIN</h1>
+        <div className="p-6 flex items-center space-x-2 border-b border-gray-700">
+          <SettingsIcon className="text-2xl" />
+          <h1 className="text-xl font-semibold">E-CARD ADMIN</h1>
         </div>
-        <div className="mt-6 space-y-2">
+        <div className="mt-6 space-y-4">
           {["Dashboard", "Customers", "Customers Card", "Themes"].map(
             (text, index) => (
               <div
                 key={text}
                 onClick={() => navigate("/" + text)}
-                className="px-4 py-2 hover:bg-gray-700 cursor-pointer rounded flex items-center space-x-2"
+                className="px-6 py-3 hover:bg-blue-600 cursor-pointer rounded-lg flex items-center space-x-3 transition duration-300 transform hover:scale-105"
               >
-                {index === 0 && <DashboardIcon />}
-                {index === 1 && <InboxIcon />}
-                {index === 2 && <BarChartIcon />}
-                {index === 3 && <AccountTreeIcon />}
-                <span className="text-gray-400 text-sm">{text}</span>
+                {index === 0 && (
+                  <DashboardIcon className="text-lg text-gray-300" />
+                )}
+                {index === 1 && <InboxIcon className="text-lg text-gray-300" />}
+                {index === 2 && (
+                  <BarChartIcon className="text-lg text-gray-300" />
+                )}
+                {index === 3 && (
+                  <AccountTreeIcon className="text-lg text-gray-300" />
+                )}
+                <span className="text-gray-300 text-lg">{text}</span>
               </div>
             )
           )}
         </div>
+        <div className="absolute bottom-10 left-0 w-full px-6">
+          <div
+            onClick={() => navigate("/")}
+            className="px-6 py-3 hover:bg-red-600 cursor-pointer rounded-lg flex items-center space-x-3 transition duration-300 transform hover:scale-105"
+          >
+            <PowerIcon className="text-lg text-gray-300" />
+            <span className="text-gray-300 text-lg">Logout</span>
+          </div>
+        </div>
       </div>
 
       {/* Sidebar toggle button for mobile */}
-      <div className="sm:hidden fixed top-2 right-2 z-50">
+      <div className="lg:hidden fixed top-5 right-5 z-50">
         <button
-          className="p-2 bg-gray-800 text-white rounded-md"
+          className="p-3 bg-gray-800 text-white rounded-lg shadow-lg hover:bg-gray-700 focus:outline-none"
           onClick={() => setIsSidebarOpen(!isSidebarOpen)}
         >
           <MenuIcon />
@@ -55,7 +70,7 @@ export default function Sidenav() {
       </div>
 
       {/* Main Content */}
-      <div className="flex-1 ml-0 sm:ml-64 transition-all duration-300">
+      <div className="flex-1 ml-0 lg:ml-64 transition-all duration-300">
         {/* Content here */}
       </div>
     </div>

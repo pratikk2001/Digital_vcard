@@ -35,13 +35,13 @@ function Login() {
   };
 
   return (
-    <div className="min-h-screen bg-blue-50 flex flex-col justify-center items-center">
-      <div className="bg-white shadow-lg rounded-lg w-96 p-6">
-      <h1 className="text-3xl font-semibold text-blue-600 text-center mb-6">E-Card</h1>
-        <h2 className="text-3xl font-bold text-blue-600 text-center mb-4">
+    <div className="min-h-screen bg-gradient-to-r from-blue-500 to-blue-800 flex justify-center items-center">
+      <div className="bg-white rounded-lg shadow-lg w-full max-w-sm p-8">
+        <h1 className="text-4xl font-bold text-blue-600 text-center mb-6">Digital Vcard</h1>
+        <h2 className="text-3xl font-semibold text-blue-600 text-center mb-4">
           Login
         </h2>
-        <form onSubmit={handleLogin} className="space-y-4">
+        <form onSubmit={handleLogin} className="space-y-6">
           <div>
             <label
               htmlFor="email"
@@ -56,7 +56,7 @@ function Login() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="w-full mt-1 px-3 py-2 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+              className="w-full mt-2 px-4 py-3 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
             />
           </div>
           <div>
@@ -73,7 +73,7 @@ function Login() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              className="w-full mt-1 px-3 py-2 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+              className="w-full mt-2 px-4 py-3 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
             />
           </div>
           {errorMessage && (
@@ -81,12 +81,12 @@ function Login() {
           )}
           <button
             type="submit"
-            className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+            className="w-full bg-blue-600 text-white py-3 px-6 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
           >
             Login
           </button>
         </form>
-        <div className="mt-4 text-center">
+        <div className="mt-6 text-center">
           <a
             href="#"
             className="text-sm text-blue-600 hover:text-blue-800 underline"
@@ -97,8 +97,10 @@ function Login() {
         <div className="mt-4 text-center">
           <p className="text-sm text-gray-600">
             Don't have an account?{" "}
-            <a href="#" className="text-blue-600 hover:text-blue-800 underline" 
-             onClick={() => navigate("/signup")}
+            <a
+              href=""
+              className="text-blue-600 hover:text-blue-800 underline"
+              onClick={() => navigate("/AdminSignup")}
             >
               Create One
             </a>

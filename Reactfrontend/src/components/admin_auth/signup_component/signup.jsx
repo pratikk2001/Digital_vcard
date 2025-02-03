@@ -1,134 +1,94 @@
-import React from "react";
-import  { useState } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-
 const Signup = () => {
-
-      const navigate = useNavigate();
-    
+  const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="bg-white w-full max-w-lg rounded-lg shadow-md p-6">
-        <h1 className="text-3xl font-semibold text-blue-600 text-center mb-6">E-Card</h1>
-        <h2 className="text-xl font-medium text-gray-700 text-center mb-6">Register</h2>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-blue-500 to-indigo-600 p-6">
+      <div className="bg-white w-full max-w-lg rounded-xl shadow-lg p-8">
+        <h1 className="text-4xl font-bold text-blue-500 text-center">Digital Vcard</h1>
+        <h2 className="text-xl font-medium text-gray-700 text-center mt-2 mb-6">
+          Register Your Account
+        </h2>
+
         <form>
-          {/* First Name and Last Name */}
-          <div className="flex space-x-4 mb-4">
-            <div className="w-1/2">
-              <label
-                htmlFor="firstName"
-                className="block text-sm font-medium text-gray-700"
-              >
-                First Name
-              </label>
+          {/* First Name & Last Name */}
+          <div className="flex flex-col sm:flex-row gap-4 mb-4">
+            <div className="w-full">
+              <label className="block text-sm font-medium text-gray-700">First Name</label>
               <input
                 type="text"
-                id="firstName"
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm py-3"
-                placeholder="First Name"
+                className="mt-1 block w-full rounded-lg border border-gray-300 bg-gray-50 p-3 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500"
+                placeholder="Enter your first name"
               />
             </div>
-            <div className="w-1/2">
-              <label
-                htmlFor="lastName"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Last Name
-              </label>
+            <div className="w-full">
+              <label className="block text-sm font-medium text-gray-700">Last Name</label>
               <input
                 type="text"
-                id="lastName"
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm py-3"
-                placeholder="Last Name"
+                className="mt-1 block w-full rounded-lg border border-gray-300 bg-gray-50 p-3 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500"
+                placeholder="Enter your last name"
               />
             </div>
           </div>
 
           {/* Email */}
           <div className="mb-4">
-            <label
-              htmlFor="email"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Email
-            </label>
+            <label className="block text-sm font-medium text-gray-700">Email</label>
             <input
               type="email"
-              id="email"
-              className="mt-1 block w-full rounded-md bg-blue-50 border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm py-3"
-              placeholder="admin@vcard.com"
+              className="mt-1 block w-full rounded-lg border border-gray-300 bg-gray-50 p-3 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500"
+              placeholder="Enter your email address"
             />
           </div>
 
-          {/* Password and Password Confirmation */}
-          <div className="flex space-x-4 mb-4">
-            <div className="w-1/2">
-              <label
-                htmlFor="password"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Password
-              </label>
+          {/* Password & Confirmation */}
+          <div className="flex flex-col sm:flex-row gap-4 mb-4">
+            <div className="w-full">
+              <label className="block text-sm font-medium text-gray-700">Password</label>
               <input
                 type="password"
-                id="password"
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm py-3"
-                placeholder="Password"
+                className="mt-1 block w-full rounded-lg border border-gray-300 bg-gray-50 p-3 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500"
+                placeholder="Enter password"
               />
             </div>
-            <div className="w-1/2">
-              <label
-                htmlFor="passwordConfirmation"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Password Confirmation
-              </label>
+            <div className="w-full">
+              <label className="block text-sm font-medium text-gray-700">Confirm Password</label>
               <input
                 type="password"
-                id="passwordConfirmation"
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm py-3"
-                placeholder="Confirm Password"
+                className="mt-1 block w-full rounded-lg border border-gray-300 bg-gray-50 p-3 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500"
+                placeholder="Confirm password"
               />
             </div>
           </div>
 
-          {/* Terms and Conditions */}
+          {/* Terms & Conditions */}
           <div className="flex items-center mb-4">
-            <input
-              type="checkbox"
-              id="terms"
-              className="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
-            />
-            <label
-              htmlFor="terms"
-              className="ml-2 text-sm text-gray-600"
-            >
-              I agree to the terms and conditions
+            <input type="checkbox" className="h-5 w-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500" />
+            <label className="ml-2 text-sm text-gray-600">
+              I agree to the <span className="text-blue-600 cursor-pointer hover:underline">terms and conditions</span>
             </label>
           </div>
 
           {/* Register Button */}
           <button
             type="submit"
-            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-md shadow-sm transition duration-200"
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-lg shadow-md transition duration-300"
           >
             Register
           </button>
 
-         <br />
-         <br />
-          {/* Login Link */}
-          <div className="text-center">
+          {/* Login Redirect */}
+          <div className="text-center mt-4">
             <p className="text-sm text-gray-600">
               Already have an account?{" "}
-              <a
-               onClick={() => navigate("/")}
-                className="text-blue-600 hover:text-blue-700 font-medium"
+              <span
+                onClick={() => navigate("/")}
+                className="text-blue-600 hover:text-blue-700 font-medium cursor-pointer"
               >
                 Login Here
-              </a>
+              </span>
             </p>
           </div>
         </form>
