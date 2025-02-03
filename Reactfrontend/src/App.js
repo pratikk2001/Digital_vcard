@@ -21,7 +21,7 @@ import CustomersMyCard from './pages/customer/mycards';
 import CustomerGetCard from './pages/customer/getcard';
 import Customerform from './pages/customer/Cardform';
 import CustomerHome from './pages/customer/home';
-import DigitalCard from './components/customerCard/CustumerCardDisplay';
+import DigitalCard from './components/customerCard/custumerCardDisplay';
 
 
 function App() {

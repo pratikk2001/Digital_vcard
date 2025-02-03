@@ -38,7 +38,7 @@ const Home = () => {
   ];
 
   return (
-    <div className="min-h-screen  text-white bg-gradient-to-r from-pink-500 to-purple-500">
+    <div className="min-h-screen">
       {/* Navbar */}
       <nav className=" text-white bg-gradient-to-r from-pink-500 to-purple-500 shadow-lg py-4">
         <div className="container mx-auto flex justify-between items-center px-6">
