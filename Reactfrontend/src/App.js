@@ -36,7 +36,6 @@ function App() {
         <Route path="/Themes" element={<Themes />} />
         <Route path="/Customers Card" element={<CustomerCard />} />
         <Route path="/Customers" element={<Costomer />} />
-
         <Route path="/AdminLogin" element={<Login />} />
         <Route path="/CustomersForm" element={<Customerform />} />
 
