@@ -10,10 +10,10 @@ const ProfilePage = () => {
     const fetchUserProfile = async () => {
       // Simulate fetching user profile (replace with an actual API request)
       setUser({
-        firstName: 'John',
-        lastName: 'Doe',
-        email: 'admin@vcard.com',
-        phone: '123-456-7890',
+        firstName: 'Enter First Name',
+        lastName: 'Enter Last Name',
+        email: 'Enter Email',
+        phone: 'Phone Number',
         password: '********',
         profileImage: 'https://via.placeholder.com/150',
         status: 'Active',
@@ -49,7 +49,7 @@ const ProfilePage = () => {
               </div>
               <div>
                 <h1 className="text-2xl font-semibold text-blue-800">Profile</h1>
-                <p className="text-sm text-blue-600">Dashboard / Profile</p>
+                {/* <p className="text-sm text-blue-600">Dashboard / Profile</p> */}
               </div>
               {/* Status */}
               <div className="sm:ml-auto">
