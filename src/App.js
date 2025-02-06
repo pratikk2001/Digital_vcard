@@ -19,9 +19,15 @@ import CustomerSettings from './pages/customer/settings';
 import CustomerThemes from './pages/customer/themes';
 import CustomersMyCard from './pages/customer/mycards';
 import CustomerGetCard from './pages/customer/getcard';
-import Customerform from './pages/customer/Cardform';
+import Customerform from './components/forms/Cardform';
 import CustomerHome from './pages/customer/home';
 import DigitalCard from './components/customerCard/CustumerCardDisplay';
+import CardForm from './components/forms/Cardform'; 
+import FormDashboard from './components/forms/FormDashboard';
+
+
+
+
 
 
 function App() {
@@ -36,6 +42,8 @@ function App() {
         <Route path="/Themes" element={<Themes />} />
         <Route path="/Customers Card" element={<CustomerCard />} />
         <Route path="/Customers" element={<Costomer />} />
+        <Route path="/CardForm" element={<CardForm />} />
+        <Route path="/FormDashboard" element={<FormDashboard />} />
 
         <Route path="/AdminLogin" element={<Login />} />
         <Route path="/CustomersForm" element={<Customerform />} />

@@ -13,7 +13,7 @@ const Navbar = () => {
   const navigate = useNavigate();
 
   return (
-    <nav className="bg-gradient-to-r from-pink-500 to-purple-500 p-4 shadow-md">
+    <nav className="bg-blue-500 p-4 shadow-md">
       <div className="container mx-auto flex justify-between items-center">
         {/* Left Section: Logo & Menu Button */}
         <div className="flex items-center space-x-4">
@@ -83,14 +83,14 @@ const Navbar = () => {
           </button>
           <button
             className="flex items-center space-x-3 w-full text-gray-700 text-lg font-medium hover:bg-gray-100 p-3 rounded-lg"
-            onClick={() => navigate("/AdminSettings")}
+            onClick={() => navigate("/CustomerSettings")}
           >
             <SettingsIcon className="text-pink-500" />
             <span>Settings</span>
           </button>
           <button
             className="flex items-center space-x-3 w-full text-gray-700 text-lg font-medium hover:bg-gray-100 p-3 rounded-lg"
-            onClick={() => navigate("/AdminProfile")}
+            onClick={() => navigate("/CustomerProfile")}
           >
             <AccountBoxIcon className="text-purple-500" />
             <span>My Profile</span>

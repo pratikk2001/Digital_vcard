@@ -29,7 +29,7 @@ const Navbar = () => {
   // Handle error if profile is not found
   if (!profile) {
     return (
-      <nav className="bg-gradient-to-r from-pink-500 to-purple-500 p-4 shadow-md">
+      <nav className="bg-blue-500 p-4 shadow-md">
         <div className="container mx-auto flex justify-between items-center">
           <h1 className="text-white font-bold text-xl tracking-wide">My App</h1>
         </div>
@@ -38,7 +38,7 @@ const Navbar = () => {
   }
 
   return (
-    <nav className="bg-gradient-to-r from-pink-500 to-purple-500 p-4 shadow-md">
+    <nav className="bg-blue-500 p-4 shadow-md">
       <div className="container mx-auto flex justify-between items-center">
         <div className="flex items-center space-x-4">
           <button

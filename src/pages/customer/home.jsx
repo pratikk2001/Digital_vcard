@@ -38,16 +38,16 @@ const Home = () => {
   ];
 
   return (
-    <div className="min-h-screen  text-white bg-gradient-to-r from-pink-500 to-purple-500">
+    <div className="min-h-screen  text-white">
       {/* Navbar */}
-      <nav className=" text-white bg-gradient-to-r from-pink-500 to-purple-500 shadow-lg py-4">
+      <nav className=" text-white bg-blue-500 shadow-lg py-4">
         <div className="container mx-auto flex justify-between items-center px-6">
           <h1 className="text-3xl font-extrabold text-white">Digital VCard</h1>
           <div className="flex space-x-4">
-            <button onClick={() => navigate("./CustomerLogin")} className="px-5 py-2 bg-white text-blue-700 font-semibold rounded-full shadow-lg hover:bg-gray-200 transition-all duration-300">
+            <button onClick={() => navigate("./CustomerLogin")} className="px-5 py-2 bg-white text-blue-700 font-bold rounded-full shadow-lg hover:bg-blue-400 transition-all duration-300">
               Login
             </button>
-            <button onClick={() => navigate("./AdminLogin")} className="px-5 py-2 bg-gray-100 text-blue-700 font-semibold rounded-full shadow-lg hover:bg-gray-300 transition-all duration-300">
+            <button onClick={() => navigate("./AdminLogin")} className="px-5 py-2 bg-gray-100 text-blue-700 font-bold rounded-full shadow-lg hover:bg-blue-400 transition-all duration-300">
               Admin Login
             </button>
           </div>
@@ -55,7 +55,7 @@ const Home = () => {
       </nav>
 
       {/* Hero Section */}
-      <header className="bg-blue-400 text-black py-24 text-center shadow-lg">
+      <header className="bg-gray-100 text-black py-24 text-center shadow-lg">
         <div className="container mx-auto">
           <h1 className="text-5xl font-extrabold mb-6">Create Your Digital Visiting Card</h1>
           <p className="text-lg mb-8">Stand out and make a great impression with customizable card themes.</p>
@@ -85,7 +85,7 @@ const Home = () => {
       </section>
 
       {/* Footer */}
-      <footer className="bg-blue-700 text-white py-6 mt-12">
+      <footer className="bg-blue-500 text-white py-6 mt-12">
         <div className="container mx-auto text-center">
           <p className="text-sm">&copy; 2025 Digital VCard. All rights reserved.</p>
         </div>
