@@ -15,7 +15,7 @@ export default function Sidenav() {
     <div className="flex">
       {/* Sidebar */}
       <div className="w-48 bg-white text-black
- h-screen fixed top-0 left-0">
+               h-screen fixed top-0 left-0">
         <div className="p-4 flex items-center space-x-2">
           <SettingsIcon />
           <h1 className="text-lg font-bold">E-CARD</h1>
@@ -63,4 +63,6 @@ export default function Sidenav() {
       </div>
     </div>
   );
+
+  
 }

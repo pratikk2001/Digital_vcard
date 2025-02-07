@@ -10,22 +10,23 @@ import { useParams } from "react-router-dom"
 
 const VCard = () => {
 
-  const { username } = useParams();
+const { username } = useParams();
 
-  // Different images for each section
-  const socialWorkImages = [
+// Different images for each section
+
+const socialWorkImages = [
     "BJP.png",
     "NCP.jpg",
     "Shiv.jpg",
   ];
 
-  const momentsImages = [
+const momentsImages = [
     "BJP.png",
     "NCP.jpg",
     "Shiv.jpg",
   ];
 
-  const newsImages = [
+const newsImages = [
     "BJP.png",
     "NCP.jpg",
     "Shiv.jpg",
