@@ -59,6 +59,7 @@ const EditVCard = () => {
     { name: "Social Work", icon: <FaHandsHelping /> },
     { name: "Events", icon: <FaCalendarAlt /> },
     { name: "News Center", icon: <FaNewspaper /> },
+    { name: "Social Links", icon: <FaImage /> },
   ];
   const handleSave = () => {
     console.log("Form data saved:", formData);
@@ -70,26 +71,21 @@ const EditVCard = () => {
     setFormData((prev) => ({ ...prev, urlAlias: newAlias }));
   };
   
-
-  const handleMultipleFileChange = (e, fieldName) => {
-    const files = Array.from(e.target.files);
-    const imageURLs = files.map((file) => URL.createObjectURL(file));
-    
-    // Ensure fieldName is always an array
-    setFormData((prevData) => ({
-      ...prevData,
-      [fieldName]: Array.isArray(prevData[fieldName]) 
-        ? [...prevData[fieldName], ...imageURLs] 
-        : imageURLs, // If it's not an array, initialize it with the new files
-    }));
-  };
   
-  const handleRemoveFile = (fileType) => {
-    setFormData({
-      ...formData,
-      [fileType]: "",  // Clear the specific file type
+
+  const handleMultipleFileChange = (e, section) => {
+    const files = Array.from(e.target.files); // Get the files selected by the user.
+    const fileURLs = files.map((file) => URL.createObjectURL(file)); // Create a temporary URL for each file.
+  
+    // Add the new images to the state
+    setFormData((prevState) => {
+      return {
+        ...prevState,
+        [section]: [...prevState[section], ...fileURLs], // Append the new images to the existing list.
+      };
     });
   };
+  
 
   const removeImage = (imageType) => {
     setFormData((prevData) => ({
@@ -98,20 +94,16 @@ const EditVCard = () => {
     }));
   };
   
-  
 
-  const handleRemoveImage = (fieldName, index) => {
-    const updatedImages = [...formData[fieldName]];
-    updatedImages.splice(index, 1);
-    setFormData((prevData) => ({
-      ...prevData,
-      [fieldName]: updatedImages,
-    }));
-  };
-
-  const handlePreviewImage = (image) => {
-    setFormData({ ...formData, previewImage: image });
-  };
+  const handleRemoveImage = (section, index) => {
+    setFormData((prevState) => {
+      const newImages = prevState[section].filter((_, idx) => idx !== index); // Filter out the image at the given index
+      return {
+        ...prevState,
+        [section]: newImages, // Update the state with the new image list.
+      };
+    });
+  };  
 
   const addToList = (fieldName, currentFieldName) => {
     if (formData[currentFieldName]) {
@@ -141,7 +133,7 @@ const EditVCard = () => {
         <div className="flex flex-1 justify-center">
           <div className="w-full max-w-7xl p-2">
             <div className="w-full bg-white shadow-lg rounded-lg p-8">
-              <h1 className="text-2xl font-semibold">Edit VCard</h1>
+              <h1 className="text-2xl font-bold">Edit VCard</h1>
             </div>
 
             {/* Sidebar and Content */}
@@ -172,7 +164,7 @@ const EditVCard = () => {
 {/* Section Render Logic */}
 {activeSection === "Basic Details" && (
   <div className="max-w-4xl mx-auto p-8 bg-white rounded-xl shadow-2xl border border-gray-100">
-    <h2 className="text-2xl font-semibold text-gray-800 mb-8">Basic Details</h2>
+    <h2 className="text-2xl font-bold text-gray-800 mb-8">Basic Details</h2>
     <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
 
       {/* URL Alias */}
@@ -387,7 +379,7 @@ const EditVCard = () => {
 
     {/* Profile Picture */}
     <div className="mt-4">
-      <label className="text-xl font-semibold mb-4 flex items-center gap-2">
+      <label className="text-xl font-bold mb-4 flex items-center gap-2">
         <i className="fas fa-user-circle text-blue-500"></i> Profile Picture
       </label>
       <input
@@ -415,7 +407,7 @@ const EditVCard = () => {
 
     {/* Banner Image */}
     <div className="mt-8">
-      <label className="text-xl font-semibold mb-4 flex items-center gap-2">
+      <label className="text-xl font-bold mb-4 flex items-center gap-2">
         <i className="fas fa-image text-blue-500"></i> Banner Image
       </label>
       <input
@@ -449,7 +441,7 @@ const EditVCard = () => {
             {/* Awards Section */}
 {activeSection === "Awards" && (
   <div className="p-6 bg-white rounded-lg shadow-md space-y-8">
-    <h2 className="text-2xl font-semibold mb-6 flex items-center gap-2">
+    <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
       <i className="fas fa-trophy text-yellow-500"></i> Awards
     </h2>
     <div className="flex items-center mb-4 space-x-4">
@@ -484,7 +476,7 @@ const EditVCard = () => {
 {/* Family Details Section */}
 {activeSection === "Family Details" && (
   <div className="p-6 bg-white rounded-lg shadow-md space-y-8">
-    <h2 className="text-2xl font-semibold mb-6 flex items-center gap-2">
+    <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
       <i className="fas fa-users text-green-500"></i> Family Details
     </h2>
     <div className="flex items-center mb-4 space-x-4">
@@ -516,11 +508,10 @@ const EditVCard = () => {
   </div>
 )}
 
-
              {/* Social Work Images */}
 {activeSection === "Social Work" && (
   <div className="mt-8 p-8 bg-white rounded-xl shadow-lg max-w-3xl mx-auto">
-    <label className="text-2xl font-semibold text-gray-900 mb-6">Social Work Images</label>
+    <label className="text-2xl font-bold text-gray-900 mb-6">Social Work Images</label>
     
     {/* File Input */}
     <input
@@ -560,7 +551,7 @@ const EditVCard = () => {
               {/* Event Images */}
 {activeSection === "Events" && (
   <div className="mt-8 p-8 bg-white rounded-xl shadow-lg max-w-3xl mx-auto">
-    <label className="text-2xl font-semibold text-gray-900 mb-6">Event Images</label>
+    <label className="text-2xl font-bold text-gray-900 mb-6">Event Images</label>
     
     {/* File Input */}
     <input
@@ -597,47 +588,84 @@ const EditVCard = () => {
   </div>
 )}
 
-
-                {/* News Center Images */}
-{activeSection === "News Center" && (
-  <div className="mt-8 p-8 bg-white rounded-xl shadow-lg max-w-3xl mx-auto">
-    <label className="text-2xl font-semibold text-gray-900 mb-6">News Center Images</label>
-    
-    {/* File Input */}
-    <input
-      type="file"
-      accept="image/*"
-      multiple
-      onChange={(e) => handleMultipleFileChange(e, "newsCenterImages")}
-      className="block w-full text-sm mt-6 text-gray-500 file:mr-4 file:py-3 file:px-5 file:border-2 file:border-gray-300 file:rounded-xl file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-blue-400 transition duration-300 mb-6"
-    />
-    
-    {/* Images Preview */}
-    <div className="flex flex-wrap gap-6 mt-6">
-      {formData.newsCenterImages.map((image, index) => (
-        <div key={index} className="relative group">
-          <img
-            src={image}
-            alt={`news-center-${index}`}
-            className="w-36 h-36 object-cover rounded-xl shadow-lg transition-all duration-300 transform hover:scale-105"
+{/* Social Links Section */}
+{activeSection === "Social Links" && (
+  <div className="mt-4">
+    <label className="text-xl font-bold mb-4">Social Links</label>
+    <div className="grid grid-cols-2 gap-4">
+      {[
+        { label: "Website", icon: "🌐", field: "websiteURL" },
+        { label: "Facebook", icon: "📘", field: "facebookURL" },
+        { label: "Twitter", icon: "𝕏", field: "twitterURL" },
+        { label: "Instagram", icon: "📸", field: "instagramURL" },
+        { label: "Reddit", icon: "👽", field: "redditURL" },
+        { label: "Tumblr", icon: "🖤", field: "tumblrURL" },
+        { label: "YouTube", icon: "▶️", field: "youtubeURL" },
+        { label: "LinkedIn", icon: "🔗", field: "linkedinURL" },
+        { label: "WhatsApp", icon: "💬", field: "whatsappURL" },
+        { label: "Pinterest", icon: "📌", field: "pinterestURL" },
+        { label: "TikTok", icon: "🎵", field: "tiktokURL" },
+        { label: "Snapchat", icon: "👻", field: "snapchatURL" },
+      ].map((social, index) => (
+        <div key={index} className="flex items-center space-x-2">
+          <span className="text-xl">{social.icon}</span>
+          <input
+            type="text"
+            placeholder={`${social.label} URL`}
+            value={formData[social.field] || ""}
+            onChange={(e) =>
+              setFormData({ ...formData, [social.field]: e.target.value })
+            }
+            className="w-full p-2 border border-gray-300 rounded-lg"
           />
-          
-          {/* Delete Button */}
-          <button
-            type="button"
-            onClick={() => handleRemoveImage("newsCenterImages", index)}
-            className="absolute top-0 right-0 bg-red-600 text-white rounded-full p-2 shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 hover:bg-red-700"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"/>
-            </svg>
-          </button>
         </div>
       ))}
     </div>
   </div>
 )}
-            </div>
+
+
+
+                {/* News Center Images */}
+{activeSection === "News Center" && (
+   <div className="mt-8 p-8 bg-white rounded-xl shadow-lg max-w-3xl mx-auto">
+   <label className="text-2xl font-bold text-gray-900 mb-6">News Center Images</label>
+
+   {/* File Input */}
+   <input
+     type="file"
+     accept="image/*"
+     multiple
+     onChange={(e) => handleMultipleFileChange(e, "newsCenterImages")}
+     className="block w-full text-sm mt-6 text-gray-500 file:mr-4 file:py-3 file:px-5 file:border-2 file:border-gray-300 file:rounded-xl file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-blue-400 transition duration-300 mb-6"
+   />
+
+   {/* Images Preview */}
+   <div className="flex flex-wrap gap-6 mt-6">
+     {formData.newsCenterImages.map((image, index) => (
+       <div key={index} className="relative group">
+         <img
+           src={image}
+           alt={`news-center-${index}`}
+           className="w-36 h-36 object-cover rounded-xl shadow-lg transition-all duration-300 transform hover:scale-105"
+         />
+
+         {/* Delete Button */}
+         <button
+           type="button"
+           onClick={() => handleRemoveImage("newsCenterImages", index)}
+           className="absolute top-0 right-0 bg-red-600 text-white rounded-full p-2 shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 hover:bg-red-700"
+         >
+           <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"/>
+           </svg>
+         </button>
+       </div>
+     ))}
+    </div>
+  </div>
+)}
+  </div>
           </div>
 
           {/* Save and Reset Buttons */}
@@ -654,11 +682,10 @@ const EditVCard = () => {
   >
     Save
   </button>
-</div>
-
-        </div>
-      </div>
-    </div>
+  </div>
+  </div>
+  </div>
+  </div>
   </div>
   );
 };

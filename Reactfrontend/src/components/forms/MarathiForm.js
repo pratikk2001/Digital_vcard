@@ -59,6 +59,7 @@ const EditVCard = () => {
     { name: "Social Work", icon: <FaHandsHelping /> },
     { name: "Events", icon: <FaCalendarAlt /> },
     { name: "News Center", icon: <FaNewspaper /> },
+    { name: "Social Links", icon: <FaImage /> },
   ];
   const handleSave = () => {
     console.log("Form data saved:", formData);
@@ -70,33 +71,39 @@ const EditVCard = () => {
     setFormData((prev) => ({ ...prev, urlAlias: newAlias }));
   };
   
+  
 
-  const handleMultipleFileChange = (e, fieldName) => {
-    const files = Array.from(e.target.files);
-    const imageURLs = files.map((file) => URL.createObjectURL(file));
-    
-    // Ensure fieldName is always an array
+  const handleMultipleFileChange = (e, section) => {
+    const files = Array.from(e.target.files); // Get the files selected by the user.
+    const fileURLs = files.map((file) => URL.createObjectURL(file)); // Create a temporary URL for each file.
+  
+    // Add the new images to the state
+    setFormData((prevState) => {
+      return {
+        ...prevState,
+        [section]: [...prevState[section], ...fileURLs], // Append the new images to the existing list.
+      };
+    });
+  };
+  
+
+  const removeImage = (imageType) => {
     setFormData((prevData) => ({
       ...prevData,
-      [fieldName]: Array.isArray(prevData[fieldName]) 
-        ? [...prevData[fieldName], ...imageURLs] 
-        : imageURLs, // If it's not an array, initialize it with the new files
+      [imageType]: null, // Clear the specific image from the formData
     }));
   };
   
 
-  const handleRemoveImage = (fieldName, index) => {
-    const updatedImages = [...formData[fieldName]];
-    updatedImages.splice(index, 1);
-    setFormData((prevData) => ({
-      ...prevData,
-      [fieldName]: updatedImages,
-    }));
-  };
-
-  const handlePreviewImage = (image) => {
-    setFormData({ ...formData, previewImage: image });
-  };
+  const handleRemoveImage = (section, index) => {
+    setFormData((prevState) => {
+      const newImages = prevState[section].filter((_, idx) => idx !== index); // Filter out the image at the given index
+      return {
+        ...prevState,
+        [section]: newImages, // Update the state with the new image list.
+      };
+    });
+  };  
 
   const addToList = (fieldName, currentFieldName) => {
     if (formData[currentFieldName]) {
@@ -126,7 +133,7 @@ const EditVCard = () => {
         <div className="flex flex-1 justify-center">
           <div className="w-full max-w-7xl p-2">
             <div className="w-full bg-white shadow-lg rounded-lg p-8">
-              <h1 className="text-2xl font-semibold">Edit VCard</h1>
+              <h1 className="text-2xl font-bold">Edit VCard</h1>
             </div>
 
             {/* Sidebar and Content */}
@@ -152,26 +159,25 @@ const EditVCard = () => {
 </div>
 
               {/* Main Content */}
-              <div className="col-span-9 p-6 bg-gray-50 rounded-lg shadow-md">
+<div className="col-span-9 p-6 bg-gray-50 rounded-lg shadow-md">
 
-                
-              {/* Section Render Logic */}
+{/* Section Render Logic */}
 {activeSection === "Basic Details" && (
-  <div className="max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-lg">
-    <h2 className="text-2xl font-semibold text-gray-800 mb-6">Basic Details</h2>
-    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+  <div className="max-w-4xl mx-auto p-8 bg-white rounded-xl shadow-2xl border border-gray-100">
+    <h2 className="text-2xl font-bold text-gray-800 mb-8">Basic Details</h2>
+    <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
 
       {/* URL Alias */}
       <div className="flex flex-col">
-        <label htmlFor="urlAlias" className="text-gray-700 font-medium flex items-center gap-1">
-          URL Alias:
+        <label htmlFor="urlAlias" className="text-gray-700 font-medium flex items-center gap-2 mb-2">
+          <span className="text-blue-500">🔗</span> URL Alias:
           <span
             className="text-gray-500 cursor-pointer relative group"
             title="The main URL that your vCard is going to be accessed from."
           >
             <i className="fas fa-info-circle"></i>
             <div className="absolute top-full left-0 bg-black text-white text-xs p-2 rounded-lg shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-              The main URL that your vCard is going to be accessed from.
+            तुमच्या vCard साठी मुख्य URL जिथून तो प्रवेश केला जाईल.
             </div>
           </span>
         </label>
@@ -181,13 +187,14 @@ const EditVCard = () => {
             name="urlAlias"
             value={formData.urlAlias}
             onChange={handleInputChange}
-            className="p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+            aria-label="Enter your vCard's URL alias"
+            className="p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300 ease-in-out"
             placeholder="Enter URL Alias"
           />
           <button
             type="button"
             onClick={handleRegenerateAlias}
-            className="p-3 bg-gray-200 hover:bg-gray-300 rounded-md text-gray-600"
+            className="p-3 bg-gradient-to-r from-blue-500 to-teal-400 hover:bg-blue-400 rounded-md text-white transition-all duration-200 ease-in-out"
             title="Regenerate URL Alias"
           >
             <i className="fas fa-sync-alt"></i>
@@ -197,136 +204,136 @@ const EditVCard = () => {
 
       {/* First Name */}
       <div className="flex flex-col">
-        <label htmlFor="firstName" className="text-gray-700 font-medium flex items-center gap-1">
-          First Name:
-          <i className="fas fa-user text-gray-500"></i>
+        <label htmlFor="firstName" className="text-gray-700 font-medium flex items-center gap-2 mb-2">
+          <span className="text-green-500">👤</span> पहिले नाव:
         </label>
         <input
           type="text"
           name="firstName"
           value={formData.firstName}
           onChange={handleInputChange}
-          className="p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
-          placeholder="First Name"
+          aria-label="Enter your first name"
+          className="p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300 ease-in-out"
+          placeholder="Enter your first name"
         />
       </div>
 
       {/* Last Name */}
       <div className="flex flex-col">
-        <label htmlFor="lastName" className="text-gray-700 font-medium flex items-center gap-1">
-          Last Name:
-          <i className="fas fa-user text-gray-500"></i>
+        <label htmlFor="lastName" className="text-gray-700 font-medium flex items-center gap-2 mb-2">
+          <span className="text-green-500">👤</span> आडनाव:
         </label>
         <input
           type="text"
           name="lastName"
           value={formData.lastName}
           onChange={handleInputChange}
-          className="p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
-          placeholder="Last Name"
+          aria-label="Enter your last name"
+          className="p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300 ease-in-out"
+          placeholder="Enter your last name"
         />
       </div>
 
       {/* Email */}
       <div className="flex flex-col">
-        <label htmlFor="email" className="text-gray-700 font-medium flex items-center gap-1">
-          Email:
-          <i className="fas fa-envelope text-gray-500"></i>
+        <label htmlFor="email" className="text-gray-700 font-medium flex items-center gap-2 mb-2">
+          <span className="text-yellow-500">📧</span> ईमेल:
         </label>
         <input
           type="email"
           name="email"
           value={formData.email}
           onChange={handleInputChange}
-          className="p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
-          placeholder="Email"
+          aria-label="Enter your email address"
+          className="p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300 ease-in-out"
+          placeholder="Enter your email address"
         />
       </div>
 
       {/* Phone */}
       <div className="flex flex-col">
-        <label htmlFor="phone" className="text-gray-700 font-medium flex items-center gap-1">
-          Phone Number:
-          <i className="fas fa-phone text-gray-500"></i>
+        <label htmlFor="phone" className="text-gray-700 font-medium flex items-center gap-2 mb-2">
+          <span className="text-blue-500">📱</span> फोन नंबर:
         </label>
         <input
           type="text"
           name="phone"
           value={formData.phone}
           onChange={handleInputChange}
-          className="p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
-          placeholder="Phone Number"
+          aria-label="Enter your phone number"
+          className="p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300 ease-in-out"
+          placeholder="Enter your phone number"
         />
       </div>
 
       {/* Date of Birth */}
       <div className="flex flex-col">
-        <label htmlFor="dob" className="text-gray-700 font-medium flex items-center gap-1">
-          Date of Birth:
-          <i className="fas fa-calendar-alt text-gray-500"></i>
+        <label htmlFor="dob" className="text-gray-700 font-medium flex items-center gap-2 mb-2">
+          <span className="text-pink-500">🎂</span> जन्मतारीख:
         </label>
         <input
           type="date"
           name="dob"
           value={formData.dob}
           onChange={handleInputChange}
-          className="p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+          aria-label="Enter your date of birth"
+          className="p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300 ease-in-out"
         />
       </div>
 
       {/* Position Title */}
       <div className="flex flex-col">
-        <label htmlFor="positionTitle" className="text-gray-700 font-medium flex items-center gap-1">
-          Position Title:
-          <i className="fas fa-briefcase text-gray-500"></i>
+        <label htmlFor="positionTitle" className="text-gray-700 font-medium flex items-center gap-2 mb-2">
+          <span className="text-gray-700">💼</span> पद शीर्षक:
         </label>
         <input
           type="text"
           name="positionTitle"
           value={formData.positionTitle}
           onChange={handleInputChange}
-          className="p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
-          placeholder="Position Title"
+          aria-label="Enter your position title"
+          className="p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300 ease-in-out"
+          placeholder="Enter your position title"
         />
       </div>
 
       {/* Address */}
       <div className="flex flex-col">
-        <label htmlFor="address" className="text-gray-700 font-medium flex items-center gap-1">
-          Address:
-          <i className="fas fa-map-marker-alt text-gray-500"></i>
+        <label htmlFor="address" className="text-gray-700 font-medium flex items-center gap-2 mb-2">
+          <span className="text-red-500">📍</span> पत्ता:
         </label>
         <input
           type="text"
           name="address"
           value={formData.address}
           onChange={handleInputChange}
-          className="p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
-          placeholder="Address"
+          aria-label="Enter your address"
+          className="p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300 ease-in-out"
+          placeholder="Enter your address"
         />
       </div>
 
       {/* Education */}
       <div className="flex flex-col">
-        <label htmlFor="education" className="text-gray-700 font-medium flex items-center gap-1">
-          Education:
-          <i className="fas fa-graduation-cap text-gray-500"></i>
+        <label htmlFor="education" className="text-gray-700 font-medium flex items-center gap-2 mb-2">
+          <span className="text-orange-500">🎓</span> शिक्षण:
         </label>
         <input
           type="text"
           name="education"
           value={formData.education}
           onChange={handleInputChange}
-          className="p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
-          placeholder="Education"
+          aria-label="Enter your education"
+          className="p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300 ease-in-out"
+          placeholder="Enter your education"
         />
       </div>
 
       {/* Show QR Code Toggle */}
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between mt-6">
         <label htmlFor="showQrCode" className="font-medium text-gray-700 flex items-center gap-2">
           <i className="fas fa-qrcode text-gray-500"></i>
-          Show QR Code:
+          <span>QR कोड दाखवा:</span>
         </label>
         <label className="relative inline-flex items-center cursor-pointer">
           <input
@@ -334,6 +341,7 @@ const EditVCard = () => {
             name="showQrCode"
             checked={formData.showQrCode}
             onChange={handleInputChange}
+            aria-label="Toggle QR code display"
             className="sr-only"
           />
           <span className="w-11 h-6 bg-gray-200 rounded-full peer peer-checked:bg-blue-500 peer-focus:ring-2 peer-focus:ring-blue-300"></span>
@@ -342,10 +350,10 @@ const EditVCard = () => {
       </div>
 
       {/* WhatsApp Share Toggle */}
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between mt-6">
         <label htmlFor="whatsappShare" className="font-medium text-gray-700 flex items-center gap-2">
           <i className="fab fa-whatsapp text-green-500"></i>
-          WhatsApp Share:
+          WhatsApp शेअर::
         </label>
         <label className="relative inline-flex items-center cursor-pointer">
           <input
@@ -353,6 +361,7 @@ const EditVCard = () => {
             name="whatsappShare"
             checked={formData.whatsappShare}
             onChange={handleInputChange}
+            aria-label="Toggle WhatsApp sharing"
             className="sr-only"
           />
           <span className="w-11 h-6 bg-gray-200 rounded-full peer peer-checked:bg-green-500 peer-focus:ring-2 peer-focus:ring-green-300"></span>
@@ -364,212 +373,301 @@ const EditVCard = () => {
   </div>
 )}
 
+              {/* Profile Section */}
+{activeSection === "Profile and Banner" && (
+  <div className="p-6 bg-white rounded-lg shadow-md space-y-8">
+
+    {/* Profile Picture */}
+    <div className="mt-4">
+      <label className="text-xl font-bold mb-4 flex items-center gap-2">
+        <i className="fas fa-user-circle text-blue-500"></i> प्रोफाइल फोटो
+      </label>
+      <input
+        type="file"
+        accept="image/*"
+        onChange={(e) => handleMultipleFileChange(e, "profilePicture")}
+        className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:border file:border-gray-300 file:rounded-lg file:bg-white file:text-blue-700 hover:file:bg-blue-100 transition duration-300 ease-in-out"
+      />
+      {formData.profilePicture && (
+        <div className="mt-4 relative">
+          <img
+            src={formData.profilePicture}
+            alt="Profile Preview"
+            className="w-32 h-32 object-cover rounded-lg border-2 border-gray-300 shadow-md"
+          />
+          <button
+            onClick={() => removeImage("profilePicture")}
+            className="absolute top-0 right-0 bg-red-500 text-white rounded-full p-1 text-sm hover:bg-red-600"
+          >
+            X
+          </button>
+        </div>
+      )}
+    </div>
+
+    {/* Banner Image */}
+    <div className="mt-8">
+      <label className="text-xl font-bold mb-4 flex items-center gap-2">
+        <i className="fas fa-image text-blue-500"></i> बॅनर प्रतिमा
+      </label>
+      <input
+        type="file"
+        accept="image/*"
+        onChange={(e) => handleMultipleFileChange(e, "bannerImage")}
+        className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:border file:border-gray-300 file:rounded-lg file:bg-white file:text-blue-700 hover:file:bg-blue-100 transition duration-300 ease-in-out"
+      />
+      {formData.bannerImage && (
+        <div className="mt-4 relative">
+          <img
+            src={formData.bannerImage}
+            alt="Banner Preview"
+            className="w-full h-32 object-cover rounded-lg border-2 border-gray-300 shadow-md"
+          />
+          <button
+            onClick={() => removeImage("bannerImage")}
+            className="absolute top-0 right-0 bg-red-500 text-white rounded-full p-1 text-sm hover:bg-red-600"
+          >
+            X
+          </button>
+        </div>
+      )}
+    </div>
+
+  </div>
+)}
 
 
 
-                {/* Profile Section */}
-                {activeSection === "Profile and Banner" && (
-                  <div>
-                    <div className="mt-4">
-                      <label className="text-xl font-semibold mb-4">Profile Picture</label>
-                      <input
-                        type="file"
-                        accept="image/*"
-                        onChange={(e) => handleMultipleFileChange(e, "profilePicture")}
-                        className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:border file:border-gray-300 file:rounded-lg file:bg-white file:text-blue-700 hover:file:bg-blue-100"
-                      />
-                      {formData.profilePicture && (
-                        <div className="mt-4">
-                          <img
-                            src={formData.profilePicture}
-                            alt="Profile Preview"
-                            className="w-32 h-32 object-cover rounded-lg"
-                          />
-                        </div>
-                      )}
-                    </div>
+            {/* Awards Section */}
+{activeSection === "Awards" && (
+  <div className="p-6 bg-white rounded-lg shadow-md space-y-8">
+    <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
+      <i className="fas fa-trophy text-yellow-500"></i> पुरस्कार
+    </h2>
+    <div className="flex items-center mb-4 space-x-4">
+      {/* Input for Award Name */}
+      <input
+        type="text"
+        name="currentAward"
+        value={formData.currentAward}
+        onChange={handleInputChange}
+        placeholder="Enter Award Name"
+        className="p-3 border border-gray-300 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+      />
+      {/* Add Award Button */}
+      <button
+        type="button"
+        onClick={() => addToList("awards", "currentAward")}
+        className="px-6 py-3 text-white bg-blue-500 rounded-lg hover:bg-blue-600 transition duration-300"
+      >
+        <i className="fas fa-plus-circle"></i> Add
+      </button>
+    </div>
+    <ul className="list-disc pl-6">
+      {formData.awards.map((award, index) => (
+        <li key={index} className="text-sm text-gray-700 flex items-center gap-2">
+          <i className="fas fa-medal text-yellow-500"></i> {award}
+        </li>
+      ))}
+    </ul>
+  </div>
+)}
 
-                    <div className="mt-40">
-                      <label className="text-xl font-semibold mb-4">Banner Image</label>
-                      <input
-                        type="file"
-                        accept="image/*"
-                        onChange={(e) => handleMultipleFileChange(e, "bannerImage")}
-                        className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:border file:border-gray-300 file:rounded-lg file:bg-white file:text-blue-700 hover:file:bg-blue-100"
-                      />
-                      {formData.bannerImage && (
-                        <div className="mt-4">
-                          <img
-                            src={formData.bannerImage}
-                            alt="Banner Preview"
-                            className="w-full h-32 object-cover rounded-lg"
-                          />
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                )}
+{/* Family Details Section */}
+{activeSection === "Family Details" && (
+  <div className="p-6 bg-white rounded-lg shadow-md space-y-8">
+    <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
+      <i className="fas fa-users text-green-500"></i> कौटुंबिक माहिती
+    </h2>
+    <div className="flex items-center mb-4 space-x-4">
+      {/* Input for Family Detail */}
+      <input
+        type="text"
+        name="currentFamilyDetail"
+        value={formData.currentFamilyDetail}
+        onChange={handleInputChange}
+        placeholder="Enter Family Detail"
+        className="p-3 border border-gray-300 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-green-500"
+      />
+      {/* Add Family Detail Button */}
+      <button
+        type="button"
+        onClick={() => addToList("familyDetails", "currentFamilyDetail")}
+        className="px-6 py-3 text-white bg-green-500 rounded-lg hover:bg-green-600 transition duration-300"
+      >
+        <i className="fas fa-plus-circle"></i> Add
+      </button>
+    </div>
+    <ul className="list-disc pl-6">
+      {formData.familyDetails.map((family, index) => (
+        <li key={index} className="text-sm text-gray-700 flex items-center gap-2">
+          <i className="fas fa-user-friends text-green-500"></i> {family}
+        </li>
+      ))}
+    </ul>
+  </div>
+)}
 
-                {/* Awards Section */}
-                {activeSection === "Awards" && (
-                <div>
-                  <h2 className="text-xl font-semibold mb-4">Awards</h2>
-                  <div className="flex items-center mb-4">
-                    <input
-                      type="text"
-                      name="currentAward"
-                      value={formData.currentAward}
-                      onChange={handleInputChange}
-                      placeholder="Enter award name"
-                      className="p-2 border rounded w-full"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => addToList("awards", "currentAward")}
-                      className="ml-4 px-4 py-2 text-white bg-blue-500 rounded-lg hover:bg-blue-600"
-                    >
-                      Add
-                    </button>
-                  </div>
-                  <ul className="list-disc pl-6">
-                    {formData.awards.map((award, index) => (
-                      <li key={index} className="text-sm text-gray-700">{award}</li>
-                    ))}
-                  </ul>
-                </div>
-              )}
+             {/* Social Work Images */}
+{activeSection === "Social Work" && (
+  <div className="mt-8 p-8 bg-white rounded-xl shadow-lg max-w-3xl mx-auto">
+    <label className="text-2xl font-bold text-gray-900 mb-6">सामाजिक कार्य प्रतिमा</label>
+    
+    {/* File Input */}
+    <input
+      type="file"
+      accept="image/*"
+      multiple
+      onChange={(e) => handleMultipleFileChange(e, "socialWorkImages")}
+      className="block w-full text-sm mt-6 text-gray-500 file:mr-4 file:py-3 file:px-5 file:border-2 file:border-gray-300 file:rounded-xl file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-blue-400 transition duration-300 mb-6"
+    />
+    
+    {/* Images Preview */}
+    <div className="flex flex-wrap gap-6 mt-6">
+      {formData.socialWorkImages.map((image, index) => (
+        <div key={index} className="relative group">
+          <img
+            src={image}
+            alt={`social-work-${index}`}
+            className="w-36 h-36 object-cover rounded-xl shadow-lg transition-all duration-300 transform hover:scale-105"
+          />
+          
+          {/* Delete Button */}
+          <button
+            type="button"
+            onClick={() => handleRemoveImage("socialWorkImages", index)}
+            className="absolute top-0 right-0 bg-red-600 text-white rounded-full p-2 shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 hover:bg-red-700"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"/>
+            </svg>
+          </button>
+        </div>
+      ))}
+    </div>
+  </div>
+)}
 
-              {/* Family Details */}
-              {activeSection === "Family Details" && (
-                <div>
-                  <h2 className="text-xl font-semibold mb-4">Family Details</h2>
-                  <div className="flex items-center mb-4">
-                    <input
-                      type="text"
-                      name="currentFamilyDetail"
-                      value={formData.currentFamilyDetail}
-                      onChange={handleInputChange}
-                      placeholder="Enter family detail"
-                      className="p-2 border rounded w-full"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => addToList("familyDetails", "currentFamilyDetail")}
-                      className="ml-4 px-4 py-2 text-white bg-blue-500 rounded-lg hover:bg-blue-600"
-                    >
-                      Add
-                    </button>
-                  </div>
-                  <ul className="list-disc pl-6">
-                    {formData.familyDetails.map((family, index) => (
-                      <li key={index} className="text-sm text-gray-700">{family}</li>
-                    ))}
-                  </ul>
-                </div>
-              )}
+              {/* Event Images */}
+{activeSection === "Events" && (
+  <div className="mt-8 p-8 bg-white rounded-xl shadow-lg max-w-3xl mx-auto">
+    <label className="text-2xl font-bold text-gray-900 mb-6">कार्यक्रम प्रतिमा</label>
+    
+    {/* File Input */}
+    <input
+      type="file"
+      accept="image/*"
+      multiple
+      onChange={(e) => handleMultipleFileChange(e, "eventImages")}
+      className="block w-full text-sm mt-6 text-gray-500 file:mr-4 file:py-3 file:px-5 file:border-2 file:border-gray-300 file:rounded-xl file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-blue-400 transition duration-300 mb-6"
+    />
+    
+    {/* Images Preview */}
+    <div className="flex flex-wrap gap-6 mt-6">
+      {formData.eventImages.map((image, index) => (
+        <div key={index} className="relative group">
+          <img
+            src={image}
+            alt={`event-${index}`}
+            className="w-36 h-36 object-cover rounded-xl shadow-lg transition-all duration-300 transform hover:scale-105"
+          />
+          
+          {/* Delete Button */}
+          <button
+            type="button"
+            onClick={() => handleRemoveImage("eventImages", index)}
+            className="absolute top-0 right-0 bg-red-600 text-white rounded-full p-2 shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 hover:bg-red-700"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"/>
+            </svg>
+          </button>
+        </div>
+      ))}
+    </div>
+  </div>
+)}
 
-              {/* Social Work Images */}
-              {activeSection === "Social Work" && (
-                <div className="mt-4">
-                  <label className="text-xl font-semibold mb-4">Social Work Images</label>
-                  <input
-                    type="file"
-                    accept="image/*"
-                    multiple
-                    onChange={(e) => handleMultipleFileChange(e, "socialWorkImages")}
-                    className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:border file:border-gray-300 file:rounded-lg file:bg-white file:text-blue-700 hover:file:bg-blue-100"
-                  />
-                  <div className="flex flex-wrap gap-2 mt-2">
-                    {formData.socialWorkImages.map((image, index) => (
-                      <div key={index} className="relative">
-                        <img
-                          src={image}
-                          alt={`social-work-${index}`}
-                          className="w-16 h-16 object-cover rounded-lg shadow-md cursor-pointer"
-                          onClick={() => handlePreviewImage(image)}
-                        />
-                        <button
-                          type="button"
-                          onClick={() => handleRemoveImage("socialWorkImages", index)}
-                          className="absolute top-0 right-0 text-red-500 font-bold"
-                        >
-                          X
-                        </button>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
+{/* Social Links Section */}
+{activeSection === "Social Links" && (
+  <div className="mt-4">
+    <label className="text-xl font-bold mb-4">सामाजिक लिंक</label>
+    <div className="grid grid-cols-2 gap-4">
+      {[
+        { label: "Website", icon: "🌐", field: "websiteURL" },
+        { label: "Facebook", icon: "📘", field: "facebookURL" },
+        { label: "Twitter", icon: "𝕏", field: "twitterURL" },
+        { label: "Instagram", icon: "📸", field: "instagramURL" },
+        { label: "Reddit", icon: "👽", field: "redditURL" },
+        { label: "Tumblr", icon: "🖤", field: "tumblrURL" },
+        { label: "YouTube", icon: "▶️", field: "youtubeURL" },
+        { label: "LinkedIn", icon: "🔗", field: "linkedinURL" },
+        { label: "WhatsApp", icon: "💬", field: "whatsappURL" },
+        { label: "Pinterest", icon: "📌", field: "pinterestURL" },
+        { label: "TikTok", icon: "🎵", field: "tiktokURL" },
+        { label: "Snapchat", icon: "👻", field: "snapchatURL" },
+      ].map((social, index) => (
+        <div key={index} className="flex items-center space-x-2">
+          <span className="text-xl">{social.icon}</span>
+          <input
+            type="text"
+            placeholder={`${social.label} URL`}
+            value={formData[social.field] || ""}
+            onChange={(e) =>
+              setFormData({ ...formData, [social.field]: e.target.value })
+            }
+            className="w-full p-2 border border-gray-300 rounded-lg"
+          />
+        </div>
+      ))}
+    </div>
+  </div>
+)}
 
-              {/* Event Section */}
-              {activeSection === "Events" && (
-                <div className="mt-4">
-                  <label className="text-xl font-semibold mb-4">Event Images</label>
-                  <input
-                    type="file"
-                    accept="image/*"
-                    multiple
-                    onChange={(e) => handleMultipleFileChange(e, "eventImages")}
-                    className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:border file:border-gray-300 file:rounded-lg file:bg-white file:text-blue-700 hover:file:bg-blue-100"
-                  />
-                  <div className="flex flex-wrap gap-2 mt-2">
-                    {formData.eventImages.map((image, index) => (
-                      <div key={index} className="relative">
-                        <img
-                          src={image}
-                          alt={`event-${index}`}
-                          className="w-16 h-16 object-cover rounded-lg shadow-md cursor-pointer"
-                          onClick={() => handlePreviewImage(image)}
-                        />
-                        <button
-                          type="button"
-                          onClick={() => handleRemoveImage("eventImages", index)}
-                          className="absolute top-0 right-0 text-red-500 font-bold"
-                        >
-                          X
-                        </button>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
+                {/* News Center Images */}
+{activeSection === "News Center" && (
+   <div className="mt-8 p-8 bg-white rounded-xl shadow-lg max-w-3xl mx-auto">
+   <label className="text-2xl font-bold text-gray-900 mb-6">बातम्या केंद्र प्रतिमा</label>
 
-              {/* News Center Section */}
-              {activeSection === "News Center" && (
-                <div className="mt-4">
-                  <label className="text-xl font-semibold mb-4">News Center Images</label>
-                  <input
-                    type="file"
-                    accept="image/*"
-                    multiple
-                    onChange={(e) => handleMultipleFileChange(e, "newsCenterImages")}
-                    className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:border file:border-gray-300 file:rounded-lg file:bg-white file:text-blue-700 hover:file:bg-blue-100"
-                  />
-                  <div className="flex flex-wrap gap-2 mt-2">
-                    {formData.newsCenterImages.map((image, index) => (
-                      <div key={index} className="relative">
-                        <img
-                          src={image}
-                          alt={`news-center-${index}`}
-                          className="w-16 h-16 object-cover rounded-lg shadow-md cursor-pointer"
-                          onClick={() => handlePreviewImage(image)}
-                        />
-                        <button
-                          type="button"
-                          onClick={() => handleRemoveImage("newsCenterImages", index)}
-                          className="absolute top-0 right-0 text-red-500 font-bold"
-                        >
-                          X
-                        </button>
-                      </div>
-                    ))}
-                    
-                  </div>
-                </div>
-              )}
+   {/* File Input */}
+   <input
+     type="file"
+     accept="image/*"
+     multiple
+     onChange={(e) => handleMultipleFileChange(e, "newsCenterImages")}
+     className="block w-full text-sm mt-6 text-gray-500 file:mr-4 file:py-3 file:px-5 file:border-2 file:border-gray-300 file:rounded-xl file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-blue-400 transition duration-300 mb-6"
+   />
+
+   {/* Images Preview */}
+   <div className="flex flex-wrap gap-6 mt-6">
+     {formData.newsCenterImages.map((image, index) => (
+       <div key={index} className="relative group">
+         <img
+           src={image}
+           alt={`news-center-${index}`}
+           className="w-36 h-36 object-cover rounded-xl shadow-lg transition-all duration-300 transform hover:scale-105"
+         />
+
+         {/* Delete Button */}
+         <button
+           type="button"
+           onClick={() => handleRemoveImage("newsCenterImages", index)}
+           className="absolute top-0 right-0 bg-red-600 text-white rounded-full p-2 shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 hover:bg-red-700"
+         >
+           <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"/>
+           </svg>
+         </button>
+       </div>
+     ))}
+    </div>
+  </div>
+)}
+
+
+
             </div>
           </div>
-          
 
           {/* Save and Reset Buttons */}
 <div className="mt-6 flex justify-end">
