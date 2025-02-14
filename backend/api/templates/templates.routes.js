@@ -1,21 +1,12 @@
 const express = require('express');
 const router = express.Router();
-const themeController = require('./templates.controller');
+const TemplateController = require('./templates.controller');
 
 
-// Get all themes
-router.get('/getAll', themeController.getAllTemplates);
-
-// // Get a theme by ID
-router.get('/getById/:id', themeController.getTemplateById);
-
-// Create a new theme
-router.post('/create', themeController.createTemplate);
-
-//  Update a theme
-router.put('/update/:id', themeController.updateTemplate);
-
-//  Delete a theme
-router.delete('/delete/:id', themeController.deleteTemplate);
+router.post("/create", TemplateController.createTemplate);
+router.get("getAll", TemplateController.getTemplates);
+router.get("getById/:id", TemplateController.getTemplateById);
+router.put("update/:id", TemplateController.updateTemplate);
+router.delete("delete/:id", TemplateController.deleteTemplate);
 
 module.exports = router;
