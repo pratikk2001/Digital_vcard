@@ -8,16 +8,12 @@ export default function Home() {
   return (
     <div className="flex flex-col min-h-screen bg-gray-100">
       {/* Top Navbar */}
-
-      <div className="z-0">
       <TopNavbar />
-      </div>
 
       <div className="flex">
         {/* Sidebar */}
-        <div className="z-10">
         <Sidenav isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
-        </div>
+
         {/* Main Content */}
         <div
           className={`flex-1 p-6 transition-all duration-300 ${

@@ -19,9 +19,22 @@ import CustomerSettings from './pages/customer/settings';
 import CustomerThemes from './pages/customer/themes';
 import CustomersMyCard from './pages/customer/mycards';
 import CustomerGetCard from './pages/customer/getcard';
-import Customerform from './pages/customer/Cardform';
+// import Customerform from './components/forms/Cardform';
 import CustomerHome from './pages/customer/home';
 import DigitalCard from './components/customerCard/custumerCardDisplay';
+import FormDashboard from './components/forms/FormDashboard';
+
+// Forms
+import EnglishForm from './components/forms/EnglishForm';  
+import Marathi from './components/forms/MarathiForm';
+
+// Templates
+import Templates1 from "./pages/customer/Templates1";
+import Templates2 from "./pages/customer/Templates2";
+import Templates3 from "./pages/customer/Templates3";
+import Templates4 from "./pages/customer/Templates4";
+import Templates5 from "./pages/customer/Templates5";
+import Templates6 from "./pages/customer/Templates6";
 
 
 function App() {
@@ -36,9 +49,9 @@ function App() {
         <Route path="/Themes" element={<Themes />} />
         <Route path="/Customers Card" element={<CustomerCard />} />
         <Route path="/Customers" element={<Costomer />} />
+        <Route path="/FormDashboard" element={<FormDashboard />} />
         <Route path="/AdminLogin" element={<Login />} />
-        <Route path="/CustomersForm" element={<Customerform />} />
-
+        {/* <Route path="/CustomersForm" element={<Customerform />} /> */}
 
         {/* Customer Routes */}
         <Route path="/CustomerLogin" element={<CustomerLogin />} />
@@ -49,6 +62,17 @@ function App() {
         <Route path="/CustomerThemes" element={<CustomerThemes />} />
         <Route path="/CustomerCard" element={<CustomersMyCard />} />
         <Route path="/GetCard" element={<CustomerGetCard />} />
+        <Route path="/EnglishForm" element={<EnglishForm />} />
+        <Route path="/MarathiForm" element={<Marathi />} />
+
+        {/* Customer Templates */}
+        <Route path="/Templates1" element={<Templates1 />} />
+        <Route path="/Templates2" element={<Templates2 />} />
+        <Route path="/Templates3" element={<Templates3 />} />
+        <Route path="/Templates4" element={<Templates4 />} />
+        <Route path="/Templates5" element={<Templates5 />} />
+        <Route path="/Templates6" element={<Templates6 />} />
+
          {/* New DigitalCard Route */}
          <Route path="/:username" element={<DigitalCard />} />
       </Routes>

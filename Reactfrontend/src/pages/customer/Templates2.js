@@ -6,29 +6,24 @@ import "swiper/css/pagination";
 import "swiper/css/navigation";
 import { Pagination, Navigation } from "swiper/modules";
 
-import { useParams } from "react-router-dom"
-
 const VCard = () => {
-
-  const { username } = useParams();
-
   // Different images for each section
   const socialWorkImages = [
-    "BJP.png",
-    "NCP.jpg",
-    "Shiv.jpg",
+    "sw-1.jpg",
+    "sw-2.jpg",
+    "sw-3.jpg",
   ];
 
   const momentsImages = [
-    "BJP.png",
-    "NCP.jpg",
-    "Shiv.jpg",
+    "cap-1.jpg",
+    "cap-2.jpg",
+    "cap-3.jpg",
   ];
 
   const newsImages = [
-    "BJP.png",
-    "NCP.jpg",
-    "Shiv.jpg",
+    "news-1.jpg",
+    "news-2.jpg",
+    "news-3.jpg",
   ];
 
   // State to handle image preview modal
@@ -53,122 +48,128 @@ const VCard = () => {
     }
   };
 
+
   return (
     <div className="bg-white flex flex-col items-center py-10">
-  <div className="bg-[#0d1726] text-white w-[500px] p-6 rounded-lg shadow-lg text-center">
+      <div
+        className="bg-gradient-to-r from-orange-400 via-gray-200 to-green-300 text-black w-[500px] p-6 rounded-lg shadow-lg text-center"
+        style={{
+          backgroundImage: `('BJP.png')`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+        }}
+      >
         {/* Header Image */}
         <img
-          src="https://via.placeholder.com/400x100"
-          alt="Header - Personal Information"
+          src="bg.jpg"
+          alt="Backgorund Image"
           className="w-full h-32 object-cover rounded-t-lg"
         />
         {/* Profile Image */}
         <img
-          src="https://via.placeholder.com/100"
-          alt="Profile of सौ. स्नेहा रमेश आंब्रे"
+          src="profile.jpg"
+          alt="Profile Image"
           className="w-24 h-24 rounded-full mx-auto -mt-12 border-4 border-white"
         />
-        <h2 className="text-xl font-bold mt-4">{username}</h2>
-        <p className="text-sm text-gray-300">
-          मा. नगरसेविका ठा.म.पा. (भारतीय जनता पार्टी)
+        <h2 className="text-xl font-bold mt-4">Mrs. ABC </h2>
+        <p className="text-sm text-black">
+          Ex. Municipal Councillor, TMC (Bharatiya Janata Party)
         </p>
 
         {/* Personal Information */}
         <div className="mt-4 text-left text-sm">
           <p>
-            <strong>वाढदिवस:</strong> १९ ऑगस्ट
+            <strong>Birth Date:</strong> 19 August 1970
           </p>
           <p>
-            <strong>संपर्क:</strong> ९८७०४४७२७२
+            <strong>Contact Number:</strong> +91 987654321
           </p>
           <p>
-            <strong>ई-मेल:</strong> bjpkaryalay04@gmail.com
+            <strong>Email:</strong> bjp@gmail.com
           </p>
           <p>
-            <strong>शिक्षण:</strong> कला शाखेत पदवीधर (BA)
+            <strong>Education:</strong> Graduate in Arts (BA)
           </p>
         </div>
 
         {/* Positions Held */}
         <div className="mt-4 text-left text-sm">
-          <h3 className="font-bold">भूषवलेले पदे:</h3>
+          <h3 className="font-bold">Positions Held:</h3>
           <ul className="list-disc list-inside">
-            <li>नगरसेविका - ठा.म.पा. प्रभाग क्र. ४ ब.</li>
-            <li>सदस्या - शिक्षण समिती ठा.म.पा.</li>
-            <li>विशेष कार्यकारी अधिकारी (SEO)</li>
-            <li>कार्याध्यक्षा - नवयुग मित्र मंडळ (रजि.ठाणे)</li>
+            <li>Municipal Councillor - TMC Ward No. 4</li>
+            <li>Member - Education Committee, TMC</li>
+            <li>Special Executive Officer (SEO)</li>
+            <li>Chairperson - Navayug Mitra Mandal (Reg. Thane)</li>
           </ul>
         </div>
 
         {/* Family Section */}
         <div className="mt-4 text-left text-sm">
-          <h3 className="font-bold">कुटुंब:</h3>
+          <h3 className="font-bold">Family:</h3>
           <ul className="list-disc list-inside">
-            <li>पती - श्री. रमेश बाळू आंब्रे</li>
-            <li>मुलगा - डॉ. सागर रमेश आंब्रे (MBBS, MS जनरल सर्जरी, FMAS, ऑनको सर्जरी फेलोशिप, हेड अँड नेक कॅन्सर सर्जरी, AIIMS ऋषिकेश ब्रेस्ट कॅन्सर सर्जरी कोर्स, फेलो TNMC मुंबई असिस्टंट)</li>
-            <li>मुलगी - डॉ. स्नेहल रमेश आंब्रे (MBBS, DMRE (रेडिओलॉजिस्ट))</li>
-            <li>सून - डॉ. श्रुति रमेश आंब्रे (MBBS, DMRE (रेडिओलॉजिस्ट))</li>
+            <li>Husband - ABC </li>
+            <li>Son -ABC (MBBS, MS General Surgery, FMAS, Oncology Surgery Fellowship, Head and Neck Cancer Surgery, AIIMS Rishikesh Breast Cancer Surgery Course, Fellow TNMC Mumbai Assistant)</li>
+            <li>Daughter - ABC (MBBS, DMRE (Radiologist))</li>
+            <li>Daughter-in-law - ABC (MBBS, DMRE (Radiologist))</li>
           </ul>
         </div>
 
         {/* Contact Details */}
-<div className="mt-6 flex justify-around">
-  {/* Mobile Section */}
-  <div className="text-center">
-    <a href="tel:+919870447272" aria-label="Call Mobile Number">
-      <FaPhone className="text-2xl mx-auto" />
-      <p className="text-sm">Mobile</p>
-      <p className="text-sm">+91 9870447272</p>
-    </a>
-  </div>
-  
-  {/* Email Section */}
-  <div className="text-center">
-    <a href="mailto:bjpkaryalay04@gmail.com" aria-label="Send Email">
-      <FaEnvelope className="text-2xl mx-auto" />
-      <p className="text-sm">Email</p>
-      <p className="text-sm">bjpkaryalay04@gmail.com</p>
-    </a>
-  </div>
-  
-  {/* Address Section */}
-  <div className="text-center">
-    <a 
-      href="https://www.google.com/maps/search/Thane,+Mumbai" 
-      target="_blank" 
-      rel="noopener noreferrer" 
-      aria-label="View Address on Google Maps"
-    >
-      <FaMapMarkerAlt className="text-2xl mx-auto" />
-      <p className="text-sm">Address</p>
-      <p className="text-sm">Thane, Mumbai</p>
-    </a>
-  </div>
-</div>
+        <div className="mt-6 flex justify-around">
+          {/* Mobile Section */}
+          <div className="text-center">
+            <a href="tel:+919870447272" aria-label="Call Mobile Number">
+              <FaPhone className="text-2xl mx-auto" />
+              <p className="text-sm">Mobile</p>
+              <p className="text-sm">+91 987654321</p>
+            </a>
+          </div>
 
+          {/* Email Section */}
+          <div className="text-center">
+            <a href="mailto:bjpkaryalay04@gmail.com" aria-label="Send Email">
+              <FaEnvelope className="text-2xl mx-auto" />
+              <p className="text-sm">Email</p>
+              <p className="text-sm">bjp@gmail.com</p>
+            </a>
+          </div>
 
-{/* QR Code */}
-<div className="mt-10 text-center">
-  <a 
-    href="https://your-link-here.com"  // Replace with the desired URL to open
-    target="_blank" 
-    rel="noopener noreferrer" 
-    aria-label="Scan QR Code"
-  >
-    <img
-      src="QR_code.png"  // Replace with the actual QR code image URL
-      alt="QR Code"
-      className="w-32 h-32 mx-auto"
-    />
-  </a>
-  <p className="text-large">QR Code</p>
-</div>
+          {/* Address Section */}
+          <div className="text-center">
+            <a
+              href="https://www.google.com/maps/search/Thane,+Mumbai"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="View Address on Google Maps"
+            >
+              <FaMapMarkerAlt className="text-2xl mx-auto" />
+              <p className="text-sm">Address</p>
+              <p className="text-sm">Thane, Mumbai</p>
+            </a>
+          </div>
+        </div>
 
+        {/* QR Code */}
+        <div className="mt-10 text-center">
+          <a
+            href="https://your-link-here.com" // Replace with the desired URL to open
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Scan QR Code"
+          >
+            <img
+              src="QR_code.png" // Replace with the actual QR code image URL
+              alt="QR Code"
+              className="w-32 h-32 mx-auto"
+            />
+          </a>
+          <p className="text-large">QR Code</p>
+        </div>
 
         {/* Social Work Section */}
         <div className="mt-6 text-left text-sm">
-          <h2 className="text-white text-xl font-bold mb-4 text-center">
-            सामाजिक कार्य:
+          <h2 className="text-black text-xl font-bold mb-4 text-center">
+            Social Work:
           </h2>
           <Swiper
             slidesPerView={1}
@@ -198,8 +199,8 @@ const VCard = () => {
 
         {/* Moments Section */}
         <div className="mt-6 text-left text-sm">
-          <h2 className="text-white text-xl font-bold mb-4 text-center">
-            क्षणचित्रे:
+          <h2 className="text-black text-xl font-bold mb-4 text-center">
+            Moments:
           </h2>
           <Swiper
             slidesPerView={1}
@@ -210,7 +211,7 @@ const VCard = () => {
               disableOnInteraction: false,
             }}
             pagination={{ clickable: true }}
-            navigation={true}
+            navigation={true }
             modules={[Pagination, Navigation]}
             className="rounded-lg overflow-hidden"
           >
@@ -229,19 +230,19 @@ const VCard = () => {
 
         {/* News Section */}
         <div className="mt-6 text-left text-sm">
-          <h2 className="text-white text-xl font-bold mb-4 text-center">
-            वर्तमान पत्रांनी घेतलेली दखल:
+          <h2 className="text-black text-xl font-bold mb-4 text-center">
+            Newspaper Coverage:
           </h2>
           <Swiper
             slidesPerView={1}
             spaceBetween={10}
             loop={true}
             autoplay={{
-              delay: 1000, // Change image every 1 second
+              delay: 10000, // Change image every 1 second
               disableOnInteraction: false,
             }}
             pagination={{ clickable: true }}
-            navigation={true}
+            navigation={true }
             modules={[Pagination, Navigation]}
             className="rounded-lg overflow-hidden"
           >
