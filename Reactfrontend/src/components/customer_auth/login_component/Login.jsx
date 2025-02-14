@@ -24,7 +24,7 @@ function Login() {
 
       if (resp.status_code === 200) {
         setErrorMessage("");
-        navigate("/CustomerDashboard"); 
+        navigate("/CustomerDashboard");
       } else {
         setErrorMessage("Invalid email or password. Please try again.");
       }
@@ -35,19 +35,21 @@ function Login() {
   };
 
   return (
-    <div className="min-h-screen bg-blue-50 flex flex-col justify-center items-center">
-      <div className="bg-white shadow-lg rounded-lg w-96 p-6">
-      <h1 className="text-3xl font-semibold text-blue-600 text-center mb-6">E-Card</h1>
-        <h2 className="text-3xl font-bold text-blue-600 text-center mb-4">
-          Login
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-blue-500 to-indigo-600">
+      <div className="bg-white shadow-2xl rounded-2xl p-8 w-96 transform hover:scale-105 transition-all duration-300">
+        <h1 className="text-4xl font-extrabold text-indigo-600 text-center mb-4">
+          Digital Vcard
+        </h1>
+        <h2 className="text-2xl font-semibold text-gray-700 text-center mb-6">
+          Sign in to your account
         </h2>
-        <form onSubmit={handleLogin} className="space-y-4">
+        <form onSubmit={handleLogin} className="space-y-5">
           <div>
             <label
               htmlFor="email"
-              className="block text-sm font-medium text-gray-700"
+              className="block text-sm font-medium text-gray-600"
             >
-              Email
+              Email Address
             </label>
             <input
               type="email"
@@ -56,13 +58,13 @@ function Login() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="w-full mt-1 px-3 py-2 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+              className="w-full mt-1 px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
             />
           </div>
           <div>
             <label
               htmlFor="password"
-              className="block text-sm font-medium text-gray-700"
+              className="block text-sm font-medium text-gray-600"
             >
               Password
             </label>
@@ -73,15 +75,17 @@ function Login() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              className="w-full mt-1 px-3 py-2 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+              className="w-full mt-1 px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
             />
           </div>
           {errorMessage && (
-            <p className="text-red-500 text-sm text-center">{errorMessage}</p>
+            <p className="text-red-500 text-sm text-center font-medium">
+              {errorMessage}
+            </p>
           )}
           <button
             type="submit"
-            className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+            className="w-full bg-gradient-to-r from-indigo-500 to-blue-600 text-white py-2 px-4 rounded-lg font-semibold text-lg hover:from-indigo-600 hover:to-blue-700 shadow-md transition-all duration-300"
           >
             Login
           </button>
@@ -89,7 +93,7 @@ function Login() {
         <div className="mt-4 text-center">
           <a
             href="#"
-            className="text-sm text-blue-600 hover:text-blue-800 underline"
+            className="text-sm font-medium text-indigo-600 hover:text-indigo-800"
           >
             Forgot Password?
           </a>
@@ -97,8 +101,10 @@ function Login() {
         <div className="mt-4 text-center">
           <p className="text-sm text-gray-600">
             Don't have an account?{" "}
-            <a href="#" className="text-blue-600 hover:text-blue-800 underline" 
-             onClick={() => navigate("/signup")}
+            <a
+              href="/CustomerSignup"
+              className="text-indigo-600 font-medium hover:text-indigo-800"
+              onClick={() => navigate("/CustomerSignup")}
             >
               Create One
             </a>

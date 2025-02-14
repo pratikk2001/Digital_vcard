@@ -3,13 +3,13 @@ import React, { useState } from "react";
 const VCard = ({ profileData }) => {
   return (
     <div className="container mx-auto p-4">
-      <div className="bg-white shadow-lg rounded-lg overflow-hidden">
+      <div className="bg-white shadow-2xl rounded-lg overflow-hidden">
         {/* Banner Section */}
         <div className="relative">
           <img
             src={profileData.bannerImage || "/assets/5.jpg"}
             alt="banner"
-            className="w-full h-48 object-cover"
+            className="w-full h-48 object-cover rounded-lg"
           />
         </div>
 
@@ -18,29 +18,20 @@ const VCard = ({ profileData }) => {
           <img
             src={profileData.profilePicture || "/assets/default-profile.png"}
             alt="profile-img"
-            className="w-24 h-24 rounded-full mx-auto border-4 border-white shadow-lg"
+            className="w-32 h-32 rounded-full mx-auto border-4 border-white shadow-xl"
           />
-          <h4 className="mt-4 text-lg font-bold">{profileData.name || "User Name"}</h4>
-          <p className="text-sm text-gray-600">{profileData.address || "User Address"}</p>
+          <h4 className="mt-4 text-xl font-semibold text-gray-800">{profileData.name || "User Name"}</h4>
+          <p className="text-sm text-gray-500">{profileData.address || "User Address"}</p>
         </div>
 
         {/* Details Section */}
-        <div className="p-6">
-          <blockquote className="text-justify text-gray-800">
-          <p>
-              <strong>Contact:</strong> {profileData.phone || "Enter a Phone Number"}
-            </p>
-            <p>
-              <strong>Email:</strong> {profileData.email || "Enter a Email Address"}
-            </p>
-            <p>
-              <strong>Education:</strong> {profileData.education || "Enter a Education"}
-            </p>
-            <p>
-              <strong>Date of Birth:</strong> {profileData.dob || "Date Of Birth"}
-            </p>
-            <p>
-              <strong>Awards:</strong>
+        <div className="p-6 bg-gray-50 rounded-lg shadow-md">
+          <blockquote className="text-justify text-gray-700">
+            <p><strong>Contact:</strong> {profileData.phone || ""}</p>
+            <p><strong>Email:</strong> {profileData.email || ""}</p>
+            <p><strong>Education:</strong> {profileData.education || ""}</p>
+            <p><strong>Date of Birth:</strong> {profileData.dob || ""}</p>
+            <p><strong>Awards:</strong>
               <ul className="list-disc pl-6">
                 {profileData.awards.length > 0 ? (
                   profileData.awards.map((award, index) => (
@@ -51,8 +42,7 @@ const VCard = ({ profileData }) => {
                 )}
               </ul>
             </p>
-            <p>
-              <strong>Family:</strong>
+            <p><strong>Family:</strong>
               <ul className="list-disc pl-6">
                 {profileData.familyDetails.length > 0 ? (
                   profileData.familyDetails.map((family, index) => (
@@ -63,36 +53,33 @@ const VCard = ({ profileData }) => {
                 )}
               </ul>
             </p>
-            <p>
-              <strong>Social Work Images:</strong>
+            <p><strong>Social Work Images:</strong>
               <div className="flex flex-wrap gap-2">
                 {profileData.socialWorkImages.length > 0 ? (
                   profileData.socialWorkImages.map((image, index) => (
-                    <img key={index} src={image} alt={`social-work-${index}`} className="w-16 h-16 object-cover rounded" />
+                    <img key={index} src={image} alt={`social-work-${index}`} className="w-16 h-16 object-cover rounded-lg shadow-md" />
                   ))
                 ) : (
                   <p>No social work images added</p>
                 )}
               </div>
             </p>
-            <p>
-              <strong>Event Images:</strong>
+            <p><strong>Event Images:</strong>
               <div className="flex flex-wrap gap-2">
                 {profileData.eventImages.length > 0 ? (
                   profileData.eventImages.map((image, index) => (
-                    <img key={index} src={image} alt={`event-${index}`} className="w-16 h-16 object-cover rounded" />
+                    <img key={index} src={image} alt={`event-${index}`} className="w-16 h-16 object-cover rounded-lg shadow-md" />
                   ))
                 ) : (
                   <p>No event images added</p>
                 )}
               </div>
             </p>
-            <p>
-              <strong>News Center Images:</strong>
+            <p><strong>News Center Images:</strong>
               <div className="flex flex-wrap gap-2">
                 {profileData.newsCenterImages.length > 0 ? (
                   profileData.newsCenterImages.map((image, index) => (
-                    <img key={index} src={image} alt={`news-center-${index}`} className="w-16 h-16 object-cover rounded" />
+                    <img key={index} src={image} alt={`news-center-${index}`} className="w-16 h-16 object-cover rounded-lg shadow-md" />
                   ))
                 ) : (
                   <p>No news center images added</p>
@@ -106,6 +93,7 @@ const VCard = ({ profileData }) => {
   );
 };
 
+// Profile Component
 const Profile = () => {
   const [formData, setFormData] = useState({
     name: "",
@@ -228,9 +216,9 @@ const Profile = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100">
-      <div className="relative bg-gradient-to-r from-pink-500 to-purple-500 text-white py-6 px-8 text-center">
-        <h1 className="text-3xl font-bold mb-2">Create Your Profile</h1>
+    <div className="min-h-screen bg-gradient-to-r from-orange-400 to-blue-300">
+      <div className="relative bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-6 px-8 text-center">
+        <h1 className="text-4xl font-bold mb-2">Create Your Profile</h1>
       </div>
 
       {feedback.successMessage && (
@@ -241,7 +229,7 @@ const Profile = () => {
       )}
 
       <div className="container mx-auto px-4 py-6 grid md:grid-cols-2 gap-6">
-        <div className="bg-white rounded-lg shadow-md p-6">
+        <div className="bg-white rounded-lg shadow-xl p-6 bg-gradient-to-r from-teal-50 to-teal-100">
           {/* Form Section */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6">
             <div>
@@ -256,7 +244,7 @@ const Profile = () => {
                 <img
                   src={formData.profilePicture}
                   alt="Profile Preview"
-                  className="mt-2 w-24 h-24 object-cover rounded-full"
+                  className="mt-2 w-24 h-24 object-cover rounded-full shadow-lg"
                 />
               )}
             </div>
@@ -273,7 +261,7 @@ const Profile = () => {
                 <img
                   src={formData.bannerImage}
                   alt="Banner Preview"
-                  className="mt-2 w-full h-32 object-cover rounded-lg"
+                  className="mt-2 w-full h-32 object-cover rounded-lg shadow-lg"
                 />
               )}
             </div>
@@ -317,7 +305,7 @@ const Profile = () => {
           </div>
 
           <div className="mt-4">
-            <label className="block text-sm font-medium mb-2">Description</label>
+            <label className="block text-sm font-medium mb-2">Address</label>
             <input
               type="text"
               name="address"
@@ -367,7 +355,7 @@ const Profile = () => {
               <button
                 type="button"
                 onClick={() => addToList("awards", "currentAward")}
-                className="ml-4 px-4 py-2 text-white bg-blue-500 rounded-lg"
+                className="ml-4 px-4 py-2 text-white bg-blue-500 rounded-lg hover:bg-blue-600"
               >
                 Add
               </button>
@@ -396,7 +384,7 @@ const Profile = () => {
               <button
                 type="button"
                 onClick={() => addToList("familyDetails", "currentFamilyDetail")}
-                className="ml-4 px-4 py-2 text-white bg-blue-500 rounded-lg"
+                className="ml-4 px-4 py-2 text-white bg-blue-500 rounded-lg hover:bg-blue-600"
               >
                 Add
               </button>
@@ -410,7 +398,8 @@ const Profile = () => {
             </ul>
           </div>
 
-          {/* Social Work, Event, and News Center Images Section */}
+          {/* Image Upload Section */}
+          {/* Social Work, Event, and News Center Images */}
           <div className="mt-4">
             <label className="block text-sm font-medium mb-2">Social Work Images</label>
             <input
@@ -422,11 +411,11 @@ const Profile = () => {
             />
             <div className="flex flex-wrap gap-2 mt-2">
               {formData.socialWorkImages.map((image, index) => (
-                <img key={index} src={image} alt={`social-work-${index}`} className="w-16 h-16 object-cover rounded" />
+                <img key={index} src={image} alt={`social-work-${index}`} className="w-16 h-16 object-cover rounded-lg shadow-md" />
               ))}
             </div>
           </div>
-
+          {/* Event Images Section */}
           <div className="mt-4">
             <label className="block text-sm font-medium mb-2">Event Images</label>
             <input
@@ -438,11 +427,12 @@ const Profile = () => {
             />
             <div className="flex flex-wrap gap-2 mt-2">
               {formData.eventImages.map((image, index) => (
-                <img key={index} src={image} alt={`event-${index}`} className="w-16 h-16 object-cover rounded" />
+                <img key={index} src={image} alt={`event-${index}`} className="w-16 h-16 object-cover rounded-lg shadow-md" />
               ))}
             </div>
           </div>
 
+          {/* News Center Images Section */}
           <div className="mt-4">
             <label className="block text-sm font-medium mb-2">News Center Images</label>
             <input
@@ -454,7 +444,7 @@ const Profile = () => {
             />
             <div className="flex flex-wrap gap-2 mt-2">
               {formData.newsCenterImages.map((image, index) => (
-                <img key={index} src={image} alt={`news-center-${index}`} className="w-16 h-16 object-cover rounded" />
+                <img key={index} src={image} alt={`news-center-${index}`} className="w-16 h-16 object-cover rounded-lg shadow-md" />
               ))}
             </div>
           </div>
@@ -463,23 +453,23 @@ const Profile = () => {
           <div className="mt-6 flex justify-between">
             <button
               type="button"
-              onClick={handleSave}
-              className="bg-green-500 text-white px-6 py-2 rounded-lg"
-            >
-              Save
-            </button>
-            <button
-              type="button"
               onClick={handleReset}
-              className="bg-gray-500 text-white px-6 py-2 rounded-lg"
+              className="px-6 py-2 text-white bg-gray-500 rounded-lg hover:bg-gray-600"
             >
               Reset
             </button>
+            <button
+              type="button"
+              onClick={handleSave}
+              className="px-6 py-2 text-white bg-blue-500 rounded-lg hover:bg-blue-600"
+            >
+              Save Profile
+            </button>
           </div>
         </div>
-
-        {/* Profile Preview */}
-        <div className="bg-white rounded-lg shadow-md p-6">
+        
+        {/* Profile Preview Section */}
+        <div className="bg-white rounded-lg shadow-xl p-6">
           <VCard profileData={formData} />
         </div>
       </div>
@@ -488,3 +478,4 @@ const Profile = () => {
 };
 
 export default Profile;
+

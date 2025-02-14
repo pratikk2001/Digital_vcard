@@ -37,51 +37,78 @@ const ProfileForm = ({ vcardData, onClose }) => {
   };
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-      <div className="bg-white p-6 rounded-lg shadow-md w-1/2">
-        <h2 className="text-xl font-semibold mb-4">Edit Profile</h2>
+    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm px-4">
+      <div className="bg-white p-6 sm:p-8 rounded-lg shadow-lg w-full max-w-lg">
+        {/* Title */}
+        <h2 className="text-2xl font-bold text-gray-800 text-center mb-6">Edit Profile</h2>
 
-        <label className="block text-sm font-medium mb-2">Name</label>
-        <input
-          type="text"
-          name="name"
-          value={formData.name}
-          onChange={handleInputChange}
-          className="w-full px-4 py-2 border rounded-md"
-        />
+        {/* Form Fields */}
+        <div className="space-y-4">
+          {/* Name */}
+          <div>
+            <label className="block text-sm font-semibold text-gray-600">Name</label>
+            <input
+              type="text"
+              name="name"
+              value={formData.name}
+              onChange={handleInputChange}
+              className="w-full px-4 py-2 border rounded-md shadow-sm focus:ring-2 focus:ring-blue-400 focus:outline-none"
+              placeholder="Enter your name"
+            />
+          </div>
 
-        <label className="block text-sm font-medium mt-4">Email</label>
-        <input
-          type="email"
-          name="email"
-          value={formData.email}
-          onChange={handleInputChange}
-          className="w-full px-4 py-2 border rounded-md"
-        />
+          {/* Email */}
+          <div>
+            <label className="block text-sm font-semibold text-gray-600">Email</label>
+            <input
+              type="email"
+              name="email"
+              value={formData.email}
+              onChange={handleInputChange}
+              className="w-full px-4 py-2 border rounded-md shadow-sm focus:ring-2 focus:ring-blue-400 focus:outline-none"
+              placeholder="Enter your email"
+            />
+          </div>
 
-        <label className="block text-sm font-medium mt-4">Phone</label>
-        <input
-          type="text"
-          name="phone"
-          value={formData.phone}
-          onChange={handleInputChange}
-          className="w-full px-4 py-2 border rounded-md"
-        />
+          {/* Phone */}
+          <div>
+            <label className="block text-sm font-semibold text-gray-600">Phone</label>
+            <input
+              type="text"
+              name="phone"
+              value={formData.phone}
+              onChange={handleInputChange}
+              className="w-full px-4 py-2 border rounded-md shadow-sm focus:ring-2 focus:ring-blue-400 focus:outline-none"
+              placeholder="Enter your phone number"
+            />
+          </div>
 
-        <label className="block text-sm font-medium mt-4">Address</label>
-        <input
-          type="text"
-          name="address"
-          value={formData.address}
-          onChange={handleInputChange}
-          className="w-full px-4 py-2 border rounded-md"
-        />
+          {/* Address */}
+          <div>
+            <label className="block text-sm font-semibold text-gray-600">Address</label>
+            <input
+              type="text"
+              name="address"
+              value={formData.address}
+              onChange={handleInputChange}
+              className="w-full px-4 py-2 border rounded-md shadow-sm focus:ring-2 focus:ring-blue-400 focus:outline-none"
+              placeholder="Enter your address"
+            />
+          </div>
+        </div>
 
+        {/* Buttons */}
         <div className="flex justify-between mt-6">
-          <button onClick={handleSave} className="px-6 py-2 bg-green-500 text-white rounded-md">
+          <button
+            onClick={handleSave}
+            className="w-1/2 px-4 py-2 bg-green-500 text-white font-semibold rounded-md shadow-md hover:bg-green-600 transition-all duration-300"
+          >
             Save
           </button>
-          <button onClick={onClose} className="px-6 py-2 bg-red-500 text-white rounded-md">
+          <button
+            onClick={onClose}
+            className="w-1/2 px-4 py-2 bg-red-500 text-white font-semibold rounded-md shadow-md hover:bg-red-600 transition-all duration-300 ml-4"
+          >
             Cancel
           </button>
         </div>
