@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import {
   Logout as LogoutIcon,
   AccountBox as AccountBoxIcon,
@@ -56,7 +56,7 @@ const Navbar = () => {
   );
 };
 
-// Extracted Profile Dropdown Component
+// Profile Dropdown Component
 const ProfileDropdown = ({ isOpen, toggleDropdown, navigate }) => (
   <div className="relative">
     <button className="flex items-center space-x-2" onClick={toggleDropdown} aria-label="Profile menu">
@@ -68,7 +68,7 @@ const ProfileDropdown = ({ isOpen, toggleDropdown, navigate }) => (
     {isOpen && (
       <div className="absolute right-0 mt-2 w-52 bg-white rounded-lg shadow-lg py-2 z-50 animate-fade-in" role="menu">
         <button
-          className="block w-full text-left px-4 py-3 text-gray-800 hover:bg-gray-100 flex items-center font-medium"
+          className="block w-full text-left px-4 py-3 text-gray-800 hover:bg-blue-500 flex items-center font-medium"
           onClick={() => navigate("/CustomerProfile")}
           role="menuitem"
         >
@@ -76,7 +76,7 @@ const ProfileDropdown = ({ isOpen, toggleDropdown, navigate }) => (
           My Profile
         </button>
         <button
-          className="block w-full text-left px-4 py-3 text-gray-800 hover:bg-gray-100 flex items-center font-medium"
+          className="block w-full text-left px-4 py-3 text-gray-800 hover:bg-blue-500 flex items-center font-medium"
           onClick={() => navigate("/")}
           role="menuitem"
         >
@@ -88,35 +88,44 @@ const ProfileDropdown = ({ isOpen, toggleDropdown, navigate }) => (
   </div>
 );
 
-// Extracted Mobile Menu Component
-const MobileMenu = ({ closeMenu, navigate }) => (
-  <div className="lg:hidden fixed top-0 left-0 w-64 h-full bg-white shadow-md p-6 space-y-4 transition-transform duration-300">
-    <button
-      className="absolute top-4 right-4 text-gray-600 text-2xl"
-      onClick={closeMenu}
-      aria-label="Close mobile menu"
-    >
-      <CloseIcon />
-    </button>
+// Mobile Menu Component with Active Route Highlighting
+const MobileMenu = ({ closeMenu, navigate }) => {
+  const location = useLocation(); // ✅ Fix: Correct way to use useLocation()
 
-    {[
-      { path: "/CustomerSettings", icon: <SettingsIcon className="text-pink-500" />, label: "Settings" },
-      { path: "/CustomerProfile", icon: <AccountBoxIcon className="text-purple-500" />, label: "My Profile" },
-      { path: "/", icon: <LogoutIcon className="text-red-500" />, label: "Logout" },
-    ].map((item, index) => (
+  // Define menu items
+  const menuItems = [
+    { path: "/CustomerSettings", icon: <SettingsIcon className="text-pink-500" />, label: "Settings" },
+    { path: "/CustomerProfile", icon: <AccountBoxIcon className="text-purple-500" />, label: "My Profile" },
+    { path: "/", icon: <LogoutIcon className="text-red-500" />, label: "Logout" },
+  ];
+
+  return (
+    <div className="lg:hidden fixed top-0 left-0 w-64 h-full bg-white shadow-md p-6 space-y-4 transition-transform duration-300">
       <button
-        key={index}
-        className="flex items-center space-x-3 w-full text-gray-700 text-lg font-medium hover:bg-gray-100 p-3 rounded-lg"
-        onClick={() => {
-          navigate(item.path);
-          closeMenu();
-        }}
+        className="absolute top-4 right-4 text-gray-600 text-2xl"
+        onClick={closeMenu}
+        aria-label="Close mobile menu"
       >
-        {item.icon}
-        <span>{item.label}</span>
+        <CloseIcon />
       </button>
-    ))}
-  </div>
-);
+
+      {menuItems.map((item, index) => (
+        <button
+          key={index}
+          className={`flex items-center space-x-3 w-full text-lg font-medium p-3 rounded-lg transition-all ${
+            location.pathname === item.path ? "bg-blue-700 text-white" : "text-gray-700 hover:bg-gray-100"
+          }`}
+          onClick={() => {
+            navigate(item.path);
+            closeMenu();
+          }}
+        >
+          {item.icon}
+          <span>{item.label}</span>
+        </button>
+      ))}
+    </div>
+  );
+};
 
 export default Navbar;

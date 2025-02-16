@@ -4,7 +4,7 @@ import Home from './pages/admin/dashboard';
 import Settings from './pages/admin/AdminSettings';
 import Profile from './pages/admin/adminProfile';
 import Themes from './pages/admin/themes';
-import CustomerCard from './pages/admin/customer_card';
+import CustomerCard from './pages/admin/customercard';
 import Costomer from './pages/admin/customer_details';
 
 import Login from './components/admin_auth/login_component/Login';
@@ -47,7 +47,7 @@ function App() {
         <Route path="/AdminSettings" element={<Settings />} />  
         <Route path="/AdminProfile" element={<Profile />} />
         <Route path="/Themes" element={<Themes />} />
-        <Route path="/Customers Card" element={<CustomerCard />} />
+        <Route path="/CustomersCard" element={<CustomerCard />} />
         <Route path="/Customers" element={<Costomer />} />
         <Route path="/FormDashboard" element={<FormDashboard />} />
         <Route path="/AdminLogin" element={<Login />} />

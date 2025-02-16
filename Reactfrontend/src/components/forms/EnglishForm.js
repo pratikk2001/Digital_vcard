@@ -94,6 +94,7 @@ const EditVCard = () => {
     }));
   };
   
+  
 
   const handleRemoveImage = (section, index) => {
     setFormData((prevState) => {
@@ -373,7 +374,7 @@ const EditVCard = () => {
   </div>
 )}
 
-              {/* Profile Section */}
+            {/* Profile Section */}
 {activeSection === "Profile and Banner" && (
   <div className="p-6 bg-white rounded-lg shadow-md space-y-8">
 
@@ -386,18 +387,20 @@ const EditVCard = () => {
         type="file"
         accept="image/*"
         onChange={(e) => handleMultipleFileChange(e, "profilePicture")}
+        aria-label="Upload Profile Picture"
         className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:border file:border-gray-300 file:rounded-lg file:bg-white file:text-blue-700 hover:file:bg-blue-100 transition duration-300 ease-in-out"
       />
       {formData.profilePicture && (
-        <div className="mt-4 relative">
+        <div className="mt-4 relative sm:w-32 sm:h-32 md:w-48 md:h-48">
           <img
             src={formData.profilePicture}
             alt="Profile Preview"
-            className="w-32 h-32 object-cover rounded-lg border-2 border-gray-300 shadow-md"
+            className="w-full h-full object-cover rounded-lg border-2 border-gray-300 shadow-md"
           />
           <button
             onClick={() => removeImage("profilePicture")}
             className="absolute top-0 right-0 bg-red-500 text-white rounded-full p-1 text-sm hover:bg-red-600"
+            aria-label="Remove Profile Picture"
           >
             X
           </button>
@@ -414,6 +417,7 @@ const EditVCard = () => {
         type="file"
         accept="image/*"
         onChange={(e) => handleMultipleFileChange(e, "bannerImage")}
+        aria-label="Upload Banner Image"
         className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:border file:border-gray-300 file:rounded-lg file:bg-white file:text-blue-700 hover:file:bg-blue-100 transition duration-300 ease-in-out"
       />
       {formData.bannerImage && (
@@ -426,6 +430,7 @@ const EditVCard = () => {
           <button
             onClick={() => removeImage("bannerImage")}
             className="absolute top-0 right-0 bg-red-500 text-white rounded-full p-1 text-sm hover:bg-red-600"
+            aria-label="Remove Banner Image"
           >
             X
           </button>
@@ -435,8 +440,6 @@ const EditVCard = () => {
 
   </div>
 )}
-
-
 
             {/* Awards Section */}
 {activeSection === "Awards" && (
@@ -623,8 +626,6 @@ const EditVCard = () => {
     </div>
   </div>
 )}
-
-
 
                 {/* News Center Images */}
 {activeSection === "News Center" && (
