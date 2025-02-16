@@ -61,6 +61,8 @@ const EditVCard = () => {
     { name: "News Center", icon: <FaNewspaper /> },
     { name: "Social Links", icon: <FaImage /> },
   ];
+
+
   const handleSave = () => {
     console.log("Form data saved:", formData);
     // Optionally, handle API calls for saving the data
@@ -71,8 +73,6 @@ const EditVCard = () => {
     setFormData((prev) => ({ ...prev, urlAlias: newAlias }));
   };
   
-  
-
   const handleMultipleFileChange = (e, section) => {
     const files = Array.from(e.target.files); // Get the files selected by the user.
     const fileURLs = files.map((file) => URL.createObjectURL(file)); // Create a temporary URL for each file.
@@ -140,9 +140,9 @@ const EditVCard = () => {
             <div className="grid grid-cols-12 gap-6 mt-6">
               {/* Sidebar */}
               <div className="col-span-3 bg-white p-6 rounded-lg shadow-md">
-  <ul className="space-y-4">
-    {sidebarItems.map((item) => (
-      <li
+            <ul className="space-y-4">
+          {sidebarItems.map((item) => (
+                 <li
         key={item.name}
         className={`flex items-center gap-3 cursor-pointer p-3 rounded-lg text-lg font-medium transition duration-200 ${
           activeSection === item.name
