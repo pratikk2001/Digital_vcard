@@ -29,35 +29,50 @@ const AwardsComponent = () => {
 
   return (
     <div className="max-w-4xl mx-auto p-8 bg-white rounded-xl shadow-2xl border border-gray-100">
-      <h2 className="text-2xl font-bold text-gray-800 mb-8">Awards</h2>
-      <div className="mb-4">
-        <input 
-          type="text"
-          value={formData.currentAward}
-          onChange={handleInputChange}
-          placeholder="Enter an award"
-          className="p-3 border border-gray-300 rounded-md w-full focus:ring-2 focus:ring-blue-500"
-        />
-        <button 
-          onClick={addAward}
-          className="p-3 bg-blue-500 text-white rounded-md mt-2"
-        >
-          Add Award
-        </button>
-      </div>
-      <ul>
-        {formData.awards.map((award, index) => (
-          <li key={index} className="mb-1 flex items-center justify-between text-gray-700">
-            {award}
-            <button 
-              onClick={() => removeAward(index)}
-              className="text-red-500 ml-2"
+      <h2 className="text-2xl font-bold text-gray-800 mb-8">🏆 Awards</h2>
+      <div className="flex flex-col gap-4">
+        {/* Award Input */}
+        <div className="flex flex-col">
+          <label htmlFor="awardInput" className="text-gray-700 font-medium mb-2">
+            🏅 Add an Award:
+          </label>
+          <div className="flex items-center gap-3">
+            <input
+              type="text"
+              id="awardInput"
+              value={formData.currentAward}
+              onChange={handleInputChange}
+              className="p-3 border border-gray-300 rounded-md w-full focus:ring-2 focus:ring-blue-500"
+              placeholder="Enter award name"
+            />
+            <button
+              type="button"
+              onClick={addAward}
+              className="p-3 bg-blue-500 hover:bg-blue-400 rounded-md text-white"
             >
-              Remove
+              ➕ Add
             </button>
-        </li>
-        ))}
-      </ul>
+          </div>
+        </div>
+
+        {/* Award List */}
+        <ul className="mt-4 space-y-2">
+          {formData.awards.map((award, index) => (
+            <li
+              key={index}
+              className="flex items-center justify-between p-3 bg-gray-100 rounded-md text-gray-700"
+            >
+              {award}
+              <button
+                onClick={() => removeAward(index)}
+                className="text-red-500 hover:text-red-700"
+              >
+                ❌ Remove
+              </button>
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 };

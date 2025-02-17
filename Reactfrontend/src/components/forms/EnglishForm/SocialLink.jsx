@@ -1,5 +1,5 @@
 import React from "react";
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
 
 const SocialLinks = ({ formData, setFormData }) => {
   const socialPlatforms = [
@@ -17,66 +17,46 @@ const SocialLinks = ({ formData, setFormData }) => {
     { label: "Snapchat", icon: "👻", field: "snapchatURL" },
   ];
 
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    const urlPattern = /^(https?:\/\/)?([\w\-]+\.)+[\w]{2,}(\/\S*)?$/;
+
+    // Validate URL format or allow empty value
+    if (value === "" || urlPattern.test(value)) {
+      setFormData((prev) => ({ ...prev, [name]: value }));
+    }
+  };
+
   return (
-    <div className="mt-4">
-      <label className="text-xl font-bold mb-4">Social Links</label>
-      <div className="grid grid-cols-2 gap-4">
-        {socialPlatforms.map((social, index) => (
-          <div key={index} className="flex items-center space-x-2">
-            <span className="text-xl">{social.icon}</span>
+    <fieldset className="max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-md border border-gray-300">
+      <legend className="text-2xl font-bold text-gray-800 mb-4">🔗 Social Links</legend>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        {socialPlatforms.map(({ label, icon, field }) => (
+          <div key={field} className="flex flex-col space-y-2">
+            <label htmlFor={field} className="text-sm font-semibold text-gray-700 flex items-center gap-2">
+              {icon} {label}
+            </label>
             <input
-              type="text"
-              placeholder={`${social.label} URL`}
-              // Use optional chaining to safely access formData properties
-              value={formData?.[social.field] || ""}
-              onChange={(e) => 
-                // Check if formData exists before updating
-                formData && setFormData({ ...formData, [social.field]: e.target.value })
-              }
-              className="w-full p-2 border border-gray-300 rounded-lg"
+              id={field}
+              name={field}
+              type="url"
+              placeholder={`Enter ${label} URL`}
+              value={formData[field] || ""}
+              onChange={handleChange}
+              className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+              aria-label={`${label} URL`}
             />
           </div>
         ))}
       </div>
-    </div>
+    </fieldset>
   );
 };
 
-// Define PropTypes for type checking
 SocialLinks.propTypes = {
-  formData: PropTypes.shape({
-    websiteURL: PropTypes.string,
-    facebookURL: PropTypes.string,
-    twitterURL: PropTypes.string,
-    instagramURL: PropTypes.string,
-    redditURL: PropTypes.string,
-    tumblrURL: PropTypes.string,
-    youtubeURL: PropTypes.string,
-    linkedinURL: PropTypes.string,
-    whatsappURL: PropTypes.string,
-    pinterestURL: PropTypes.string,
-    tiktokURL: PropTypes.string,
-    snapchatURL: PropTypes.string,
-  }).isRequired,
-  setFormData: PropTypes.func.isRequired
-};
-
-// Define defaultProps to provide a fallback if formData is not provided
-SocialLinks.defaultProps = {
-  formData: {
-    websiteURL: "",
-    facebookURL: "",
-    twitterURL: "",
-    instagramURL: "",
-    redditURL: "",
-    tumblrURL: "",
-    youtubeURL: "",
-    linkedinURL: "",
-    whatsappURL: "",
-    pinterestURL: "",
-    tiktokURL: "",
-    snapchatURL: ""
-  }
+  formData: PropTypes.object.isRequired,
+  setFormData: PropTypes.func.isRequired,
 };
 
 export default SocialLinks;
