@@ -25,8 +25,8 @@ import DigitalCard from './components/customerCard/custumerCardDisplay';
 import FormDashboard from './components/forms/FormDashboard';
 
 // Forms
-import EnglishForm from './components/forms/EnglishForm';  
-import Marathi from './components/forms/MarathiForm';
+import EnglishForm from './components/forms/EnglishForm/EnglishForm';  
+import Marathi from './components/forms/MarathiForm/MarathiForm';
 
 // Templates
 import Templates1 from "./pages/customer/Templates1";
