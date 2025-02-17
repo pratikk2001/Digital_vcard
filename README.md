@@ -1,2 +1,2 @@
-1) Npm Install
-2) Npm Start
+Npm Install 
+Npm Start
