@@ -74,6 +74,7 @@ function App() {
         <Route path="/Templates6" element={<Templates6 />} />
 
          {/* New DigitalCard Route */}
+         
          <Route path="/:username" element={<DigitalCard />} />
       </Routes>
     </BrowserRouter>

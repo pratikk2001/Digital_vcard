@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 
 const themeSchema = new mongoose.Schema(
   {
+    userId:{type:mongoose.Schema.ObjectId, required:true , ref:"Admin"},
     name: { type: String, required: true },
     email: { type: String, required: true, unique: true },
     phone: { type: String, required: true },
@@ -19,4 +20,4 @@ const themeSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-module.exports = mongoose.model('Theme', themeSchema);
+module.exports = mongoose.model('Template', themeSchema);

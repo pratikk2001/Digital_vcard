@@ -2,11 +2,14 @@ const express = require('express');
 const router = express.Router();
 const TemplateController = require('./templates.controller');
 
+router.post("/save/basicDetails/id:", TemplateController.saveBasicDetails);
+router.get("/save/profileBanner/:id", TemplateController.saveProfileBanner);
+router.get("/save/awards/:id", TemplateController.saveAwards);
+router.put("/save/familyDetails/:id", TemplateController.saveFamilyDetails);
+router.post("/save/socialWorkImages/:id", TemplateController.saveSocialWorkImages);
+router.post("/save/saveEventImages/:id", TemplateController.saveEventImages);
+router.post("/save/saveNewsCenterImages/:id", TemplateController.saveNewsCenterImages);
+router.post("getFormData/:id", TemplateController.getFormData);
 
-router.post("/create", TemplateController.createTemplate);
-router.get("getAll", TemplateController.getTemplates);
-router.get("getById/:id", TemplateController.getTemplateById);
-router.put("update/:id", TemplateController.updateTemplate);
-router.delete("delete/:id", TemplateController.deleteTemplate);
 
 module.exports = router;

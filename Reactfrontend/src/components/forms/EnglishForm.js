@@ -2,10 +2,12 @@ import React, { useState } from "react";
 import Topnav from "../customer_nav/Topnavbar";
 import Sidenav from "../customer_nav/Customersidenav";
 import { FaInfoCircle, FaImage, FaAward, FaUsers, FaHandsHelping, FaCalendarAlt, FaNewspaper } from "react-icons/fa";
-
+import BasicDetails from "./EnglishFormBasicDetails"
 
 const EditVCard = () => {
   const [activeSection, setActiveSection] = useState("Basic Details");
+
+  
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -61,6 +63,7 @@ const EditVCard = () => {
     { name: "News Center", icon: <FaNewspaper /> },
     { name: "Social Links", icon: <FaImage /> },
   ];
+
   const handleSave = () => {
     console.log("Form data saved:", formData);
     // Optionally, handle API calls for saving the data
@@ -140,15 +143,16 @@ const EditVCard = () => {
             <div className="grid grid-cols-12 gap-6 mt-6">
               {/* Sidebar */}
               <div className="col-span-3 bg-white p-6 rounded-lg shadow-md">
-  <ul className="space-y-4">
-    {sidebarItems.map((item) => (
-      <li
-        key={item.name}
-        className={`flex items-center gap-3 cursor-pointer p-3 rounded-lg text-lg font-medium transition duration-200 ${
-          activeSection === item.name
+            <ul className="space-y-4">
+    
+            {sidebarItems.map((item) => (
+             <li
+             key={item.name}
+            className={`flex items-center gap-3 cursor-pointer p-3 rounded-lg text-lg font-medium transition duration-200 ${
+            activeSection === item.name
             ? "bg-blue-600 text-white shadow-md"
             : "text-gray-700 hover:bg-gray-100"
-        }`}
+              }`}
         onClick={() => setActiveSection(item.name)}
       >
         <span className="text-xl">{item.icon}</span>
@@ -163,214 +167,9 @@ const EditVCard = () => {
 
 {/* Section Render Logic */}
 {activeSection === "Basic Details" && (
-  <div className="max-w-4xl mx-auto p-8 bg-white rounded-xl shadow-2xl border border-gray-100">
-    <h2 className="text-2xl font-bold text-gray-800 mb-8">Basic Details</h2>
-    <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
+  
+  <BasicDetails></BasicDetails>
 
-      {/* URL Alias */}
-      <div className="flex flex-col">
-        <label htmlFor="urlAlias" className="text-gray-700 font-medium flex items-center gap-2 mb-2">
-          <span className="text-blue-500">🔗</span> URL Alias:
-          <span
-            className="text-gray-500 cursor-pointer relative group"
-            title="The main URL that your vCard is going to be accessed from."
-          >
-            <i className="fas fa-info-circle"></i>
-            <div className="absolute top-full left-0 bg-black text-white text-xs p-2 rounded-lg shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-              The main URL that your vCard is going to be accessed from.
-            </div>
-          </span>
-        </label>
-        <div className="flex items-center gap-3 mt-1">
-          <input
-            type="text"
-            name="urlAlias"
-            value={formData.urlAlias}
-            onChange={handleInputChange}
-            aria-label="Enter your vCard's URL alias"
-            className="p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300 ease-in-out"
-            placeholder="Enter URL Alias"
-          />
-          <button
-            type="button"
-            onClick={handleRegenerateAlias}
-            className="p-3 bg-gradient-to-r from-blue-500 to-teal-400 hover:bg-blue-400 rounded-md text-white transition-all duration-200 ease-in-out"
-            title="Regenerate URL Alias"
-          >
-            <i className="fas fa-sync-alt"></i>
-          </button>
-        </div>
-      </div>
-
-      {/* First Name */}
-      <div className="flex flex-col">
-        <label htmlFor="firstName" className="text-gray-700 font-medium flex items-center gap-2 mb-2">
-          <span className="text-green-500">👤</span> First Name:
-        </label>
-        <input
-          type="text"
-          name="firstName"
-          value={formData.firstName}
-          onChange={handleInputChange}
-          aria-label="Enter your first name"
-          className="p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300 ease-in-out"
-          placeholder="Enter your first name"
-        />
-      </div>
-
-      {/* Last Name */}
-      <div className="flex flex-col">
-        <label htmlFor="lastName" className="text-gray-700 font-medium flex items-center gap-2 mb-2">
-          <span className="text-green-500">👤</span> Last Name:
-        </label>
-        <input
-          type="text"
-          name="lastName"
-          value={formData.lastName}
-          onChange={handleInputChange}
-          aria-label="Enter your last name"
-          className="p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300 ease-in-out"
-          placeholder="Enter your last name"
-        />
-      </div>
-
-      {/* Email */}
-      <div className="flex flex-col">
-        <label htmlFor="email" className="text-gray-700 font-medium flex items-center gap-2 mb-2">
-          <span className="text-yellow-500">📧</span> Email:
-        </label>
-        <input
-          type="email"
-          name="email"
-          value={formData.email}
-          onChange={handleInputChange}
-          aria-label="Enter your email address"
-          className="p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300 ease-in-out"
-          placeholder="Enter your email address"
-        />
-      </div>
-
-      {/* Phone */}
-      <div className="flex flex-col">
-        <label htmlFor="phone" className="text-gray-700 font-medium flex items-center gap-2 mb-2">
-          <span className="text-blue-500">📱</span> Phone Number:
-        </label>
-        <input
-          type="text"
-          name="phone"
-          value={formData.phone}
-          onChange={handleInputChange}
-          aria-label="Enter your phone number"
-          className="p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300 ease-in-out"
-          placeholder="Enter your phone number"
-        />
-      </div>
-
-      {/* Date of Birth */}
-      <div className="flex flex-col">
-        <label htmlFor="dob" className="text-gray-700 font-medium flex items-center gap-2 mb-2">
-          <span className="text-pink-500">🎂</span> Date of Birth:
-        </label>
-        <input
-          type="date"
-          name="dob"
-          value={formData.dob}
-          onChange={handleInputChange}
-          aria-label="Enter your date of birth"
-          className="p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300 ease-in-out"
-        />
-      </div>
-
-      {/* Position Title */}
-      <div className="flex flex-col">
-        <label htmlFor="positionTitle" className="text-gray-700 font-medium flex items-center gap-2 mb-2">
-          <span className="text-gray-700">💼</span> Position Title:
-        </label>
-        <input
-          type="text"
-          name="positionTitle"
-          value={formData.positionTitle}
-          onChange={handleInputChange}
-          aria-label="Enter your position title"
-          className="p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300 ease-in-out"
-          placeholder="Enter your position title"
-        />
-      </div>
-
-      {/* Address */}
-      <div className="flex flex-col">
-        <label htmlFor="address" className="text-gray-700 font-medium flex items-center gap-2 mb-2">
-          <span className="text-red-500">📍</span> Address:
-        </label>
-        <input
-          type="text"
-          name="address"
-          value={formData.address}
-          onChange={handleInputChange}
-          aria-label="Enter your address"
-          className="p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300 ease-in-out"
-          placeholder="Enter your address"
-        />
-      </div>
-
-      {/* Education */}
-      <div className="flex flex-col">
-        <label htmlFor="education" className="text-gray-700 font-medium flex items-center gap-2 mb-2">
-          <span className="text-orange-500">🎓</span> Education:
-        </label>
-        <input
-          type="text"
-          name="education"
-          value={formData.education}
-          onChange={handleInputChange}
-          aria-label="Enter your education"
-          className="p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300 ease-in-out"
-          placeholder="Enter your education"
-        />
-      </div>
-
-      {/* Show QR Code Toggle */}
-      <div className="flex items-center justify-between mt-6">
-        <label htmlFor="showQrCode" className="font-medium text-gray-700 flex items-center gap-2">
-          <i className="fas fa-qrcode text-gray-500"></i>
-          <span>Show QR Code:</span>
-        </label>
-        <label className="relative inline-flex items-center cursor-pointer">
-          <input
-            type="checkbox"
-            name="showQrCode"
-            checked={formData.showQrCode}
-            onChange={handleInputChange}
-            aria-label="Toggle QR code display"
-            className="sr-only"
-          />
-          <span className="w-11 h-6 bg-gray-200 rounded-full peer peer-checked:bg-blue-500 peer-focus:ring-2 peer-focus:ring-blue-300"></span>
-          <span className="absolute inset-y-0 left-1 w-5 h-5 bg-white rounded-full transition-all peer-checked:translate-x-full"></span>
-        </label>
-      </div>
-
-      {/* WhatsApp Share Toggle */}
-      <div className="flex items-center justify-between mt-6">
-        <label htmlFor="whatsappShare" className="font-medium text-gray-700 flex items-center gap-2">
-          <i className="fab fa-whatsapp text-green-500"></i>
-          WhatsApp Share:
-        </label>
-        <label className="relative inline-flex items-center cursor-pointer">
-          <input
-            type="checkbox"
-            name="whatsappShare"
-            checked={formData.whatsappShare}
-            onChange={handleInputChange}
-            aria-label="Toggle WhatsApp sharing"
-            className="sr-only"
-          />
-          <span className="w-11 h-6 bg-gray-200 rounded-full peer peer-checked:bg-green-500 peer-focus:ring-2 peer-focus:ring-green-300"></span>
-          <span className="absolute inset-y-0 left-1 w-5 h-5 bg-white rounded-full transition-all peer-checked:translate-x-full"></span>
-        </label>
-      </div>
-
-    </div>
-  </div>
 )}
 
               {/* Profile Section */}
@@ -435,8 +234,6 @@ const EditVCard = () => {
 
   </div>
 )}
-
-
 
             {/* Awards Section */}
 {activeSection === "Awards" && (
@@ -624,8 +421,6 @@ const EditVCard = () => {
   </div>
 )}
 
-
-
                 {/* News Center Images */}
 {activeSection === "News Center" && (
    <div className="mt-8 p-8 bg-white rounded-xl shadow-lg max-w-3xl mx-auto">
@@ -665,6 +460,7 @@ const EditVCard = () => {
     </div>
   </div>
 )}
+
   </div>
           </div>
 
