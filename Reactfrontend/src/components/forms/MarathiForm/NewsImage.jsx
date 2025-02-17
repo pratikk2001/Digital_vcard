@@ -4,20 +4,23 @@ const NewsImage = ({ initialImages = [], onImagesChange = () => {} }) => {
   const [imagesPreview, setImagesPreview] = useState(initialImages);
 
   const handleMultipleFileChange = (e) => {
-    const files = Array.from(e.target.files).filter(file => file.type.startsWith('image/'));
-    if (files.length > 0) {
-      const newImages = files.map(file => URL.createObjectURL(file));
-      setImagesPreview(prevImages => [...prevImages, ...newImages]);
-      onImagesChange([...imagesPreview, ...files]); // Pass array of files to parent
-    } else {
-      alert('Please select image files');
+    const files = Array.from(e.target.files).filter(file => file.type.startsWith("image/"));
+    
+    if (files.length === 0) {
+      alert("Please select valid image files.");
+      return;
     }
+
+    const newImageURLs = files.map(file => URL.createObjectURL(file));
+
+    setImagesPreview((prevImages) => [...prevImages, ...newImageURLs]);
+    onImagesChange([...imagesPreview, ...files]); // Send files to parent
   };
 
   const handleRemoveImage = (index) => {
-    setImagesPreview(prevImages => {
+    setImagesPreview((prevImages) => {
       const updatedImages = [...prevImages];
-      URL.revokeObjectURL(updatedImages[index]); // Clean up the URL
+      URL.revokeObjectURL(updatedImages[index]); // Clean up memory
       updatedImages.splice(index, 1);
       onImagesChange(updatedImages);
       return updatedImages;
@@ -25,44 +28,47 @@ const NewsImage = ({ initialImages = [], onImagesChange = () => {} }) => {
   };
 
   useEffect(() => {
-    // Cleanup function when component unmounts or when images change
     return () => {
-      imagesPreview.forEach(url => URL.revokeObjectURL(url));
+      imagesPreview.forEach((url) => URL.revokeObjectURL(url));
     };
   }, [imagesPreview]);
 
   return (
-    <div className="mt-8 p-8 bg-white rounded-xl shadow-lg max-w-3xl mx-auto">
-      <label className="text-2xl font-bold text-gray-900 mb-6">बातमी केंद्राच्या फोटो</label>
-      
-      {/* File Input */}
-      <input
-        type="file"
-        accept="image/*"
-        multiple
-        onChange={handleMultipleFileChange}
-        className="block w-full text-sm mt-6 text-gray-500 file:mr-4 file:py-3 file:px-5 file:border-2 file:border-gray-300 file:rounded-xl file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-blue-400 transition duration-300 mb-6"
-      />
-      
-      {/* Images Preview */}
-      <div className="flex flex-wrap gap-6 mt-6">
+    <div className="max-w-4xl mx-auto p-8 bg-white rounded-xl shadow-2xl border border-gray-100">
+      <h2 className="text-2xl font-bold text-gray-800 mb-8">📸 News Center Images</h2>
+
+      {/* File Upload Input */}
+      <div className="flex flex-col">
+        <label htmlFor="newsImages" className="text-gray-700 font-medium mb-2">
+          🖼️ Upload Images:
+        </label>
+        <input
+          id="newsImages"
+          type="file"
+          accept="image/*"
+          multiple
+          onChange={handleMultipleFileChange}
+          className="p-3 border border-gray-300 rounded-md w-full focus:ring-2 focus:ring-blue-500"
+        />
+      </div>
+
+      {/* Images Preview Grid */}
+      <div className="grid grid-cols-2 sm:grid-cols-3 gap-6 mt-6">
         {imagesPreview.map((image, index) => (
           <div key={index} className="relative group">
             <img
               src={image}
               alt={`news-${index}`}
-              className="w-36 h-36 object-cover rounded-xl shadow-lg transition-all duration-300 transform hover:scale-105"
+              className="w-full h-36 object-cover rounded-md shadow-md transition-transform duration-300 hover:scale-105"
             />
-            
+
             {/* Delete Button */}
             <button
               type="button"
               onClick={() => handleRemoveImage(index)}
-              className="absolute top-0 right-0 bg-red-600 text-white rounded-full p-2 shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 hover:bg-red-700"
+              className="absolute top-2 right-2 bg-red-600 text-white rounded-full p-2 shadow-md opacity-0 group-hover:opacity-100 transition-opacity duration-200 hover:bg-red-700"
             >
-              <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"/>
-              </svg>
+              ❌
             </button>
           </div>
         ))}
