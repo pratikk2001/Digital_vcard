@@ -5,6 +5,7 @@ const AwardsComponent = () => {
     awards: [],
     currentAward: ""
   });
+console.log("Form Data"+formData.awards)
 
   const handleInputChange = (e) => {
     setFormData({ ...formData, currentAward: e.target.value });
@@ -27,14 +28,22 @@ const AwardsComponent = () => {
     });
   };
 
+  const saveAwards = () => {
+    console.log("Saved Awards:", formData.awards);
+  };
+
+  const resetAwards = () => {
+    setFormData({ awards: [], currentAward: "" });
+  };
+
   return (
     <div className="max-w-4xl mx-auto p-8 bg-white rounded-xl shadow-2xl border border-gray-100">
-      <h2 className="text-2xl font-bold text-gray-800 mb-8">🏆 Awards</h2>
+      <h2 className="text-2xl font-bold text-gray-800 mb-8">🏆 पुरस्कार</h2>
       <div className="flex flex-col gap-4">
         {/* Award Input */}
         <div className="flex flex-col">
           <label htmlFor="awardInput" className="text-gray-700 font-medium mb-2">
-            🏅 Add an Award:
+          🏅 पुरस्कार माहिती जोडा:
           </label>
           <div className="flex items-center gap-3">
             <input
@@ -43,7 +52,7 @@ const AwardsComponent = () => {
               value={formData.currentAward}
               onChange={handleInputChange}
               className="p-3 border border-gray-300 rounded-md w-full focus:ring-2 focus:ring-blue-500"
-              placeholder="Enter award name"
+              placeholder="पुरस्काराचे नाव प्रविष्ट करा"
             />
             <button
               type="button"
@@ -72,6 +81,22 @@ const AwardsComponent = () => {
             </li>
           ))}
         </ul>
+
+        {/* Save and Reset Buttons */}
+        <div className="flex justify-end gap-4 mt-4">
+          <button
+            onClick={saveAwards}
+            className="p-3 bg-green-500 hover:bg-green-400 rounded-md text-white"
+          >
+            💾 Save
+          </button>
+          <button
+            onClick={resetAwards}
+            className="p-3 bg-gray-500 hover:bg-gray-400 rounded-md text-white"
+          >
+            🔄 Reset
+          </button>
+        </div>
       </div>
     </div>
   );

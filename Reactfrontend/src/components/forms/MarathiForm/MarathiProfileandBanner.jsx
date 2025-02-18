@@ -23,13 +23,24 @@ const ProfileBanner = () => {
     });
   };
 
+  const saveDetails = () => {
+    console.log("Saved Profile & Banner Details:", formData);
+  };
+
+  const resetDetails = () => {
+    setFormData({
+      profilePicture: null,
+      bannerImage: null,
+    });
+  };
+
   return (
     <div className="max-w-4xl mx-auto p-8 bg-white rounded-xl shadow-2xl border border-gray-100">
-      <h2 className="text-2xl font-bold text-gray-800 mb-8">Profile & Banner</h2>
+      <h2 className="text-2xl font-bold text-gray-800 mb-8">📸 प्रोफाइल आणि बॅनर</h2>
 
       {/* Profile Picture Upload */}
       <div className="flex flex-col mb-6">
-        <label className="text-gray-700 font-medium mb-2">👤 Profile Picture:</label>
+        <label className="text-gray-700 font-medium mb-2">👤 प्रोफाइल फोटो:</label>
         <input
           type="file"
           name="profilePicture"
@@ -56,7 +67,7 @@ const ProfileBanner = () => {
 
       {/* Banner Image Upload */}
       <div className="flex flex-col">
-        <label className="text-gray-700 font-medium mb-2">🖼️ Banner Image:</label>
+        <label className="text-gray-700 font-medium mb-2">🖼️ बॅनर फोटो:</label>
         <input
           type="file"
           name="bannerImage"
@@ -79,6 +90,22 @@ const ProfileBanner = () => {
             </button>
           </div>
         )}
+      </div>
+
+      {/* Save and Reset Buttons */}
+      <div className="flex justify-end gap-4 mt-6">
+        <button
+          onClick={saveDetails}
+          className="p-3 bg-green-500 hover:bg-green-400 rounded-md text-white"
+        >
+          💾 Save
+        </button>
+        <button
+          onClick={resetDetails}
+          className="p-3 bg-gray-500 hover:bg-gray-400 rounded-md text-white"
+        >
+          🔄 Reset
+        </button>
       </div>
     </div>
   );

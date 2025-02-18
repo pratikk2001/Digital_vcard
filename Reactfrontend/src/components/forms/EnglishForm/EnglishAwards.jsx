@@ -5,7 +5,7 @@ const AwardsComponent = () => {
     awards: [],
     currentAward: ""
   });
-
+  
   const handleInputChange = (e) => {
     setFormData({ ...formData, currentAward: e.target.value });
   };
@@ -25,6 +25,14 @@ const AwardsComponent = () => {
       ...formData,
       awards: formData.awards.filter((_, i) => i !== index)
     });
+  };
+
+  const saveAwards = () => {
+    console.log("Saved Awards:", formData.awards);
+  };
+
+  const resetAwards = () => {
+    setFormData({ awards: [], currentAward: "" });
   };
 
   return (
@@ -72,6 +80,22 @@ const AwardsComponent = () => {
             </li>
           ))}
         </ul>
+
+        {/* Save and Reset Buttons */}
+        <div className="flex justify-end gap-4 mt-4">
+          <button
+            onClick={saveAwards}
+            className="p-3 bg-green-500 hover:bg-green-400 rounded-md text-white"
+          >
+            💾 Save
+          </button>
+          <button
+            onClick={resetAwards}
+            className="p-3 bg-gray-500 hover:bg-gray-400 rounded-md text-white"
+          >
+            🔄 Reset
+          </button>
+        </div>
       </div>
     </div>
   );

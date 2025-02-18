@@ -27,6 +27,17 @@ const NewsImage = ({ initialImages = [], onImagesChange = () => {} }) => {
     });
   };
 
+  const handleSave = () => {
+    console.log("Saved Images:", imagesPreview);
+    alert("Images saved successfully!"); // Replace with actual save logic
+  };
+
+  const handleReset = () => {
+    imagesPreview.forEach(url => URL.revokeObjectURL(url)); // Clean up memory
+    setImagesPreview([]);
+    onImagesChange([]);
+  };
+
   useEffect(() => {
     return () => {
       imagesPreview.forEach((url) => URL.revokeObjectURL(url));
@@ -35,12 +46,12 @@ const NewsImage = ({ initialImages = [], onImagesChange = () => {} }) => {
 
   return (
     <div className="max-w-4xl mx-auto p-8 bg-white rounded-xl shadow-2xl border border-gray-100">
-      <h2 className="text-2xl font-bold text-gray-800 mb-8">📸 News Center Images</h2>
+      <h2 className="text-2xl font-bold text-gray-800 mb-8">📸 बातमी केंद्राच्या फोटो</h2>
 
       {/* File Upload Input */}
       <div className="flex flex-col">
         <label htmlFor="newsImages" className="text-gray-700 font-medium mb-2">
-          🖼️ Upload Images:
+        🖼️ बातमीच्या फोटो अपलोड करा:
         </label>
         <input
           id="newsImages"
@@ -61,8 +72,6 @@ const NewsImage = ({ initialImages = [], onImagesChange = () => {} }) => {
               alt={`news-${index}`}
               className="w-full h-36 object-cover rounded-md shadow-md transition-transform duration-300 hover:scale-105"
             />
-
-            {/* Delete Button */}
             <button
               type="button"
               onClick={() => handleRemoveImage(index)}
@@ -72,6 +81,22 @@ const NewsImage = ({ initialImages = [], onImagesChange = () => {} }) => {
             </button>
           </div>
         ))}
+      </div>
+
+      {/* Buttons */}
+      <div className="flex justify-end gap-4 mt-6">
+      <button
+          onClick={handleSave}
+          className="p-3 bg-green-500 hover:bg-green-400 rounded-md text-white"
+        >
+          💾 Save
+        </button>
+        <button
+          onClick={handleReset}
+          className="p-3 bg-gray-500 hover:bg-gray-400 rounded-md text-white"
+        >
+          🔄 Reset
+        </button>
       </div>
     </div>
   );

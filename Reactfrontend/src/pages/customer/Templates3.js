@@ -24,55 +24,55 @@ const VCard = () => {
 
   return (
     <div className="bg-white flex flex-col items-center py-10">
-      <div className="bg-orange-400 text-black w-[500px] p-6 rounded-lg shadow-lg text-center">
+      <div className="bg-orange-400 text-black w-full max-w-[500px] p-4 md:p-6 rounded-lg shadow-lg text-center mx-4">
         <div className="relative">
           <img
             src="Shiv.jpg"
             alt="Header"
-            className="w-full h-40 object-cover rounded-t-2xl"
+            className="w-full h-24 md:h-40 object-cover rounded-t-2xl"
           />
-          <div className="absolute top-28 left-1/2 transform -translate-x-1/2">
+          <div className="absolute top-16 md:top-28 left-1/2 transform -translate-x-1/2">
             <img
               src="profile.jpg"
               alt="Profile"
-              className="w-28 h-28 rounded-full border-4 border-white shadow-lg transform hover:scale-105"
+              className="w-20 md:w-28 h-20 md:h-28 rounded-full border-4 border-white shadow-lg transform hover:scale-105"
             />
           </div>
         </div>
-        <div className="text-center mt-16">
-          <h2 className="text-3xl font-bold text-gray-800">Mrs. ABC </h2>
-          <p className="text-md text-gray-600">Ex. Municipal Councillor, TMC (Shivsena)</p>
+        <div className="text-center mt-12 md:mt-16">
+          <h2 className="text-2xl md:text-3xl font-bold text-gray-800">Mrs. ABC</h2>
+          <p className="text-sm md:text-md text-gray-600">Ex. Municipal Councillor, TMC (Shivsena)</p>
         </div>
 
-        <div className="mt-6 space-y-4 text-gray-800">
+        <div className="mt-4 md:mt-6 space-y-2 md:space-y-4 text-gray-800">
           {["Birthdate: 19 August 1970", "Contact: +91 987654321", "Email: Shivsena@gmail.com", "Education: Graduate in Arts (BA)"].map(
             (item, index) => (
-              <p key={index} className="bg-gray-100 p-3 rounded-lg shadow-md">{item}</p>
+              <p key={index} className="bg-gray-100 p-2 md:p-3 rounded-lg shadow-md">{item}</p>
             )
           )}
         </div>
 
-        <div className="mt-6">
-          <h3 className="font-bold text-xl text-gray-800">Positions Held</h3>
-          <ul className="list-disc ml-6 space-y-2 text-gray-800">
+        <div className="mt-4 md:mt-6">
+          <h3 className="font-bold text-lg md:text-xl text-gray-800">Positions Held</h3>
+          <ul className="list-disc ml-4 md:ml-6 space-y-1 md:space-y-2 text-gray-800">
             {["Municipal Councillor - TMC Ward No. 4B", "Member - Education Committee, TMC", "Special Executive Officer (SEO)", "Chairperson - Navayug Mitra Mandal (Reg. Thane)"].map((position, index) => (
               <li key={index}>{position}</li>
             ))}
           </ul>
         </div>
 
-        <div className="mt-6">
-          <h3 className="font-bold text-xl text-gray-800">Family</h3>
-          <ul className="list-disc ml-6 space-y-2 text-gray-800">
-            {["Husband - Mr. ABC ", "Son - ABC", "Daughter -ABC", "Daughter-in-law -ABC"].map((member, index) => (
+        <div className="mt-4 md:mt-6">
+          <h3 className="font-bold text-lg md:text-xl text-gray-800">Family</h3>
+          <ul className="list-disc ml-4 md:ml-6 space-y-1 md:space-y-2 text-gray-800">
+            {["Husband - Mr. ABC ", "Son - ABC", "Daughter - ABC", "Daughter-in-law - ABC"].map((member, index) => (
               <li key={index}>{member}</li>
             ))}
           </ul>
         </div>
 
         {Object.entries(imageCategories).map(([title, images]) => (
-          <div key={title} className="mt-6">
-            <h2 className="text-black text-3xl font-bold text-center mb-4">{title}</h2>
+          <div key={title} className="mt-4 md:mt-6">
+            <h2 className="text-black text-2xl md:text-3xl font-bold text-center mb-2 md:mb-4">{title}</h2>
             <Swiper
               slidesPerView={1}
               spaceBetween={10}
@@ -88,7 +88,7 @@ const VCard = () => {
                   <img
                     src={src}
                     alt={`${title} Image`}
-                    className="w-full h-64 object-cover rounded-lg cursor-pointer transform hover:scale-105"
+                    className="w-full h-32 md:h-64 object-cover rounded-lg cursor-pointer transform hover:scale-105"
                     onClick={() => handleImageClick(src)}
                   />
                 </SwiperSlide>
@@ -97,6 +97,8 @@ const VCard = () => {
           </div>
         ))}
       </div>
+
+      {/* Modal implementation remains the same if needed */}
     </div>
   );
 };

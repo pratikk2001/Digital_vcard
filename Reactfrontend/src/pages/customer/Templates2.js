@@ -7,7 +7,6 @@ import "swiper/css/navigation";
 import { Pagination, Navigation } from "swiper/modules";
 
 const VCard = () => {
-  // Different images for each section
   const socialWorkImages = [
     "sw-1.jpg",
     "sw-2.jpg",
@@ -26,33 +25,28 @@ const VCard = () => {
     "news-3.jpg",
   ];
 
-  // State to handle image preview modal
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState("");
 
-  // Function to open modal with the selected image
   const handleImageClick = (image) => {
     setSelectedImage(image);
     setIsModalOpen(true);
   };
 
-  // Function to close the modal
   const closeModal = () => {
     setIsModalOpen(false);
   };
 
-  // Close modal if background is clicked
   const handleBackgroundClick = (e) => {
     if (e.target === e.currentTarget) {
       closeModal();
     }
   };
 
-
   return (
     <div className="bg-white flex flex-col items-center py-10">
       <div
-        className="bg-gradient-to-r from-orange-400 via-gray-200 to-green-300 text-black w-[500px] p-6 rounded-lg shadow-lg text-center"
+        className="bg-gradient-to-r from-orange-400 via-gray-200 to-green-300 text-black w-full max-w-[500px] p-4 md:p-6 rounded-lg shadow-lg text-center mx-4"
         style={{
           backgroundImage: `('BJP.png')`,
           backgroundSize: "cover",
@@ -62,22 +56,22 @@ const VCard = () => {
         {/* Header Image */}
         <img
           src="bg.jpg"
-          alt="Backgorund Image"
-          className="w-full h-32 object-cover rounded-t-lg"
+          alt="Background Image"
+          className="w-full h-24 md:h-32 object-cover rounded-t-lg"
         />
         {/* Profile Image */}
         <img
           src="profile.jpg"
           alt="Profile Image"
-          className="w-24 h-24 rounded-full mx-auto -mt-12 border-4 border-white"
+          className="w-20 h-20 md:w-24 md:h-24 rounded-full mx-auto -mt-10 md:-mt-12 border-4 border-white"
         />
-        <h2 className="text-xl font-bold mt-4">Mrs. ABC </h2>
-        <p className="text-sm text-black">
+        <h2 className="text-lg md:text-xl font-bold mt-2 md:mt-4">Mrs. ABC</h2>
+        <p className="text-xs md:text-sm text-black">
           Ex. Municipal Councillor, TMC (Bharatiya Janata Party)
         </p>
 
         {/* Personal Information */}
-        <div className="mt-4 text-left text-sm">
+        <div className="mt-2 md:mt-4 text-left text-xs md:text-sm">
           <p>
             <strong>Birth Date:</strong> 19 August 1970
           </p>
@@ -93,7 +87,7 @@ const VCard = () => {
         </div>
 
         {/* Positions Held */}
-        <div className="mt-4 text-left text-sm">
+        <div className="mt-2 md:mt-4 text-left text-xs md:text-sm">
           <h3 className="font-bold">Positions Held:</h3>
           <ul className="list-disc list-inside">
             <li>Municipal Councillor - TMC Ward No. 4</li>
@@ -104,71 +98,71 @@ const VCard = () => {
         </div>
 
         {/* Family Section */}
-        <div className="mt-4 text-left text-sm">
+        <div className="mt-2 md:mt-4 text-left text-xs md:text-sm">
           <h3 className="font-bold">Family:</h3>
           <ul className="list-disc list-inside">
             <li>Husband - ABC </li>
-            <li>Son -ABC (MBBS, MS General Surgery, FMAS, Oncology Surgery Fellowship, Head and Neck Cancer Surgery, AIIMS Rishikesh Breast Cancer Surgery Course, Fellow TNMC Mumbai Assistant)</li>
-            <li>Daughter - ABC (MBBS, DMRE (Radiologist))</li>
-            <li>Daughter-in-law - ABC (MBBS, DMRE (Radiologist))</li>
+            <li>Son - ABC (...)</li>
+            <li>Daughter - ABC (...)</li>
+            <li>Daughter-in-law - ABC (...)</li>
           </ul>
         </div>
 
         {/* Contact Details */}
-        <div className="mt-6 flex justify-around">
+        <div className="mt-4 md:mt-6 flex justify-around flex-wrap">
           {/* Mobile Section */}
-          <div className="text-center">
+          <div className="text-center w-full md:w-auto">
             <a href="tel:+919870447272" aria-label="Call Mobile Number">
-              <FaPhone className="text-2xl mx-auto" />
-              <p className="text-sm">Mobile</p>
-              <p className="text-sm">+91 987654321</p>
+              <FaPhone className="text-lg md:text-2xl mx-auto" />
+              <p className="text-xs md:text-sm">Mobile</p>
+              <p className="text-xs md:text-sm">+91 987654321</p>
             </a>
           </div>
 
           {/* Email Section */}
-          <div className="text-center">
+          <div className="text-center w-full md:w-auto">
             <a href="mailto:bjpkaryalay04@gmail.com" aria-label="Send Email">
-              <FaEnvelope className="text-2xl mx-auto" />
-              <p className="text-sm">Email</p>
-              <p className="text-sm">bjp@gmail.com</p>
+              <FaEnvelope className="text-lg md:text-2xl mx-auto" />
+              <p className="text-xs md:text-sm">Email</p>
+              <p className="text-xs md:text-sm">bjp@gmail.com</p>
             </a>
           </div>
 
           {/* Address Section */}
-          <div className="text-center">
+          <div className="text-center w-full md:w-auto">
             <a
               href="https://www.google.com/maps/search/Thane,+Mumbai"
               target="_blank"
               rel="noopener noreferrer"
               aria-label="View Address on Google Maps"
             >
-              <FaMapMarkerAlt className="text-2xl mx-auto" />
-              <p className="text-sm">Address</p>
-              <p className="text-sm">Thane, Mumbai</p>
+              <FaMapMarkerAlt className="text-lg md:text-2xl mx-auto" />
+              <p className="text-xs md:text-sm">Address</p>
+              <p className="text-xs md:text-sm">Thane, Mumbai</p>
             </a>
           </div>
         </div>
 
         {/* QR Code */}
-        <div className="mt-10 text-center">
+        <div className="mt-4 md:mt-10 text-center">
           <a
-            href="https://your-link-here.com" // Replace with the desired URL to open
+            href="https://your-link-here.com"
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Scan QR Code"
           >
             <img
-              src="QR_code.png" // Replace with the actual QR code image URL
+              src="QR_code.png"
               alt="QR Code"
-              className="w-32 h-32 mx-auto"
+              className="w-24 h-24 md:w-32 md:h-32 mx-auto"
             />
           </a>
-          <p className="text-large">QR Code</p>
+          <p className="text-sm">QR Code</p>
         </div>
 
         {/* Social Work Section */}
-        <div className="mt-6 text-left text-sm">
-          <h2 className="text-black text-xl font-bold mb-4 text-center">
+        <div className="mt-4 md:mt-6 text-left text-xs md:text-sm">
+          <h2 className="text-black text-lg md:text-xl font-bold mb-2 md:mb-4 text-center">
             Social Work:
           </h2>
           <Swiper
@@ -176,8 +170,8 @@ const VCard = () => {
             spaceBetween={10}
             loop={true}
             autoplay={{
-              delay: 1000, // Change image every 1 second
-              disableOnInteraction: false, // Keep autoplay running even after user interacts
+              delay: 1000,
+              disableOnInteraction: false,
             }}
             pagination={{ clickable: true }}
             navigation={true}
@@ -189,7 +183,7 @@ const VCard = () => {
                 <img
                   src={src}
                   alt={`Social work event by BJP party, showcasing community engagement`}
-                  className="w-full h-64 object-cover rounded-lg cursor-pointer"
+                  className="w-full h-48 md:h-64 object-cover rounded-lg cursor-pointer"
                   onClick={() => handleImageClick(src)}
                 />
               </SwiperSlide>
@@ -198,8 +192,8 @@ const VCard = () => {
         </div>
 
         {/* Moments Section */}
-        <div className="mt-6 text-left text-sm">
-          <h2 className="text-black text-xl font-bold mb-4 text-center">
+        <div className="mt-4 md:mt-6 text-left text-xs md:text-sm">
+          <h2 className="text-black text-lg md:text-xl font-bold mb-2 md:mb-4 text-center">
             Moments:
           </h2>
           <Swiper
@@ -207,11 +201,11 @@ const VCard = () => {
             spaceBetween={10}
             loop={true}
             autoplay={{
-              delay: 1000, // Change image every 1 second
+              delay: 1000,
               disableOnInteraction: false,
             }}
             pagination={{ clickable: true }}
-            navigation={true }
+            navigation={true}
             modules={[Pagination, Navigation]}
             className="rounded-lg overflow-hidden"
           >
@@ -220,7 +214,7 @@ const VCard = () => {
                 <img
                   src={src}
                   alt={`Moments of personal events and memories from various moments`}
-                  className="w-full h-64 object-cover rounded-lg cursor-pointer"
+                  className="w-full h-48 md:h-64 object-cover rounded-lg cursor-pointer"
                   onClick={() => handleImageClick(src)}
                 />
               </SwiperSlide>
@@ -229,8 +223,8 @@ const VCard = () => {
         </div>
 
         {/* News Section */}
-        <div className="mt-6 text-left text-sm">
-          <h2 className="text-black text-xl font-bold mb-4 text-center">
+        <div className="mt-4 md:mt-6 text-left text-xs md:text-sm">
+          <h2 className="text-black text-lg md:text-xl font-bold mb-2 md:mb-4 text-center">
             Newspaper Coverage:
           </h2>
           <Swiper
@@ -238,11 +232,11 @@ const VCard = () => {
             spaceBetween={10}
             loop={true}
             autoplay={{
-              delay: 10000, // Change image every 1 second
+              delay: 10000,
               disableOnInteraction: false,
             }}
             pagination={{ clickable: true }}
-            navigation={true }
+            navigation={true}
             modules={[Pagination, Navigation]}
             className="rounded-lg overflow-hidden"
           >
@@ -251,7 +245,7 @@ const VCard = () => {
                 <img
                   src={src}
                   alt={`News coverage highlighting achievements of the BJP party`}
-                  className="w-full h-64 object-cover rounded-lg cursor-pointer"
+                  className="w-full h-48 md:h-64 object-cover rounded-lg cursor-pointer"
                   onClick={() => handleImageClick(src)}
                 />
               </SwiperSlide>
@@ -268,16 +262,16 @@ const VCard = () => {
           role="dialog"
           aria-labelledby="imagePreviewModal"
         >
-          <div className="bg-white p-4 rounded-lg relative">
+          <div className="bg-white p-2 md:p-4 rounded-lg relative w-full max-w-[90vw] md:max-w-[50vw]">
             <button
-              className="absolute top-0 right-0 text-xl text-gray-600"
+              className="absolute top-0 right-0 text-lg md:text-xl text-gray-600 p-2"
               onClick={closeModal}
               role="button"
               aria-label="Close modal"
             >
-              &times;
+              ×
             </button>
-            <img src={selectedImage} alt="Preview of the selected image" className="w-96 h-auto" />
+            <img src={selectedImage} alt="Preview of the selected image" className="w-full h-auto" />
           </div>
         </div>
       )}

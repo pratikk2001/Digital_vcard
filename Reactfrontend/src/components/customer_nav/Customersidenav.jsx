@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { Dashboard, MoveToInbox, BarChart, AccountTree, Menu } from "@mui/icons-material";
+import { Dashboard, MoveToInbox, BarChart, AccountTree, Menu, ExitToApp } from "@mui/icons-material";
 
 export default function Sidenav() {
   const navigate = useNavigate();
@@ -19,6 +19,12 @@ export default function Sidenav() {
   const handleNavigation = React.useCallback((path) => {
     navigate(path);
     setIsOpen(false);
+  }, [navigate]);
+
+  // Logout function
+  const handleLogout = React.useCallback(() => {
+    // Here you would handle the actual logout logic, e.g., clearing local storage, API calls, etc.
+    navigate('/login'); // Redirect to login page or wherever after logout
   }, [navigate]);
 
   return (
@@ -43,8 +49,7 @@ export default function Sidenav() {
       >
         <div className="mt-0 space-y-3">
           {/* Sidebar Header */}
-          <div className=" h-10 my-4 flex items-center justify-center text-black font-bold text-2xl">Digital VCard</div>
-
+          <div className="h-10 my-4 flex items-center justify-center text-black font-bold text-2xl">Digital VCard</div>
 
           {/* Divider */}
           <div className="border-t-2 border-black my-2"></div>
@@ -58,6 +63,15 @@ export default function Sidenav() {
               onClick={() => handleNavigation(item.path)}
             />
           ))}
+
+          {/* Logout Link */}
+          <div
+            onClick={handleLogout}
+            className="flex items-center space-x-3 px-6 py-4 cursor-pointer rounded-lg mx-3 transition-all duration-300 ease-in-out hover:bg-red-500 hover:text-white"
+          >
+            <ExitToApp />
+            <span className="text-lg font-medium">Logout</span>
+          </div>
         </div>
       </nav>
 

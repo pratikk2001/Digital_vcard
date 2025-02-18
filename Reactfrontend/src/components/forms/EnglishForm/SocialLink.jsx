@@ -21,10 +21,18 @@ const SocialLinks = ({ formData, setFormData }) => {
     const { name, value } = e.target;
     const urlPattern = /^(https?:\/\/)?([\w\-]+\.)+[\w]{2,}(\/\S*)?$/;
 
-    // Validate URL format or allow empty value
     if (value === "" || urlPattern.test(value)) {
       setFormData((prev) => ({ ...prev, [name]: value }));
     }
+  };
+
+  const handleSave = () => {
+    console.log("Saved Social Links:", formData);
+    alert("Social links saved successfully!"); // Replace with actual save logic
+  };
+
+  const handleReset = () => {
+    setFormData({});
   };
 
   return (
@@ -49,6 +57,22 @@ const SocialLinks = ({ formData, setFormData }) => {
             />
           </div>
         ))}
+      </div>
+
+      {/* Buttons */}
+      <div className="flex justify-end gap-4 mt-6">
+      <button
+          onClick={handleSave}
+          className="p-3 bg-green-500 hover:bg-green-400 rounded-md text-white"
+        >
+          💾 Save
+        </button>
+        <button
+          onClick={handleReset}
+          className="p-3 bg-gray-500 hover:bg-gray-400 rounded-md text-white"
+        >
+          🔄 Reset
+        </button>
       </div>
     </fieldset>
   );

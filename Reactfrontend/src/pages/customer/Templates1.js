@@ -19,42 +19,22 @@ const VCard = () => {
     }
   }, []);
 
+  const socialWorkImages = ["sw-1.jpg", "sw-2.jpg", "sw-3.jpg"];
+  const momentsImages = ["cap-1.jpg", "cap-2.jpg", "cap-3.jpg"];
+  const newsImages = ["news-1.jpg", "news-2.jpg", "news-3.jpg"];
 
-  // Different images for each section
-  const socialWorkImages = [
-    "sw-1.jpg",
-    "sw-2.jpg",
-    "sw-3.jpg",
-  ];
-
-  const momentsImages = [
-    "cap-1.jpg",
-    "cap-2.jpg",
-    "cap-3.jpg",
-  ];
-
-  const newsImages = [
-    "news-1.jpg",
-    "news-2.jpg",
-    "news-3.jpg",
-  ];
-
-  // State to handle image preview modal
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState("");
 
-  // Function to open modal with the selected image
   const handleImageClick = (image) => {
     setSelectedImage(image);
     setIsModalOpen(true);
   };
 
-  // Function to close the modal
   const closeModal = () => {
     setIsModalOpen(false);
   };
 
-  // Close modal if background is clicked
   const handleBackgroundClick = (e) => {
     if (e.target === e.currentTarget) {
       closeModal();
@@ -63,9 +43,9 @@ const VCard = () => {
 
   return (
     <div className="bg-white flex flex-col items-center py-10">
-       <div
+      <div
         ref={vCardRef}
-        className="bg-gradient-to-r from-orange-400 via-gray-200 to-green-300 text-black w-[500px] p-6 rounded-lg shadow-lg text-center"
+        className="bg-gradient-to-r from-orange-400 via-gray-200 to-green-300 text-black w-full max-w-[500px] p-4 md:p-6 rounded-lg shadow-lg text-center mx-4"
         style={{
           backgroundImage: `('BJP.png')`,
           backgroundSize: "cover",
@@ -76,21 +56,21 @@ const VCard = () => {
         <img
           src="bg.jpg"
           alt="Backgorund Image"
-          className="w-full h-32 object-cover rounded-t-lg"
+          className="w-full h-24 md:h-32 object-cover rounded-t-lg"
         />
         {/* Profile Image */}
         <img
           src="profile.jpg"
           alt="Profile Image"
-          className="w-24 h-24 rounded-full mx-auto -mt-12 border-4 border-white"
+          className="w-20 h-20 md:w-24 md:h-24 rounded-full mx-auto -mt-10 md:-mt-12 border-4 border-white"
         />
-        <h2 className="text-xl font-bold mt-4">ABC</h2>
-        <p className="text-sm text-black">
+        <h2 className="text-lg md:text-xl font-bold mt-2 md:mt-4">ABC</h2>
+        <p className="text-xs md:text-sm text-black">
           मा. नगरसेवक ठा.म.पा. (भारतीय जनता पार्टी)
         </p>
 
         {/* Personal Information */}
-        <div className="mt-4 text-left text-sm">
+        <div className="mt-2 md:mt-4 text-left text-xs md:text-sm">
           <p>
             <strong>वाढदिवस:</strong> १९ ऑगस्ट १९७०
           </p>
@@ -106,7 +86,7 @@ const VCard = () => {
         </div>
 
         {/* Positions Held */}
-        <div className="mt-4 text-left text-sm">
+        <div className="mt-2 md:mt-4 text-left text-xs md:text-sm">
           <h3 className="font-bold">भूषवलेले पदे:</h3>
           <ul className="list-disc list-inside">
             <li>नगरसेवक - ठा.म.पा. प्रभाग क्र. ४</li>
@@ -117,7 +97,7 @@ const VCard = () => {
         </div>
 
         {/* Family Section */}
-        <div className="mt-4 text-left text-sm">
+        <div className="mt-2 md:mt-4 text-left text-xs md:text-sm">
           <h3 className="font-bold">कुटुंब:</h3>
           <ul className="list-disc list-inside">
             <li>पत्नी - ABC </li>
@@ -128,36 +108,36 @@ const VCard = () => {
         </div>
 
         {/* Contact Details */}
-        <div className="mt-6 flex justify-around">
+        <div className="mt-4 md:mt-6 flex justify-around flex-wrap">
           {/* Mobile Section */}
-          <div className="text-center">
+          <div className="text-center w-full md:w-auto">
             <a href="tel:+919870447272" aria-label="Call Mobile Number">
-              <FaPhone className="text-2xl mx-auto" />
-              <p className="text-sm">Mobile</p>
-              <p className="text-sm">+91 987654321</p>
+              <FaPhone className="text-lg md:text-2xl mx-auto" />
+              <p className="text-xs md:text-sm">Mobile</p>
+              <p className="text-xs md:text-sm">+91 987654321</p>
             </a>
           </div>
 
           {/* Email Section */}
-          <div className="text-center">
+          <div className="text-center w-full md:w-auto">
             <a href="mailto:bjpkaryalay04@gmail.com" aria-label="Send Email">
-              <FaEnvelope className="text-2xl mx-auto" />
-              <p className="text-sm">Email</p>
-              <p className="text-sm">bjp@gmail.com</p>
+              <FaEnvelope className="text-lg md:text-2xl mx-auto" />
+              <p className="text-xs md:text-sm">Email</p>
+              <p className="text-xs md:text-sm">bjp@gmail.com</p>
             </a>
           </div>
 
           {/* Address Section */}
-          <div className="text-center">
+          <div className="text-center w-full md:w-auto">
             <a
               href="https://www.google.com/maps/search/Thane,+Mumbai"
               target="_blank"
               rel="noopener noreferrer"
               aria-label="View Address on Google Maps"
             >
-              <FaMapMarkerAlt className="text-2xl mx-auto" />
-              <p className="text-sm">Address</p>
-              <p className="text-sm">Thane, Mumbai</p>
+              <FaMapMarkerAlt className="text-lg md:text-2xl mx-auto" />
+              <p className="text-xs md:text-sm">Address</p>
+              <p className="text-xs md:text-sm">Thane, Mumbai</p>
             </a>
           </div>
         </div>

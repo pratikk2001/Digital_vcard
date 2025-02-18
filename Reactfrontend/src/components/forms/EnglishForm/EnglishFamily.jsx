@@ -6,7 +6,8 @@ const FamilyDetailsComponent = () => {
     fatherName: "",
     motherName: "",
     siblings: "",
-    address: ""
+    address: "",
+    designation: ""  // Add this field to formData
   });
 
   const handleInputChange = (e) => {
@@ -14,6 +15,21 @@ const FamilyDetailsComponent = () => {
     setFormData({
       ...formData,
       [name]: value,
+    });
+  };
+
+  const saveDetails = () => {
+    console.log("Saved Family Details:", formData);
+  };
+
+  const resetDetails = () => {
+    setFormData({
+      familyDetails: "",
+      fatherName: "",
+      motherName: "",
+      siblings: "",
+      address: "",
+      designation: "", // Reset "designation" field as well
     });
   };
 
@@ -36,7 +52,7 @@ const FamilyDetailsComponent = () => {
 
         {/* Mother's Name */}
         <div className="flex flex-col">
-          <label htmlFor="motherName" className="text-gray-700 font-medium mb-2">👩‍👧 Mother's Name:</label>
+          <label htmlFor="motherName" className="text-gray-700 font-medium mb-2">👩‍👧 Last Name:</label>
           <input
             type="text"
             name="motherName"
@@ -49,7 +65,7 @@ const FamilyDetailsComponent = () => {
 
         {/* Siblings */}
         <div className="flex flex-col">
-          <label htmlFor="siblings" className="text-gray-700 font-medium mb-2">🧑‍🤝‍🧑 Siblings:</label>
+          <label htmlFor="siblings" className="text-gray-700 font-medium mb-2">🧑‍🤝‍🧑 Siblings Name:</label>
           <input
             type="text"
             name="siblings"
@@ -60,18 +76,34 @@ const FamilyDetailsComponent = () => {
           />
         </div>
 
-        {/* Address */}
+        {/* Designation */}
         <div className="flex flex-col">
-          <label htmlFor="address" className="text-gray-700 font-medium mb-2">🏠 Address:</label>
+          <label htmlFor="designation" className="text-gray-700 font-medium mb-2">💼 Designation:</label>
           <input
             type="text"
-            name="address"
-            value={formData.address}
+            name="designation"
+            value={formData.designation}
             onChange={handleInputChange}
             className="p-3 border border-gray-300 rounded-md w-full focus:ring-2 focus:ring-blue-500"
-            placeholder="Enter home address"
+            placeholder="Enter your designation"
           />
         </div>
+      </div>
+
+      {/* Save and Reset Buttons */}
+      <div className="flex justify-end gap-4 mt-6">
+        <button
+          onClick={saveDetails}
+          className="p-3 bg-green-500 hover:bg-green-400 rounded-md text-white"
+        >
+          💾 Save
+        </button>
+        <button
+          onClick={resetDetails}
+          className="p-3 bg-gray-500 hover:bg-gray-400 rounded-md text-white"
+        >
+          🔄 Reset
+        </button>
       </div>
     </div>
   );
