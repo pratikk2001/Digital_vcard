@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Topnav from "../../customer_nav/Topnavbar";
 import Sidenav from "../../customer_nav/Customersidenav";
-import { FaInfoCircle, FaImage, FaAward, FaUsers, FaHandsHelping, FaCalendarAlt, FaNewspaper } from "react-icons/fa";
+import { FaInfoCircle, FaImage, FaAward, FaUsers, FaHandsHelping, FaCalendarAlt, FaNewspaper, FaFont, FaFontAwesome } from "react-icons/fa";
 import BasicDetails from "./EnglishFormBasicDetails";
 import ProfileBanner from "./EnglishProfileandBanner";
 import AwardsComponent from "./EnglishAwards";
@@ -10,6 +10,7 @@ import SocialImage from "./SocialImage";
 import EventImage from "./EventImage";
 import NewsImage from "./NewsImage";
 import SocialLink from "./SocialLink";
+import Fonts from "./Fonts"
 
 const EditVCard = () => {
   const [activeSection, setActiveSection] = useState("Basic Details");
@@ -54,6 +55,7 @@ const EditVCard = () => {
     { name: "Events", icon: <FaCalendarAlt /> },
     { name: "News Center", icon: <FaNewspaper /> },
     { name: "Social Links", icon: <FaImage /> },
+    { name: "Fonts", icon:<FaFontAwesome/>},
   ];
 
   return (
@@ -110,6 +112,7 @@ const EditVCard = () => {
                 {activeSection === "Events" && <EventImage formData={formData} setFormData={setFormData} />}
                 {activeSection === "News Center" && <NewsImage formData={formData} setFormData={setFormData} />}
                 {activeSection === "Social Links" && <SocialLink formData={formData} setFormData={setFormData} />}
+                {activeSection === "Fonts" && <Fonts formData={formData} setFormData={setFormData} />}
               </div>
             </div>
           </div>

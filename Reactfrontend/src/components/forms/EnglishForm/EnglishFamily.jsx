@@ -1,96 +1,69 @@
 import React, { useState } from "react";
 
 const FamilyDetailsComponent = () => {
-  const [formData, setFormData] = useState({
-    familyDetails: "",
-    fatherName: "",
-    motherName: "",
-    siblings: "",
-    address: "",
-    designation: ""  // Add this field to formData
-  });
+  const [description, setDescription] = useState([""]);
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
+  const handleInputChange = (index, value) => {
+    const updatedDescription = [...description];
+    updatedDescription[index] = value;
+    setDescription(updatedDescription);
+  };
+
+  const addNewPoint = () => {
+    setDescription([...description, ""]);
+  };
+
+  const removePoint = (index) => {
+    const updatedDescription = description.filter((_, i) => i !== index);
+    setDescription(updatedDescription);
   };
 
   const saveDetails = () => {
-    console.log("Saved Family Details:", formData);
+    console.log("Saved Description:", description);
+    alert("Description saved successfully!");
   };
 
   const resetDetails = () => {
-    setFormData({
-      familyDetails: "",
-      fatherName: "",
-      motherName: "",
-      siblings: "",
-      address: "",
-      designation: "", // Reset "designation" field as well
-    });
+    setDescription([""]);
   };
 
   return (
     <div className="max-w-4xl mx-auto p-8 bg-white rounded-xl shadow-2xl border border-gray-100">
-      <h2 className="text-2xl font-bold text-gray-800 mb-8">👨‍👩‍👧‍👦 Family Details</h2>
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
-        {/* Father's Name */}
-        <div className="flex flex-col">
-          <label htmlFor="fatherName" className="text-gray-700 font-medium mb-2">👨‍👦 Father's Name:</label>
-          <input
-            type="text"
-            name="fatherName"
-            value={formData.fatherName}
-            onChange={handleInputChange}
-            className="p-3 border border-gray-300 rounded-md w-full focus:ring-2 focus:ring-blue-500"
-            placeholder="Enter father's name"
-          />
-        </div>
+      <h2 className="text-2xl font-bold text-gray-800 mb-6">📜 Description</h2>
 
-        {/* Mother's Name */}
-        <div className="flex flex-col">
-          <label htmlFor="motherName" className="text-gray-700 font-medium mb-2">👩‍👧 Last Name:</label>
-          <input
-            type="text"
-            name="motherName"
-            value={formData.motherName}
-            onChange={handleInputChange}
-            className="p-3 border border-gray-300 rounded-md w-full focus:ring-2 focus:ring-blue-500"
-            placeholder="Enter mother's name"
-          />
-        </div>
-
-        {/* Siblings */}
-        <div className="flex flex-col">
-          <label htmlFor="siblings" className="text-gray-700 font-medium mb-2">🧑‍🤝‍🧑 Siblings Name:</label>
-          <input
-            type="text"
-            name="siblings"
-            value={formData.siblings}
-            onChange={handleInputChange}
-            className="p-3 border border-gray-300 rounded-md w-full focus:ring-2 focus:ring-blue-500"
-            placeholder="Enter number of siblings"
-          />
-        </div>
-
-        {/* Designation */}
-        <div className="flex flex-col">
-          <label htmlFor="designation" className="text-gray-700 font-medium mb-2">💼 Designation:</label>
-          <input
-            type="text"
-            name="designation"
-            value={formData.designation}
-            onChange={handleInputChange}
-            className="p-3 border border-gray-300 rounded-md w-full focus:ring-2 focus:ring-blue-500"
-            placeholder="Enter your designation"
-          />
-        </div>
+      {/* Description Input */}
+      <div className="flex flex-col gap-4">
+        {description.map((point, index) => (
+          <div key={index} className="flex items-center gap-2">
+            <span className="text-lg font-bold">{index + 1}.</span>
+            <input
+              type="text"
+              value={point}
+              onChange={(e) => handleInputChange(index, e.target.value)}
+              className="p-3 border border-gray-300 rounded-md w-full focus:ring-2 focus:ring-blue-500"
+              placeholder={`Enter Family Details ${index + 1}`}
+            />
+            {description.length > 1 && (
+              <button
+                onClick={() => removePoint(index)}
+                className="p-2 bg-red-500 text-white rounded-md hover:bg-red-600"
+              >
+                ❌
+              </button>
+            )}
+          </div>
+        ))}
       </div>
 
-      {/* Save and Reset Buttons */}
+      {/* Add New Point Button */}
+      <button
+        onClick={addNewPoint}
+        className="mt-4 p-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+      >
+        ➕ Add Details
+      </button>
+
+      {/* Save & Reset Buttons */}
       <div className="flex justify-end gap-4 mt-6">
         <button
           onClick={saveDetails}

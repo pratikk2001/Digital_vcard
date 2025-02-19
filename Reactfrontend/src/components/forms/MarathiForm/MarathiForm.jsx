@@ -110,6 +110,7 @@ const EditVCard = () => {
                 {activeSection === "Events" && <EventImage formData={formData} setFormData={setFormData} />}
                 {activeSection === "News Center" && <NewsImage formData={formData} setFormData={setFormData} />}
                 {activeSection === "Social Links" && <SocialLink formData={formData} setFormData={setFormData} />}
+                {activeSection === "Fonts" && <SocialLink formData={formData} setFormData={setFormData} />}
               </div>
             </div>
           </div>

@@ -1,38 +1,58 @@
 import React, { useState, useEffect } from "react";
 import { FaSave, FaRedo, FaTrashAlt } from "react-icons/fa";
 
-const EventImageForm = ({ initialImages = [], onImagesChange = () => {} }) => {
-  const [formData, setFormData] = useState({ images: initialImages });
+const EventImage = ({ initialImages = [], onImagesChange = () => {} }) => {
+  const [formData, setFormData] = useState({ images: initialImages, captions: {} });
 
   const handleMultipleFileChange = (e) => {
     const files = Array.from(e.target.files).filter(file => file.type.startsWith("image/"));
     if (files.length > 0) {
       const newImages = files.map(file => URL.createObjectURL(file));
-      setFormData(prev => ({ ...prev, images: [...prev.images, ...newImages] }));
-      onImagesChange([...formData.images, ...files]); // Pass array of files to parent
+      setFormData(prev => {
+        const updatedImages = [...prev.images, ...newImages];
+        const updatedCaptions = { ...prev.captions };
+        newImages.forEach((_, index) => {
+          updatedCaptions[updatedImages.length - 1 - index] = ""; // Initialize caption
+        });
+
+        onImagesChange(updatedImages, updatedCaptions);
+        return { images: updatedImages, captions: updatedCaptions };
+      });
     } else {
       alert("Please select image files");
     }
   };
 
+  const handleCaptionChange = (index, text) => {
+    setFormData(prev => {
+      const updatedCaptions = { ...prev.captions, [index]: text };
+      return { ...prev, captions: updatedCaptions };
+    });
+  };
+
   const handleRemoveImage = (index) => {
     setFormData(prev => {
       const updatedImages = [...prev.images];
+      const updatedCaptions = { ...prev.captions };
+
       URL.revokeObjectURL(updatedImages[index]); // Clean up the URL
       updatedImages.splice(index, 1);
-      onImagesChange(updatedImages);
-      return { ...prev, images: updatedImages };
+      delete updatedCaptions[index]; // Remove the caption
+
+      onImagesChange(updatedImages, updatedCaptions);
+      return { images: updatedImages, captions: updatedCaptions };
     });
   };
 
   const saveDetails = () => {
     console.log("Saved Event Images:", formData.images);
-    alert("Event images saved successfully!");
+    console.log("Saved Captions:", formData.captions);
+    alert("Event images and captions saved successfully!");
   };
 
   const resetDetails = () => {
-    setFormData({ images: [] });
-    onImagesChange([]);
+    setFormData({ images: [], captions: {} });
+    onImagesChange([], {});
   };
 
   useEffect(() => {
@@ -60,15 +80,17 @@ const EventImageForm = ({ initialImages = [], onImagesChange = () => {} }) => {
         />
       </div>
 
-      {/* Image Previews */}
+      {/* Image Previews with Text Input */}
       <div className="flex flex-wrap gap-4 mt-6">
         {formData.images.map((image, index) => (
-          <div key={index} className="relative group">
+          <div key={index} className="relative group p-2 border border-gray-200 rounded-lg shadow-md">
             <img
               src={image}
               alt={`event-${index}`}
               className="w-32 h-32 object-cover rounded-md border-2 border-gray-300 shadow-md"
             />
+            
+            {/* Remove Button */}
             <button
               type="button"
               onClick={() => handleRemoveImage(index)}
@@ -76,6 +98,15 @@ const EventImageForm = ({ initialImages = [], onImagesChange = () => {} }) => {
             >
               <FaTrashAlt />
             </button>
+
+            {/* Text Input for Caption */}
+            <input
+              type="text"
+              placeholder="Enter caption..."
+              value={formData.captions[index] || ""}
+              onChange={(e) => handleCaptionChange(index, e.target.value)}
+              className="mt-2 w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+            />
           </div>
         ))}
       </div>
@@ -99,4 +130,4 @@ const EventImageForm = ({ initialImages = [], onImagesChange = () => {} }) => {
   );
 };
 
-export default EventImageForm;
+export default EventImage;

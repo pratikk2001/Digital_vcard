@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 
 const SocialImage = ({ initialImage = null, onImageChange = () => {} }) => {
   const [imagePreview, setImagePreview] = useState(initialImage ? [initialImage] : []);
+  const [captions, setCaptions] = useState({}); // Store captions
 
   const handleImageUpload = (e) => {
     const files = Array.from(e.target.files).filter(file => file.type.startsWith("image/"));
@@ -23,18 +24,33 @@ const SocialImage = ({ initialImage = null, onImageChange = () => {} }) => {
       URL.revokeObjectURL(updatedImages[index]); // Clean up memory
       updatedImages.splice(index, 1);
       onImageChange(updatedImages);
+
+      // Remove caption
+      const updatedCaptions = { ...captions };
+      delete updatedCaptions[index];
+      setCaptions(updatedCaptions);
+
       return updatedImages;
     });
   };
 
+  const handleCaptionChange = (index, value) => {
+    setCaptions((prevCaptions) => ({
+      ...prevCaptions,
+      [index]: value,
+    }));
+  };
+
   const handleSave = () => {
     console.log("Saved Images:", imagePreview);
-    alert("Images saved successfully!"); // Replace with actual save logic
+    console.log("Captions:", captions);
+    alert("Images and captions saved successfully!"); // Replace with actual save logic
   };
 
   const handleReset = () => {
     imagePreview.forEach(url => URL.revokeObjectURL(url)); // Clean up memory
     setImagePreview([]);
+    setCaptions({});
     onImageChange([]);
   };
 
@@ -79,13 +95,20 @@ const SocialImage = ({ initialImage = null, onImageChange = () => {} }) => {
             >
               ❌
             </button>
+            <input
+              type="text"
+              placeholder="Enter caption..."
+              value={captions[index] || ""}
+              onChange={(e) => handleCaptionChange(index, e.target.value)}
+              className="mt-2 w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+            />
           </div>
         ))}
       </div>
 
       {/* Buttons */}
       <div className="flex justify-end gap-4 mt-6">
-      <button
+        <button
           onClick={handleSave}
           className="p-3 bg-green-500 hover:bg-green-400 rounded-md text-white"
         >

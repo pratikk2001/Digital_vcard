@@ -52,7 +52,7 @@ function App() {
         <Route path="/FormDashboard" element={<FormDashboard />} />
         <Route path="/AdminLogin" element={<Login />} />
         {/* <Route path="/CustomersForm" element={<Customerform />} /> */}
-
+      
         {/* Customer Routes */}
         <Route path="/CustomerLogin" element={<CustomerLogin />} />
         <Route path="/CustomerSignup" element={<CustomerSignup />} />
@@ -64,7 +64,7 @@ function App() {
         <Route path="/GetCard" element={<CustomerGetCard />} />
         <Route path="/EnglishForm" element={<EnglishForm />} />
         <Route path="/MarathiForm" element={<Marathi />} />
-
+        
         {/* Customer Templates */}
         <Route path="/Templates1" element={<Templates1 />} />
         <Route path="/Templates2" element={<Templates2 />} />

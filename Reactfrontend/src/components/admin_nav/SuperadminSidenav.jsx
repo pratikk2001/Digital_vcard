@@ -17,7 +17,6 @@ export default function Sidenav() {
   const menuItems = [
     { text: "Dashboard", path: "/dashboard" },
     { text: "Customers", path: "/customers" },
-    { text: "Customers Card", path: "/customerscard" }, // Set the correct path
     { text: "Themes", path: "/themes" },
   ];
 
@@ -25,7 +24,7 @@ export default function Sidenav() {
     <div className="flex">
       {/* Sidebar */}
       <div
-        className={`bg-blue-100 text-black h-screen fixed top-0 left-0 transform ${
+        className={`bg-white text-black h-screen fixed top-0 left-0 transform ${
           isSidebarOpen ? "translate-x-0" : "-translate-x-full"
         } lg:translate-x-0 transition-transform duration-300 z-50 shadow-2xl`}
       >
@@ -94,7 +93,7 @@ function SidebarLink({ text, path, index, navigate, location }) {
   return (
     <div
       onClick={() => navigate(path)}
-      className={`px-6 py-3 rounded-lg flex items-center space-x-3 transition duration-300 transform hover:scale-105 cursor-pointer ${
+      className={`px-6 py-3 rounded-lg flex items-center space-x-3 transition duration-100 transform hover:scale-95 cursor-pointer ${
         isActive ? "bg-blue-500 text-white" : "hover:bg-blue-500"
       }`}
     >
