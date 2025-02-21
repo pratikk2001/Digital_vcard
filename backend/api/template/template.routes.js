@@ -2,9 +2,12 @@ const express = require("express");
 const router = express.Router();
 const TemplateController = require("./template.controller");
 
+// Define the exact route from your request
 router.post("/save/basicDetails/:id", TemplateController.saveBasicDetails);
-router.get("/save/profileBanner/:id", TemplateController.saveProfileBanner);
-router.get("/save/awards/:id", TemplateController.saveAwards);
+
+// Other routes (adjust as needed)
+router.post("/save/profileBanner/:id", TemplateController.saveProfileBanner); // Changed to POST
+router.post("/save/awards/:id", TemplateController.saveAwards);              // Changed to POST
 router.put("/save/familyDetails/:id", TemplateController.saveFamilyDetails);
 router.post("/save/socialWorkImages/:id", TemplateController.saveSocialWorkImages);
 router.post("/save/eventImages/:id", TemplateController.saveEventImages);
