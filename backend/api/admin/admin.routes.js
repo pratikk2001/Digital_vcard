@@ -1,10 +1,33 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const AdminController = require('./admin.controller');
+const AdminController = require("./admin.controller");
+const { body, validationResult } = require("express-validator");
+const asyncHandler = require("../../middlewares/asyncHandler");
 
-router.post("/create",AdminController.createAdmin);
+const adminController = new AdminController(); // Instantiate the class
 
-router.post("/login",AdminController.loginAdmin);
+router.post(
+  "/register",
+  [
+    body("first_name").trim().notEmpty().withMessage("First name is required").isString(),
+    body("last_name").trim().notEmpty().withMessage("Last name is required").isString(),
+    body("email").trim().isEmail().withMessage("Invalid email format").normalizeEmail().toLowerCase(),
+    body("password").trim().isLength({ min: 6 }).withMessage("Password must be at least 6 characters").isString(),
+  ],
+  asyncHandler(adminController.createAdmin.bind(adminController))
+);
 
+router.post(
+  "/login",
+  [
+    body("email").trim().isEmail().withMessage("Invalid email format").normalizeEmail().toLowerCase(),
+    body("password").trim().notEmpty().withMessage("Password is required").isString(),
+  ],
+  asyncHandler(adminController.loginAdmin.bind(adminController))
+);
+
+// Optional: Add more routes
+router.get("/", asyncHandler(adminController.getAllAdmins.bind(adminController)));
+router.get("/:id", asyncHandler(adminController.getAdminById.bind(adminController)));
 
 module.exports = router;

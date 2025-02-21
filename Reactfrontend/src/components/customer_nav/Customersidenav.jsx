@@ -13,6 +13,7 @@ export default function Sidenav() {
     { name: "Add Details", path: "/FormDashboard", icon: <MoveToInbox /> },
     { name: "My Cards", path: "/CustomerCard", icon: <BarChart /> },
     { name: "Themes", path: "/CustomerThemes", icon: <AccountTree /> },
+    { name: "Logout", path: "/", icon: <ExitToApp /> },
   ], []);
 
   // Optimized navigation function
@@ -24,7 +25,7 @@ export default function Sidenav() {
   // Logout function
   const handleLogout = React.useCallback(() => {
     // Here you would handle the actual logout logic, e.g., clearing local storage, API calls, etc.
-    navigate('/login'); // Redirect to login page or wherever after logout
+    navigate('/'); // Redirect to login page or wherever after logout
   }, [navigate]);
 
   return (
@@ -49,7 +50,9 @@ export default function Sidenav() {
       >
         <div className="mt-0 space-y-3">
           {/* Sidebar Header */}
-          <div className="h-10 my-4 flex items-center justify-center text-black font-bold text-2xl">Digital VCard</div>
+          <div className="h-10 my-4 flex items-center justify-center text-black font-bold text-2xl">
+            Digital VCard
+          </div>
 
           {/* Divider */}
           <div className="border-t-2 border-black my-2"></div>
@@ -60,18 +63,9 @@ export default function Sidenav() {
               key={item.path}
               item={item}
               isActive={location.pathname === item.path}
-              onClick={() => handleNavigation(item.path)}
+              onClick={item.name === "Logout" ? handleLogout : () => handleNavigation(item.path)}
             />
           ))}
-
-          {/* Logout Link */}
-          <div
-            onClick={handleLogout}
-            className="flex items-center space-x-3 px-6 py-4 cursor-pointer rounded-lg mx-3 transition-all duration-300 ease-in-out hover:bg-red-500 hover:text-white"
-          >
-            <ExitToApp />
-            <span className="text-lg font-medium">Logout</span>
-          </div>
         </div>
       </nav>
 

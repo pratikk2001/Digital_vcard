@@ -1,118 +1,162 @@
-
-const Admin = require("./admin.model");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-
+const Admin = require("./admin.model");
 
 class AdminController {
-
-getAllUsers = async (req, res) => {
-        try {
-          const users = await Admin.find();
-          res.json({
-            status_code:200,
-            massage:"all the admin fetch successfully",
-            data:users
-          });
-        } catch (error) {
-          res.status(500).json({ message: "Error fetching users", error });
-        }
- };
-
-// Signup API: createAdmin
-createAdmin = async (req, res) => {
-  const { first_name,last_name, email, password } = req.body;
-
-  try {
-    // Check if the admin already exists
-    const existingAdmin = await Admin.findOne({ email });
-    if (existingAdmin) {
-      return res.status(400).json({ message: "Admin already exists" });
+  async getAllAdmins(req, res) {
+    try {
+      const admins = await Admin.find().select("-password");
+      res.status(200).json({
+        status_code: 200,
+        message: "All admins fetched successfully",
+        data: admins,
+      });
+    } catch (error) {
+      res.status(500).json({
+        status_code: 500,
+        message: "Error fetching admins",
+        error: process.env.NODE_ENV === "development" ? error.message : undefined,
+      });
     }
-
-    // Hash the password
-    const hashedPassword = await bcrypt.hash(password, 10);
-    console.log(hashedPassword)
-
-    // Create a new Admin
-    const newAdmin = new Admin({
-      first_name,
-      last_name,
-      email,
-      password: hashedPassword,
-      role: "admin",
-    });
-
-
-    // Generate JWT token
-    const token = jwt.sign(
-      { userId: newAdmin._id, email: newAdmin.email, role: newAdmin.role },
-      process.env.JWT_SECRET,
-      { expiresIn: "5d" } // Token expires in 2 days
-    );
-
-    newAdmin.token = token;
-
-    // Save to the database
-    await newAdmin.save();
-
-    res.status(200).json({ status_code:200, message: "Admin created successfully", data: newAdmin });
-  } catch (error) {
-    res.status(500).json({ message: "Error creating admin", error });
   }
-};
 
+  async createAdmin(req, res) {
+    const { first_name, last_name, email, password } = req.body;
 
-loginAdmin = async (req, res) => {
-  const { email, password } = req.body;
+    try {
+      const existingAdmin = await Admin.findOne({ email });
+      if (existingAdmin) {
+        return res.status(400).json({
+          status_code: 400,
+          message: "Admin with this email already exists",
+          data: null,
+        });
+      }
 
-  try {
-    // Check if the admin exists
-    const admin = await Admin.findOne({ email });
-    if (!admin) {
-      return res.status(404).json({ message: "Admin not found" });
+      const saltRounds = 10;
+      const hashedPassword = await bcrypt.hash(String(password), saltRounds); // Ensure string
+
+      const newAdmin = new Admin({
+        first_name,
+        last_name,
+        email,
+        password: hashedPassword,
+        role: "admin",
+      });
+
+      await newAdmin.save();
+
+      const token = jwt.sign(
+        { userId: newAdmin._id, email: newAdmin.email, role: newAdmin.role },
+        process.env.JWT_SECRET || "your-secret-key",
+        { expiresIn: "5d" }
+      );
+
+      res.status(201).json({
+        status_code: 201,
+        message: "Admin created successfully",
+        data: {
+          _id: newAdmin._id,
+          first_name: newAdmin.first_name,
+          last_name: newAdmin.last_name,
+          email: newAdmin.email,
+          role: newAdmin.role,
+          token,
+        },
+      });
+    } catch (error) {
+      res.status(500).json({
+        status_code: 500,
+        message: "Error creating admin",
+        error: process.env.NODE_ENV === "development" ? error.message : undefined,
+      });
     }
-
-    // Verify the password
-    const isPasswordValid = bcrypt.compare(password, admin.password);
-    if (!isPasswordValid) {
-      return res.status(401).json({ message: "Invalid email or password" });
-    }
-
-    // Generate JWT token
-    const token = jwt.sign(
-      { userId: admin._id, email: admin.email, role: admin.role },
-      process.env.JWT_SECRET,
-      { expiresIn: "2d" }
-    );
-
-    // Update token in the database
-    admin.token = token;
-    await admin.save();
-
-    res.status(200).json({ message: "Login successful", status_code:200 , data: admin });
-  } catch (error) {
-    res.status(500).json({ message: "Error logging in", error });
   }
-};
 
+  async loginAdmin(req, res) {
+    const { email, password } = req.body;
 
- getUserById = async (req, res) => {
-        const { id } = req.params;
-      
-        try {
-          const user = await Admin.findById(id);
-      
-          if (!user) {
-            return res.status(404).json({ message: "User not found" , status_code:404,data:null });
-          }
-      
-          res.json({ message: "User fetched successfully", status_code:200,  data:user });
-        } catch (error) {
-          res.status(500).json({ message: "Error fetching user", error });
-        }
-};
+    try {
+      const admin = await Admin.findOne({ email });
+      if (!admin) {
+        return res.status(404).json({
+          status_code: 404,
+          message: "Admin not found",
+          data: null,
+        });
+      }
 
+      if (!admin.password) {
+        return res.status(500).json({
+          status_code: 500,
+          message: "Internal server error: Admin account is corrupted (missing password)",
+          data: null,
+        });
+      }
+
+      const isPasswordValid = await bcrypt.compare(String(password), admin.password);
+      if (!isPasswordValid) {
+        return res.status(401).json({
+          status_code: 401,
+          message: "Invalid email or password",
+          data: null,
+        });
+      }
+
+      const token = jwt.sign(
+        { userId: admin._id, email: admin.email, role: admin.role },
+        process.env.JWT_SECRET || "your-secret-key",
+        { expiresIn: "2d" }
+      );
+
+      res.status(200).json({
+        status_code: 200,
+        message: "Login successful",
+        data: {
+          _id: admin._id,
+          first_name: admin.first_name,
+          last_name: admin.last_name,
+          email: admin.email,
+          role: admin.role,
+          token,
+        },
+      });
+    } catch (error) {
+      console.error("Login error:", error);
+      res.status(500).json({
+        status_code: 500,
+        message: "Error logging in",
+        error: process.env.NODE_ENV === "development" ? error.message : undefined,
+      });
+    }
+  }
+
+  async getAdminById(req, res) {
+    const { id } = req.params;
+
+    try {
+      const admin = await Admin.findById(id).select("-password");
+      if (!admin) {
+        return res.status(404).json({
+          status_code: 404,
+          message: "Admin not found",
+          data: null,
+        });
+      }
+
+      res.status(200).json({
+        status_code: 200,
+        message: "Admin fetched successfully",
+        data: admin,
+      });
+    } catch (error) {
+      res.status(500).json({
+        status_code: 500,
+        message: "Error fetching admin",
+        error: process.env.NODE_ENV === "development" ? error.message : undefined,
+      });
+    }
+  }
 }
 
-module.exports = new AdminController();
+module.exports = AdminController;
