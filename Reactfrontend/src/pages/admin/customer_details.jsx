@@ -38,6 +38,7 @@ const CostomerDetails = () => {
                   <th className="p-4">User Name</th>
                   <th className="p-4">Email</th>
                   <th className="p-4">Theme</th>
+                  <th classname="p-4">View</th>
                   <th className="p-4">Status</th>
                   <th className="p-4">Action</th>
                 </tr>

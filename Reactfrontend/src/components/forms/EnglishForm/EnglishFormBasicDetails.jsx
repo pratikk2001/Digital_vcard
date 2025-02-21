@@ -57,6 +57,7 @@ const EnglishFormBasicDetails = () => {
   };
 
   const handleReset = () => {
+    
     setFormData({
       firstName: "",
       lastName: "",
