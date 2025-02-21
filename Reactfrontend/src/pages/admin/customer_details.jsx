@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Sidenav from "../../components/admin_nav/SuperadminSidenav";
 import TopNavbar from "../../components/admin_nav/topnav"; // Import the Navbar component
 
-const CostomerDetails = () => {
+const CustomerDetails = () => {
   const [users, setUsers] = useState([
     { name: "Karan Sharma", email: "karanmitash@gmail.com", theme: "Political 1", status: "Active" },
     { name: "Sinan Mintaş", email: "sinanmintas04@gmail.com", theme: "Political 2", status: "Inactive" },
@@ -13,16 +13,24 @@ const CostomerDetails = () => {
 
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
+  const [selectedUser, setSelectedUser] = useState(null);
   const [editUser, setEditUser] = useState(null);
   const [showModal, setShowModal] = useState(false);
+  const [viewUserModal, setViewUserModal] = useState(false);
 
   const totalPages = Math.ceil(users.length / itemsPerPage);
   const currentUsers = users.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
   const handlePageChange = (page) => setCurrentPage(page);
   const handleEdit = (user) => { setEditUser(user); setShowModal(true); };
-  const handleSave = () => { setUsers((prev) => prev.map((u) => (u.email === editUser.email ? editUser : u))); setShowModal(false); };
-  const handleToggleStatus = (email) => { setUsers((prev) => prev.map((u) => u.email === email ? { ...u, status: u.status === "Active" ? "Inactive" : "Active" } : u)); };
+  const handleSave = () => { 
+    setUsers((prev) => prev.map((u) => (u.email === editUser.email ? editUser : u))); 
+    setShowModal(false); 
+  };
+  const handleToggleStatus = (email) => { 
+    setUsers((prev) => prev.map((u) => u.email === email ? { ...u, status: u.status === "Active" ? "Inactive" : "Active" } : u)); 
+  };
+  const handleViewUser = (user) => { setSelectedUser(user); setViewUserModal(true); };
 
   return (
     <div className="min-h-screen bg-gray-100">
@@ -38,7 +46,7 @@ const CostomerDetails = () => {
                   <th className="p-4">User Name</th>
                   <th className="p-4">Email</th>
                   <th className="p-4">Theme</th>
-                  <th classname="p-4">View</th>
+                  <th className="p-4">View</th>
                   <th className="p-4">Status</th>
                   <th className="p-4">Action</th>
                 </tr>
@@ -54,6 +62,14 @@ const CostomerDetails = () => {
                     </td>
                     <td className="p-4">{user.email}</td>
                     <td className="p-4">{user.theme}</td>
+                    <td className="p-4">
+                      <button
+                        onClick={() => handleViewUser(user)}
+                        className="px-3 py-1 bg-gray-600 text-white rounded-md hover:bg-gray-700"
+                      >
+                        View
+                      </button>
+                    </td>
                     <td className="p-4">
                       <button
                         onClick={() => handleToggleStatus(user.email)}
@@ -75,22 +91,27 @@ const CostomerDetails = () => {
               </tbody>
             </table>
           </div>
-          <div className="mt-4 flex justify-between items-center">
-            <span className="text-gray-600">Showing {itemsPerPage * (currentPage - 1) + 1} to {Math.min(itemsPerPage * currentPage, users.length)} of {users.length} entries</span>
-            <div className="flex gap-2">
-              {Array.from({ length: totalPages }, (_, i) => (
-                <button
-                  key={i}
-                  className={`px-4 py-2 rounded-md ${currentPage === i + 1 ? "bg-blue-500 text-white" : "bg-gray-200 text-gray-700 hover:bg-gray-300"}`}
-                  onClick={() => handlePageChange(i + 1)}
-                >
-                  {i + 1}
-                </button>
-              ))}
-            </div>
-          </div>
 
-          {showModal && (
+          {/* View User Modal */}
+          {viewUserModal && selectedUser && (
+            <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+              <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-sm">
+                <h2 className="text-2xl font-semibold mb-4">User Details</h2>
+                <div className="border p-4 rounded-lg">
+                  <p><strong>Name:</strong> {selectedUser.name}</p>
+                  <p><strong>Email:</strong> {selectedUser.email}</p>
+                  <p><strong>Theme:</strong> {selectedUser.theme}</p>
+                  <p><strong>Status:</strong> {selectedUser.status}</p>
+                </div>
+                <button onClick={() => setViewUserModal(false)} className="mt-4 px-4 py-2 bg-gray-400 text-white rounded-md hover:bg-gray-500">
+                  Close
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* Edit User Modal */}
+          {showModal && editUser && (
             <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
               <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
                 <h2 className="text-2xl font-semibold mb-4">Edit User</h2>
@@ -113,4 +134,4 @@ const CostomerDetails = () => {
   );
 };
 
-export default CostomerDetails;
+export default CustomerDetails;
