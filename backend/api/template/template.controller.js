@@ -629,8 +629,6 @@ getSocialImage = async (req, res) => {
 
    };   
 
-
-
    async getDocument(filePath) {
     try {
       const file = fs.readFileSync(filePath);
