@@ -8,13 +8,14 @@ const ProfileBanner = () => {
 
   const handleFileChange = (e) => {
     const { name, files } = e.target;
-    if (files[0]) {
+    if (files.length > 0) {
       setFormData({
         ...formData,
-        [name]: URL.createObjectURL(files[0]),
+        [name]: files[0], // Store the actual File object
       });
     }
   };
+  
 
   const removeImage = (field) => {
     setFormData({
@@ -23,8 +24,44 @@ const ProfileBanner = () => {
     });
   };
 
-  const saveDetails = () => {
+  const saveDetails =async () => {
     console.log("Saved Profile & Banner Details:", formData);
+
+    if (!formData.profilePicture && !formData.bannerImage) {
+      alert("Please select at least one image.");
+      return;
+    }
+  
+    const userId = localStorage.getItem("userId");
+    const formDataToSend = new FormData();
+  
+    if (formData.profilePicture) {
+      formDataToSend.append("profilePicture", formData.profilePicture); // ✅ File object
+    }
+    if (formData.bannerImage) {
+      formDataToSend.append("bannerImage", formData.bannerImage); // ✅ File object
+    }
+  
+    try {
+      const apiBaseUrl = process.env.REACT_APP_API_BASE_URL || "http://localhost:4500";
+  
+      const response = await fetch(`${apiBaseUrl}/api/template/save/ProfileBanner/${userId}`, {
+        method: "POST",
+        body: formDataToSend,
+      });
+
+    const result = await response.json();
+    if (response.ok) {
+      alert("Profile and banner updated successfully!");
+      // console.log("Response:", result);
+    } else {
+      alert(`Error: ${result.message}`);
+    }
+  } catch (error) {
+    console.error("Error uploading images:", error);
+    alert("Failed to upload images. Please try again.");
+  }
+
   };
 
   const resetDetails = () => {
@@ -51,7 +88,7 @@ const ProfileBanner = () => {
         {formData.profilePicture && (
           <div className="mt-4 relative">
             <img
-              src={formData.profilePicture}
+              src={URL.createObjectURL(formData.profilePicture)}
               alt="Profile Preview"
               className="w-32 h-32 object-cover rounded-lg border-2 border-gray-300 shadow-md"
             />
@@ -78,7 +115,7 @@ const ProfileBanner = () => {
         {formData.bannerImage && (
           <div className="mt-4 relative">
             <img
-              src={formData.bannerImage}
+              src={URL.createObjectURL(formData.bannerImage)}
               alt="Banner Preview"
               className="w-full h-32 object-cover rounded-lg border-2 border-gray-300 shadow-md"
             />
@@ -109,6 +146,8 @@ const ProfileBanner = () => {
       </div>
     </div>
   );
+
+  
 };
 
 export default ProfileBanner;

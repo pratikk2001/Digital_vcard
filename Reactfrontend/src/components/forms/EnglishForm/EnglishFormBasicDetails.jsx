@@ -18,11 +18,16 @@ const EnglishFormBasicDetails = () => {
 
   const [errors, setErrors] = useState({});
 
+  const UserId = localStorage.getItem("userId");
+
   const handleInputChange = (e) => {
+
     const { name, value, type, checked } = e.target;
     setFormData({ ...formData, [name]: type === "checkbox" ? checked : value });
     setErrors({ ...errors, [name]: "" });
+  
   };
+
 
   const handleRegenerateAlias = () => {
     setFormData({ ...formData, urlAlias: `alias-${Math.random().toString(36).substring(7)}` });
@@ -49,11 +54,45 @@ const EnglishFormBasicDetails = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSave = (e) => {
+  const handleSave =async (e) => {
     e.preventDefault();
     if (validateForm()) {
-      console.log("Saved Data:", formData);
-      alert("Form submitted successfully!");
+      // console.log("Saved Data:", formData);
+      // alert("Form submitted successfully!");
+
+
+      const apiBaseUrl = process.env.REACT_APP_API_BASE_URL || "http://localhost:4500"; // Match backend port
+      const response = await fetch(`${apiBaseUrl}/api/template/save/basicDetails/${UserId}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          firstName: formData.firstName.trim().charAt(0).toUpperCase() + formData.firstName.trim().slice(1).toLowerCase(),
+          lastName: formData.lastName.trim().charAt(0).toUpperCase() + formData.lastName.trim().slice(1).toLowerCase(),
+          email: formData.email.toLowerCase().trim(),
+          phone: formData.phone.trim(),
+          dob: formData.dob,
+          positionTitle: formData.positionTitle.trim(),
+          address: formData.address.trim(),
+          education: formData.education.trim(),
+          showQrCode: formData.showQrCode,
+          whatsappShare: formData.whatsappShare,  
+          urlAlias: formData.urlAlias.trim(),
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.status_code === 200) {
+      
+        alert(data.message); 
+        console.log(data.status_code);
+      
+      } else {
+       
+      }
+ 
     }
   };
 

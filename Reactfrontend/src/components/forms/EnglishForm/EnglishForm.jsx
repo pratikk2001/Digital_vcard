@@ -61,6 +61,7 @@ const EditVCard = () => {
   ];
 
   return (
+
     <div className="min-h-screen flex flex-col bg-gray-50">
       {/* Top Navigation */}
       <div className="w-full bg-blue-600 text-white shadow-md">
@@ -122,6 +123,7 @@ const EditVCard = () => {
         </div>
       </div>
     </div>
+    
   );
 };
 

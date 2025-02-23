@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { FaSave, FaRedo, FaTrashAlt } from "react-icons/fa";
 
 const EventImage = ({ initialImages = [], onImagesChange = () => {} }) => {
+  
   const [formData, setFormData] = useState({ images: initialImages, captions: {} });
 
   const handleMultipleFileChange = (e) => {
@@ -50,16 +51,19 @@ const EventImage = ({ initialImages = [], onImagesChange = () => {} }) => {
     alert("Event images and captions saved successfully!");
   };
 
+
   const resetDetails = () => {
     setFormData({ images: [], captions: {} });
     onImagesChange([], {});
   };
+
 
   useEffect(() => {
     return () => {
       formData.images.forEach(url => URL.revokeObjectURL(url)); // Clean up URL when component unmounts
     };
   }, [formData.images]);
+
 
   return (
     <div className="max-w-4xl mx-auto p-8 bg-white rounded-xl shadow-2xl border border-gray-100">
@@ -70,6 +74,7 @@ const EventImage = ({ initialImages = [], onImagesChange = () => {} }) => {
       {/* File Upload Input */}
       <div className="flex flex-col mb-4">
         <label htmlFor="eventImages" className="text-gray-700 font-medium mb-2">🖼️ Upload Event Images:</label>
+    
         <input
           id="eventImages"
           type="file"
@@ -78,6 +83,7 @@ const EventImage = ({ initialImages = [], onImagesChange = () => {} }) => {
           onChange={handleMultipleFileChange}
           className="p-3 border border-gray-300 rounded-md w-full focus:ring-2 focus:ring-blue-500"
         />
+    
       </div>
 
       {/* Image Previews with Text Input */}
@@ -107,6 +113,7 @@ const EventImage = ({ initialImages = [], onImagesChange = () => {} }) => {
               onChange={(e) => handleCaptionChange(index, e.target.value)}
               className="mt-2 w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
             />
+
           </div>
         ))}
       </div>
@@ -128,6 +135,8 @@ const EventImage = ({ initialImages = [], onImagesChange = () => {} }) => {
       </div>
     </div>
   );
+
+
 };
 
 export default EventImage;

@@ -39,8 +39,15 @@ const Login = () => {
 
       if (response.ok && data.status_code === 200) {
         const token = data.data?.token;
-        if (token) {
+        const role = data.data?.role;
+        const userId = data.data?._id;
+        const email = data.data?.email;
+        const firstName = data.data?.first_name;
+
+        if (token || role || userId ) {
           localStorage.setItem("authToken", token);
+          localStorage.setItem("role", role);
+          localStorage.setItem("userId", userId);
         }
         alert("Login Successful!"); // Replace with toast in production
         navigate("/CustomerDashboard"); // Adjust to your admin dashboard route
