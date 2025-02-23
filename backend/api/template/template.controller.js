@@ -1,9 +1,17 @@
 const Template = require("../template/template.model"); // Adjust path if needed (e.g., "./template.model" if in same dir)
 
+const fs = require("fs");
+const path = require("path");
+const mime = require("mime-types");
+
+
+
 class TemplateController {
   // Save or Update Basic Details
 
-  async saveBasicDetails(req, res) {
+
+
+async saveBasicDetails(req, res) {
     try {
       const {
         firstName,
@@ -65,6 +73,34 @@ class TemplateController {
     }
   }
   
+async getByUrlAlias(req, res) {
+  try {
+    const { urlAlias } = req.params;
+
+    // Find the template by urlAlias
+    const theme = await Template.findOne({ urlAlias });
+
+    if (!theme) {
+      return res.status(404).json({
+        status_code: 404,
+        message: "Theme not found",
+      });
+    }
+
+    res.status(200).json({
+      status_code: 200,
+      message: "Theme retrieved successfully",
+      data: theme,
+    });
+  } catch (error) {
+    console.error("Error fetching theme:", error);
+    res.status(500).json({
+      status_code: 500,
+      error: "Internal server error",
+    });
+  }
+}
+
 
   // Save or Update Profile and Banner
 saveProfileBanner=async(req, res) => {
@@ -372,6 +408,229 @@ async getFormData(req, res) {
       });
     }
   }
+
+
+
+getProfileImage = async (req, res) => {
+    try {
+
+      const { imageId } = req.params;
+      
+      // console.log("Product ID:", productId);
+
+      const imagePath = path.resolve(
+        __dirname,
+        `../../uploads/profileImages/${imageId}`
+      );
+
+      // console.log("Image path:", imagePath);
+
+      const document = await this.getDocument(imagePath);
+
+      if (!document) {
+        return res.status(200).json({
+          status_code: 200,
+          message: "Image not found",
+        });
+      }
+
+      const mimeType = mime.lookup(imagePath) || "application/octet-stream";
+      res.set("Content-Type", mimeType);
+      res.send(document);
+    } catch (error) {
+      res.status(500).json({
+        status_code: 500,
+        error: "Internal server error",
+      });
+    }
+
+   };
+
+getBanerImage = async (req, res) => {
+    try {
+
+      const { imageId } = req.params;
+      
+      // console.log("Product ID:", productId);
+
+      const imagePath = path.resolve(
+        __dirname,
+        `../../uploads/bannerImages/${imageId}`
+      );
+
+      // console.log("Image path:", imagePath);
+
+      const document = await this.getDocument(imagePath);
+
+      if (!document) {
+        return res.status(200).json({
+          status_code: 200,
+          message: "Image not found",
+        });
+      }
+
+      const mimeType = mime.lookup(imagePath) || "application/octet-stream";
+      res.set("Content-Type", mimeType);
+      res.send(document);
+    } catch (error) {
+      res.status(500).json({
+        status_code: 500,
+        error: "Internal server error",
+      });
+    }
+
+   };   
+
+getAwardsImage = async (req, res) => {
+    try {
+      const { imageId } = req.params;
+      
+      // console.log("Product ID:", productId);
+
+      const imagePath = path.resolve(
+        __dirname,
+        `../../uploads/awardsImages/${imageId}`
+      );
+
+      // console.log("Image path:", imagePath);
+
+      const document = await this.getDocument(imagePath);
+
+      if (!document) {
+        return res.status(200).json({
+          status_code: 200,
+          message: "Image not found",
+        });
+      }
+
+      const mimeType = mime.lookup(imagePath) || "application/octet-stream";
+      res.set("Content-Type", mimeType);
+      res.send(document);
+    } catch (error) {
+      res.status(500).json({
+        status_code: 500,
+        error: "Internal server error",
+      });
+    }
+
+   };   
+
+getEventImage = async (req, res) => {
+    try {
+      const { imageId } = req.params;
+      
+      // console.log("Product ID:", productId);
+
+      const imagePath = path.resolve(
+        __dirname,
+        `../../uploads/eventImages/${imageId}`
+      );
+
+      // console.log("Image path:", imagePath);
+
+      const document = await this.getDocument(imagePath);
+
+      if (!document) {
+        return res.status(200).json({
+          status_code: 200,
+          message: "Image not found",
+        });
+      }
+
+      const mimeType = mime.lookup(imagePath) || "application/octet-stream";
+      res.set("Content-Type", mimeType);
+      res.send(document);
+    } catch (error) {
+      res.status(500).json({
+        status_code: 500,
+        error: "Internal server error",
+      });
+    }
+
+   };   
+
+getNewsImage = async (req, res) => {
+    try {
+      const { imageId } = req.params;
+      
+      // console.log("Product ID:", productId);
+
+      const imagePath = path.resolve(
+        __dirname,
+        `../../uploads/newsImages/${imageId}`
+      );
+
+      // console.log("Image path:", imagePath);
+
+      const document = await this.getDocument(imagePath);
+
+      if (!document) {
+        return res.status(200).json({
+          status_code: 200,
+          message: "Image not found",
+        });
+      }
+
+      const mimeType = mime.lookup(imagePath) || "application/octet-stream";
+      res.set("Content-Type", mimeType);
+      res.send(document);
+    } catch (error) {
+      res.status(500).json({
+        status_code: 500,
+        error: "Internal server error",
+      });
+    }
+
+   };   
+
+getSocialImage = async (req, res) => {
+    try {
+      const { imageId } = req.params;
+      
+      // console.log("Product ID:", productId);
+
+      const imagePath = path.resolve(
+        __dirname,
+        `../../uploads/socialImages/${imageId}`
+      );
+
+      // console.log("Image path:", imagePath);
+
+      const document = await this.getDocument(imagePath);
+
+      if (!document) {
+        return res.status(200).json({
+          status_code: 200,
+          message: "Image not found",
+        });
+      }
+
+      const mimeType = mime.lookup(imagePath) || "application/octet-stream";
+      res.set("Content-Type", mimeType);
+      res.send(document);
+    } catch (error) {
+      res.status(500).json({
+        status_code: 500,
+        error: "Internal server error",
+      });
+    }
+
+   };   
+
+
+
+   async getDocument(filePath) {
+    try {
+      const file = fs.readFileSync(filePath);
+      return file;
+    } catch (error) {
+      console.error("Error reading file:", error);
+      return null;
+    }
+  }
+  
+
+
 }
 
 module.exports = new TemplateController();
