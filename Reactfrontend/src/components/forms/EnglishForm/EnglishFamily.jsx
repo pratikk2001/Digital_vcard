@@ -1,21 +1,23 @@
 import React, { useState } from "react";
+import axios from "axios"; // You'll need to install axios: npm install axios
 
 const FamilyDetailsComponent = () => {
-  const [description, setDescription] = useState([""]);
+  const [familyDetails, setFamilyDetails] = useState([{ name: "", email: "" }]);
+  const userId = "6799205044bf1cf19496061a"; // Hardcoded for now; replace with dynamic value if needed
 
-  const handleInputChange = (index, value) => {
-    const updatedDescription = [...description];
-    updatedDescription[index] = value;
-    setDescription(updatedDescription);
+  const handleInputChange = (index, field, value) => {
+    const updatedDetails = [...familyDetails];
+    updatedDetails[index][field] = value;
+    setFamilyDetails(updatedDetails);
   };
 
   const addNewPoint = () => {
-    setDescription([...description, ""]);
+    setFamilyDetails([...familyDetails, { name: "", email: "" }]);
   };
 
   const removePoint = (index) => {
-    const updatedDescription = description.filter((_, i) => i !== index);
-    setDescription(updatedDescription);
+    const updatedDetails = familyDetails.filter((_, i) => i !== index);
+    setFamilyDetails(updatedDetails);
   };
 
   const  saveDetails =async () => {
@@ -48,24 +50,24 @@ const FamilyDetailsComponent = () => {
   };
 
   const resetDetails = () => {
-    setDescription([""]);
+    setFamilyDetails([{ name: "", email: "" }]);
   };
 
   return (
     <div className="max-w-4xl mx-auto p-8 bg-white rounded-xl shadow-2xl border border-gray-100">
       <h2 className="text-2xl font-bold text-gray-800 mb-6">Description</h2>
 
-      {/* Description Input */}
+      {/* Family Details Inputs */}
       <div className="flex flex-col gap-4">
-        {description.map((point, index) => (
+        {familyDetails.map((detail, index) => (
           <div key={index} className="flex items-center gap-2">
             <span className="text-lg font-bold">{index + 1}.</span>
             <input
               type="text"
-              value={point}
-              onChange={(e) => handleInputChange(index, e.target.value)}
-              className="p-3 border border-gray-300 rounded-md w-full focus:ring-2 focus:ring-blue-500"
-              placeholder={`Enter Family Details ${index + 1}`}
+              value={detail.name}
+              onChange={(e) => handleInputChange(index, "name", e.target.value)}
+              className="p-3 border border-gray-300 rounded-md w-1/2 focus:ring-2 focus:ring-blue-500"
+              placeholder={`Name ${index + 1}`}
             />
             {description.length > 1 && (  
               <button
