@@ -35,6 +35,7 @@ import Templates3 from "./pages/customer/Templates3";
 import Templates4 from "./pages/customer/Templates4";
 import Templates5 from "./pages/customer/Templates5";
 import Templates6 from "./pages/customer/Templates6";
+import dynamicTemplate from "./pages/customer/dynamicTemplate";
 
 
 function App() {
@@ -75,7 +76,7 @@ function App() {
 
          {/* New DigitalCard Route */}
          
-         <Route path="/:username" element={<DigitalCard />} />
+         <Route path="/:userUrl" element={<Templates2 />} />
       </Routes>
     </BrowserRouter>
   );

@@ -10,7 +10,7 @@ import { useParams } from "react-router-dom"
 
 const VCard = () => {
 
-const { username } = useParams();
+const { userurl } = useParams();
 
 // Different images for each section
 
@@ -69,7 +69,7 @@ const newsImages = [
           alt="Profile of सौ. स्नेहा रमेश आंब्रे"
           className="w-24 h-24 rounded-full mx-auto -mt-12 border-4 border-white"
         />
-        <h2 className="text-xl font-bold mt-4">{username}</h2>
+        <h2 className="text-xl font-bold mt-4">{userurl}</h2>
         <p className="text-sm text-gray-300">
           मा. नगरसेविका ठा.म.पा. (भारतीय जनता पार्टी)
         </p>

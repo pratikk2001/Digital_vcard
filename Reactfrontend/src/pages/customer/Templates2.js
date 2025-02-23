@@ -1,280 +1,113 @@
-import React, { useState } from "react";
-import { FaPhone, FaEnvelope, FaMapMarkerAlt, FaQrcode } from "react-icons/fa";
+import React, { useState, useEffect } from "react";
+import { FaPhone, FaEnvelope, FaMapMarkerAlt } from "react-icons/fa";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 import { Pagination, Navigation } from "swiper/modules";
+import { useParams } from "react-router-dom";
+import axios from "axios";
 
 const VCard = () => {
-  const socialWorkImages = [
-    "sw-1.jpg",
-    "sw-2.jpg",
-    "sw-3.jpg",
-  ];
+  const { userUrl } = useParams();
+  const [cardData, setCardData] = useState(null);
+  const baseURL = "http://localhost:4500/api/template/getcardbyurl/";
 
-  const momentsImages = [
-    "cap-1.jpg",
-    "cap-2.jpg",
-    "cap-3.jpg",
-  ];
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
 
-  const newsImages = [
-    "news-1.jpg",
-    "news-2.jpg",
-    "news-3.jpg",
-  ];
+        console.log("User URL:", userUrl);
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedImage, setSelectedImage] = useState("");
+        const response = await axios.get("http://localhost:4500/api/template/getcardbyurl/"+ userUrl);
+        setCardData(response.data.data);
 
-  const handleImageClick = (image) => {
-    setSelectedImage(image);
-    setIsModalOpen(true);
-  };
+        console.log("Card Data:", response.data);
+       
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+    fetchData();
+  }, [userUrl]);
 
-  const closeModal = () => {
-    setIsModalOpen(false);
-  };
-
-  const handleBackgroundClick = (e) => {
-    if (e.target === e.currentTarget) {
-      closeModal();
-    }
-  };
+  if (!cardData) {
+    return <div className="text-center mt-10">Loading...</div>;
+  }
 
   return (
     <div className="bg-white flex flex-col items-center py-10">
       <div
         className="bg-gradient-to-r from-orange-400 via-gray-200 to-green-300 text-black w-full max-w-[500px] p-4 md:p-6 rounded-lg shadow-lg text-center mx-4"
-        style={{
-          backgroundImage: `('BJP.png')`,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-        }}
+        style={{ backgroundImage: ``, backgroundSize: "cover" }}
       >
-        {/* Header Image */}
         <img
-          src="bg.jpg"
-          alt="Background Image"
-          className="w-full h-24 md:h-32 object-cover rounded-t-lg"
-        />
-        {/* Profile Image */}
-        <img
-          src="profile.jpg"
+          src={cardData.profilePicture}
           alt="Profile Image"
           className="w-20 h-20 md:w-24 md:h-24 rounded-full mx-auto -mt-10 md:-mt-12 border-4 border-white"
         />
-        <h2 className="text-lg md:text-xl font-bold mt-2 md:mt-4">Mrs. ABC</h2>
-        <p className="text-xs md:text-sm text-black">
-          Ex. Municipal Councillor, TMC (Bharatiya Janata Party)
-        </p>
+        <h2 className="text-lg md:text-xl font-bold mt-2 md:mt-4">{cardData.firstName} {cardData.lastName}</h2>
+        <p className="text-xs md:text-sm text-black">{cardData.positionTitle}</p>
 
-        {/* Personal Information */}
         <div className="mt-2 md:mt-4 text-left text-xs md:text-sm">
-          <p>
-            <strong>Birth Date:</strong> 19 August 1970
-          </p>
-          <p>
-            <strong>Contact Number:</strong> +91 987654321
-          </p>
-          <p>
-            <strong>Email:</strong> bjp@gmail.com
-          </p>
-          <p>
-            <strong>Education:</strong> Graduate in Arts (BA)
-          </p>
+          <p><strong>Birth Date:</strong> {new Date(cardData.dob).toDateString()}</p>
+          <p><strong>Contact Number:</strong> {cardData.phone}</p>
+          <p><strong>Email:</strong> {cardData.email}</p>
+          <p><strong>Education:</strong> {cardData.education}</p>
+          <p><strong>Address:</strong> {cardData.address}</p>
         </div>
 
-        {/* Positions Held */}
-        <div className="mt-2 md:mt-4 text-left text-xs md:text-sm">
-          <h3 className="font-bold">Positions Held:</h3>
-          <ul className="list-disc list-inside">
-            <li>Municipal Councillor - TMC Ward No. 4</li>
-            <li>Member - Education Committee, TMC</li>
-            <li>Special Executive Officer (SEO)</li>
-            <li>Chairperson - Navayug Mitra Mandal (Reg. Thane)</li>
-          </ul>
-        </div>
-
-        {/* Family Section */}
+        {/* Family Details */}
         <div className="mt-2 md:mt-4 text-left text-xs md:text-sm">
           <h3 className="font-bold">Family:</h3>
           <ul className="list-disc list-inside">
-            <li>Husband - ABC </li>
-            <li>Son - ABC (...)</li>
-            <li>Daughter - ABC (...)</li>
-            <li>Daughter-in-law - ABC (...)</li>
+            {cardData.familyDetails.map((member, index) => (
+              <li key={index}>{member}</li>
+            ))}
           </ul>
         </div>
 
+        {/* Swiper for Images */}
+        {/* <Swiper pagination={true} navigation={true} modules={[Pagination, Navigation]} className="my-5">
+          {cardData.eventImages.map((img) => (
+            <SwiperSlide key={img._id}>
+              <img src={""} alt={img.caption} className="w-full h-48 object-cover rounded-lg" />
+              <p className="text-sm text-center mt-1">{img.caption}</p>
+            </SwiperSlide>
+          ))}
+        </Swiper> */}
+
         {/* Contact Details */}
         <div className="mt-4 md:mt-6 flex justify-around flex-wrap">
-          {/* Mobile Section */}
           <div className="text-center w-full md:w-auto">
-            <a href="tel:+919870447272" aria-label="Call Mobile Number">
+            <a href={`tel:${cardData.phone}`} aria-label="Call Mobile Number">
               <FaPhone className="text-lg md:text-2xl mx-auto" />
               <p className="text-xs md:text-sm">Mobile</p>
-              <p className="text-xs md:text-sm">+91 987654321</p>
+              <p className="text-xs md:text-sm">{cardData.phone}</p>
             </a>
           </div>
 
-          {/* Email Section */}
           <div className="text-center w-full md:w-auto">
-            <a href="mailto:bjpkaryalay04@gmail.com" aria-label="Send Email">
+            <a href={`mailto:${cardData.email}`} aria-label="Send Email">
               <FaEnvelope className="text-lg md:text-2xl mx-auto" />
               <p className="text-xs md:text-sm">Email</p>
-              <p className="text-xs md:text-sm">bjp@gmail.com</p>
+              <p className="text-xs md:text-sm">{cardData.email}</p>
             </a>
           </div>
 
-          {/* Address Section */}
           <div className="text-center w-full md:w-auto">
             <a
-              href="https://www.google.com/maps/search/Thane,+Mumbai"
+              href={`https://www.google.com/maps/search/${encodeURIComponent(cardData.address)}`}
               target="_blank"
               rel="noopener noreferrer"
-              aria-label="View Address on Google Maps"
+              aria-label="View Address"
             >
               <FaMapMarkerAlt className="text-lg md:text-2xl mx-auto" />
               <p className="text-xs md:text-sm">Address</p>
-              <p className="text-xs md:text-sm">Thane, Mumbai</p>
             </a>
           </div>
         </div>
-
-        {/* QR Code */}
-        <div className="mt-4 md:mt-10 text-center">
-          <a
-            href="https://your-link-here.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="Scan QR Code"
-          >
-            <img
-              src="QR_code.png"
-              alt="QR Code"
-              className="w-24 h-24 md:w-32 md:h-32 mx-auto"
-            />
-          </a>
-          <p className="text-sm">QR Code</p>
-        </div>
-
-        {/* Social Work Section */}
-        <div className="mt-4 md:mt-6 text-left text-xs md:text-sm">
-          <h2 className="text-black text-lg md:text-xl font-bold mb-2 md:mb-4 text-center">
-            Social Work:
-          </h2>
-          <Swiper
-            slidesPerView={1}
-            spaceBetween={10}
-            loop={true}
-            autoplay={{
-              delay: 1000,
-              disableOnInteraction: false,
-            }}
-            pagination={{ clickable: true }}
-            navigation={true}
-            modules={[Pagination, Navigation]}
-            className="rounded-lg overflow-hidden"
-          >
-            {socialWorkImages.map((src, index) => (
-              <SwiperSlide key={index}>
-                <img
-                  src={src}
-                  alt={`Social work event by BJP party, showcasing community engagement`}
-                  className="w-full h-48 md:h-64 object-cover rounded-lg cursor-pointer"
-                  onClick={() => handleImageClick(src)}
-                />
-              </SwiperSlide>
-            ))}
-          </Swiper>
-        </div>
-
-        {/* Moments Section */}
-        <div className="mt-4 md:mt-6 text-left text-xs md:text-sm">
-          <h2 className="text-black text-lg md:text-xl font-bold mb-2 md:mb-4 text-center">
-            Moments:
-          </h2>
-          <Swiper
-            slidesPerView={1}
-            spaceBetween={10}
-            loop={true}
-            autoplay={{
-              delay: 1000,
-              disableOnInteraction: false,
-            }}
-            pagination={{ clickable: true }}
-            navigation={true}
-            modules={[Pagination, Navigation]}
-            className="rounded-lg overflow-hidden"
-          >
-            {momentsImages.map((src, index) => (
-              <SwiperSlide key={index}>
-                <img
-                  src={src}
-                  alt={`Moments of personal events and memories from various moments`}
-                  className="w-full h-48 md:h-64 object-cover rounded-lg cursor-pointer"
-                  onClick={() => handleImageClick(src)}
-                />
-              </SwiperSlide>
-            ))}
-          </Swiper>
-        </div>
-
-        {/* News Section */}
-        <div className="mt-4 md:mt-6 text-left text-xs md:text-sm">
-          <h2 className="text-black text-lg md:text-xl font-bold mb-2 md:mb-4 text-center">
-            Newspaper Coverage:
-          </h2>
-          <Swiper
-            slidesPerView={1}
-            spaceBetween={10}
-            loop={true}
-            autoplay={{
-              delay: 10000,
-              disableOnInteraction: false,
-            }}
-            pagination={{ clickable: true }}
-            navigation={true}
-            modules={[Pagination, Navigation]}
-            className="rounded-lg overflow-hidden"
-          >
-            {newsImages.map((src, index) => (
-              <SwiperSlide key={index}>
-                <img
-                  src={src}
-                  alt={`News coverage highlighting achievements of the BJP party`}
-                  className="w-full h-48 md:h-64 object-cover rounded-lg cursor-pointer"
-                  onClick={() => handleImageClick(src)}
-                />
-              </SwiperSlide>
-            ))}
-          </Swiper>
-        </div>
       </div>
-
-      {/* Modal for Image Preview */}
-      {isModalOpen && (
-        <div
-          className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50"
-          onClick={handleBackgroundClick}
-          role="dialog"
-          aria-labelledby="imagePreviewModal"
-        >
-          <div className="bg-white p-2 md:p-4 rounded-lg relative w-full max-w-[90vw] md:max-w-[50vw]">
-            <button
-              className="absolute top-0 right-0 text-lg md:text-xl text-gray-600 p-2"
-              onClick={closeModal}
-              role="button"
-              aria-label="Close modal"
-            >
-              ×
-            </button>
-            <img src={selectedImage} alt="Preview of the selected image" className="w-full h-auto" />
-          </div>
-        </div>
-      )}
     </div>
   );
 };
