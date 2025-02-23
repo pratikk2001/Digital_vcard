@@ -29,9 +29,18 @@ const themeSchema = new mongoose.Schema(
       caption: { type: String, default: "" }
     }],
     familyDetails: [{ type: String }], // Update to subdocument if needed
-    socialWorkImages: [{ type: String }],
-    eventImages: [{ type: String }],
-    newsCenterImages: [{ type: String }],
+    socialWorkImages: [{
+      imageUrl: { type: String },
+      caption: { type: String, default: "" }
+    }],
+    eventImages: [{
+      imageUrl: { type: String },
+      caption: { type: String, default: "" }
+    }],
+    newsCenterImages: [{
+      imageUrl: { type: String },
+      caption: { type: String, default: "" }
+    }],
   },
   { timestamps: true }
 );

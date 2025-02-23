@@ -7,8 +7,9 @@ const superAdminRoutes = require("./super_admin/super_admin.routes");
 const adminRoutes = require("./admin/admin.routes");
 
 // Mount sub-routers with consistent naming
+
 router.use("/template", templateRoutes);
-router.use("/super_admin", superAdminRoutes); // Changed to kebab-case for consistency
+router.use("/super_admin", superAdminRoutes); // Changed to case for consistency
 router.use("/admin", adminRoutes);
 
 // Optional: Add a root route for debugging
