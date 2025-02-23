@@ -20,33 +20,21 @@ const FamilyDetailsComponent = () => {
     setFamilyDetails(updatedDetails);
   };
 
-  const  saveDetails =async () => {
-    console.log("Saved Description:", description);
-
-    const userId = localStorage.getItem("userId");
-
-    const apiBaseUrl = process.env.REACT_APP_API_BASE_URL || "http://localhost:4500"; // Match backend port
-    const response = await fetch(`${apiBaseUrl}/api/template/save/familyDetails/${userId}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        familyDetails: description,
-      }),
-    })
-
-    const data = await response.json();
-
-    if (response.ok && data.status_code === 200) {
-
-    alert("Description saved successfully!");  
-
-    } else {
-      alert("Error saving description. Please try again.");
-
+  const saveDetails = async () => {
+    try {
+      const response = await axios.put(
+        `http://localhost:4500/api/template/save/familyDetails/${userId}`,
+        familyDetails,
+        {
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+      console.log("Response:", response.data);
+      alert("Family details saved successfully!");
+    } catch (error) {
+      console.error("Error saving details:", error);
+      alert("Failed to save family details: " + error.response?.data?.message || error.message);
     }
-
   };
 
   const resetDetails = () => {
@@ -55,7 +43,7 @@ const FamilyDetailsComponent = () => {
 
   return (
     <div className="max-w-4xl mx-auto p-8 bg-white rounded-xl shadow-2xl border border-gray-100">
-      <h2 className="text-2xl font-bold text-gray-800 mb-6">Description</h2>
+      <h2 className="text-2xl font-bold text-gray-800 mb-6">📜 Family Details</h2>
 
       {/* Family Details Inputs */}
       <div className="flex flex-col gap-4">
@@ -69,7 +57,14 @@ const FamilyDetailsComponent = () => {
               className="p-3 border border-gray-300 rounded-md w-1/2 focus:ring-2 focus:ring-blue-500"
               placeholder={`Name ${index + 1}`}
             />
-            {description.length > 1 && (  
+            <input
+              type="email"
+              value={detail.email}
+              onChange={(e) => handleInputChange(index, "email", e.target.value)}
+              className="p-3 border border-gray-300 rounded-md w-1/2 focus:ring-2 focus:ring-blue-500"
+              placeholder={`Email ${index + 1}`}
+            />
+            {familyDetails.length > 1 && (
               <button
                 onClick={() => removePoint(index)}
                 className="p-2 bg-red-500 text-white rounded-md hover:bg-red-600"

@@ -1,4 +1,4 @@
-const Template = require("../template/template.model"); // Adjust path if needed (e.g., "./template.model" if in same dir)
+const Template = require("../template/template.model"); // Adjust path as needed
 
 const fs = require("fs");
 const path = require("path");
@@ -42,18 +42,19 @@ async saveBasicDetails(req, res) {
       const template = await Template.findOneAndUpdate(
         { userId }, // Search by userId
         {
-          firstName: formattedFirstName,
-          lastName: formattedLastName,
-          userId,
-          email,
-          phone,
-          dob,
-          positionTitle,
-          address,
-          education,
-          showQrCode,
-          whatsappShare,
-          urlAlias,
+          $set: {
+            firstName,
+            lastName,
+            email,
+            phone,
+            dob,
+            positionTitle,
+            address,
+            education,
+            showQrCode,
+            whatsappShare,
+            urlAlias,
+          },
         },
         { new: true, upsert: true, setDefaultsOnInsert: true } // Return new doc if updated, insert if not exists
       );
@@ -68,7 +69,7 @@ async saveBasicDetails(req, res) {
       return res.status(500).json({
         status_code: 500,
         message: "Failed to save basic details",
-        error: error.message,
+        error: error.name === "ValidationError" ? error.message : "Internal server error",
       });
     }
   }
@@ -226,39 +227,50 @@ async saveFamilyDetails(req, res) {
       const { familyDetails } = req.body;
       const userId = req.params. id;
 
-      if (!userId) {
-        return res.status(400).json({ status_code: 400, message: "User ID is required" });
-      }
-      if (!Array.isArray(familyDetails)) {
-        return res.status(400).json({ status_code: 400, message: "Family details must be an array" });
-      }
-
-      const template = await Template.findOneAndUpdate(
-        { userId },
-        { $push: { familyDetails: { $each: familyDetails } } },
-        { new: true, upsert: true }
-      );
-
-      return res.status(200).json({
-        status_code: 200,
-        message: "Family details updated successfully",
-        data: template,
-      });
-    } catch (error) {
-      console.error("Error in saveFamilyDetails:", error);
-      return res.status(500).json({
-        status_code: 500,
-        message: "Failed to update family details",
-        error: error.message,
-      });
+    if (!userId) {
+      return res.status(400).json({ status_code: 400, message: "User ID is required" });
     }
+    if (!Array.isArray(familyDetails) || familyDetails.length === 0) {
+      return res.status(400).json({ status_code: 400, message: "Family details must be a non-empty array" });
+    }
+
+    // Validate familyDetails structure: only name is required
+    for (const detail of familyDetails) {
+      if (!detail.name) {
+        return res.status(400).json({
+          status_code: 400,
+          message: "Each family detail must have a name",
+        });
+      }
+      // Email is optional, no need to check
+    }
+
+    const template = await Template.findOneAndUpdate(
+      { userId },
+      { $push: { familyDetails: { $each: familyDetails } } },
+      { new: true, upsert: true }
+    );
+
+    return res.status(200).json({
+      status_code: 200,
+      message: "Family details updated successfully",
+      data: template,
+    });
+  } catch (error) {
+    console.error("Error in saveFamilyDetails:", error);
+    return res.status(500).json({
+      status_code: 500,
+      message: "Failed to update family details",
+      error: error.name === "CastError" ? "Invalid family details format" : error.message,
+    });
   }
+}
 
   // Save Social Work Images
-async saveSocialWorkImages(req, res) {
-  try {
-    const userId = req.params.id;
-    const captions = req.body.captions ? JSON.parse(req.body.captions) : [];
+  async saveSocialWorkImages(req, res) {
+    try {
+      const { socialWorkImages } = req.body;
+      const userId = req.params.id;
 
     if (!userId) {
       return res.status(400).json({ status_code: 400, message: "User ID is required" });

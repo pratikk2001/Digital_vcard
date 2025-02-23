@@ -1,48 +1,41 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
-const themeSchema = new mongoose.Schema(
-  {
-    userId: { type: mongoose.Schema.ObjectId, required: true, ref: "Admin" },
-    firstName: { type: String, required: true },
-    lastName: { type: String, required: true },
-    email: { type: String, required: true, sparse: true },
-    phone: {
-      type: String,
-      required: true,
-      match: [/^\d{10,15}$/, "Invalid phone number format"],
-    },
-    address: { type: String },
-    dob: { type: Date },
-    education: { type: String },
-    positionTitle: { type: String },
+const TemplateSchema = new mongoose.Schema({
+  userId: { type: String, required: true, unique: true },
+  firstName: { type: String },
+  lastName: { type: String },
+  email: { type: String },
+  phone: { type: String },
+  dob: { type: String }, // Consider Date type if applicable
+  positionTitle: { type: String },
+  address: { type: String },
+  education: { type: String },
+  showQrCode: { type: Boolean },
+  whatsappShare: { type: Boolean },
+  urlAlias: { type: String },
+  profilePicture: { type: String },
+  bannerImage: { type: String },
+  awards: [{
+    imageUrl: { type: String, required: true },
+    caption: { type: String, default: "" }
+  }],
+  familyDetails: [{
+    name: { type: String, required: true },
+  }],
+  socialWorkImages: [{
+    imageUrl: { type: String },
+    caption: { type: String, default: "" }
+  }],
+  eventImages: [{
+    imageUrl: { type: String },
+    caption: { type: String, default: "" }
+  }],
+  newsCenterImages: [{
+    imageUrl: { type: String },
+    caption: { type: String, default: "" }
+  }],
+  youtubeLink: { type: String },
+});
 
-    // Additional Fields
-    showQrCode: { type: Boolean, default: false },
-    whatsappShare: { type: Boolean, default: false },
-    urlAlias: { type: String, unique: true, sparse: true },
-
-    // Images & Awards
-    profilePicture: { type: String },
-    bannerImage: { type: String },
-    awards: [{
-      imageUrl: { type: String },
-      caption: { type: String, default: "" }
-    }],
-    familyDetails: [{ type: String }], // Update to subdocument if needed
-    socialWorkImages: [{
-      imageUrl: { type: String },
-      caption: { type: String, default: "" }
-    }],
-    eventImages: [{
-      imageUrl: { type: String },
-      caption: { type: String, default: "" }
-    }],
-    newsCenterImages: [{
-      imageUrl: { type: String },
-      caption: { type: String, default: "" }
-    }],
-  },
-  { timestamps: true }
-);
-
+   
 module.exports = mongoose.model("Template", themeSchema);
