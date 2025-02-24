@@ -4,6 +4,7 @@ import TopNavbar from "../../components/admin_nav/topnav";
 
 const AdminProfile = () => {
   const [profileImage, setProfileImage] = useState(null);
+
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -12,6 +13,7 @@ const AdminProfile = () => {
     password: '',
     confirmPassword: '',
   });
+  
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
 

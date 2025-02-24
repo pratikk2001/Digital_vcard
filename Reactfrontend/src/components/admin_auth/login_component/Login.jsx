@@ -12,7 +12,7 @@ function Login() {
     try {
       const apiBaseUrl = process.env.REACT_APP_API_BASE_URL;
 
-      const response = await fetch(`${apiBaseUrl}/admin/login`, {
+      const response = await fetch(`${apiBaseUrl}/api/super_admin/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
