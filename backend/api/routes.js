@@ -12,6 +12,7 @@ router.use("/template", templateRoutes);
 router.use("/super_admin", superAdminRoutes); // Changed to case for consistency
 router.use("/admin", adminRoutes);
 
+
 // Optional: Add a root route for debugging
 router.get("/", (req, res) => {
   res.status(200).json({

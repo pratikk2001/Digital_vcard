@@ -1,15 +1,12 @@
 const Template = require("../template/template.model"); // Adjust path as needed
-
 const fs = require("fs");
+
 const path = require("path");
 const mime = require("mime-types");
 
 
-
 class TemplateController {
   // Save or Update Basic Details
-
-
 
 async saveBasicDetails(req, res) {
     try {
@@ -72,8 +69,8 @@ async saveBasicDetails(req, res) {
         error: error.name === "ValidationError" ? error.message : "Internal server error",
       });
     }
-  }
-  
+}
+ 
 async getByUrlAlias(req, res) {
   try {
     const { urlAlias } = req.params;
@@ -100,10 +97,9 @@ async getByUrlAlias(req, res) {
       error: "Internal server error",
     });
   }
-}
-
-
-  // Save or Update Profile and Banner
+}             
+                             
+// Save or Update Profile and Banner
 saveProfileBanner=async(req, res) => {
   try {
     const userId = req.params.id;
@@ -138,7 +134,7 @@ saveProfileBanner=async(req, res) => {
   }
 }
 
-  // Save Awards
+// Save Awards
 saveAwards = async (req, res) => {
       try {
 
@@ -179,7 +175,8 @@ saveAwards = async (req, res) => {
           error: error.message,
         });
       }
-    };
+};
+
 
 deleteAward = async (req, res) => {
       try {
@@ -219,7 +216,7 @@ deleteAward = async (req, res) => {
           error: error.message,
         });
       }
-    };    
+};    
 
   // Save Family Details
 async saveFamilyDetails(req, res) {
@@ -269,7 +266,7 @@ async saveFamilyDetails(req, res) {
   // Save Social Work Images
   async saveSocialWorkImages(req, res) {
     try {
-      const { socialWorkImages } = req.body;
+      const captions = req.body.captions ? JSON.parse(req.body.captions) : [];
       const userId = req.params.id;
 
     if (!userId) {
@@ -277,12 +274,12 @@ async saveFamilyDetails(req, res) {
     }
 
     if (!req.files || req.files.length === 0) {
-      return res.status(400).json({ status_code: 400, message: "At least one event image is required" });
+      return res.status(400).json({ status_code: 400, message: "At least one social image is required" });
     }
 
     const formattedEventImages = req.files.map((file, index) => ({
       imageUrl: file.filename, // Store relative path
-      caption: captions[index] || "",
+      caption: captions[index] || "", 
     }));
 
     const template = await Template.findOneAndUpdate(
@@ -293,14 +290,14 @@ async saveFamilyDetails(req, res) {
 
     return res.status(200).json({
       status_code: 200,
-      message: "Event images uploaded successfully",
+      message: "social images uploaded successfully",
       data: template,
     });
   } catch (error) {
-    console.error("Error in saveEventImages:", error);
+    console.error("Error in save social Images:", error);
     return res.status(500).json({
       status_code: 500,
-      message: "Failed to upload event images",
+      message: "Failed to upload social images",
       error: error.message,
     });
   }
@@ -345,7 +342,7 @@ saveEventImages = async (req, res) => {
         error: error.message,
       });
     }
-  };
+};
 
 
   // Save News Center Images
@@ -387,7 +384,8 @@ async saveNewsCenterImages(req, res) {
     });
   }
 
-  }
+}
+
 
   // Get Form Data by ID
 async getFormData(req, res) {
@@ -419,8 +417,7 @@ async getFormData(req, res) {
         error: error.message,
       });
     }
-  }
-
+}
 
 
 getProfileImage = async (req, res) => {
@@ -456,7 +453,7 @@ getProfileImage = async (req, res) => {
       });
     }
 
-   };
+};
 
 getBanerImage = async (req, res) => {
     try {
@@ -491,7 +488,7 @@ getBanerImage = async (req, res) => {
       });
     }
 
-   };   
+};   
 
 getAwardsImage = async (req, res) => {
     try {
@@ -524,8 +521,7 @@ getAwardsImage = async (req, res) => {
         error: "Internal server error",
       });
     }
-
-   };   
+};   
 
 getEventImage = async (req, res) => {
     try {
@@ -629,7 +625,7 @@ getSocialImage = async (req, res) => {
 
    };   
 
-   async getDocument(filePath) {
+async getDocument(filePath) {
     try {
       const file = fs.readFileSync(filePath);
       return file;
@@ -639,8 +635,6 @@ getSocialImage = async (req, res) => {
     }
   }
   
-
-
 }
 
 module.exports = new TemplateController();

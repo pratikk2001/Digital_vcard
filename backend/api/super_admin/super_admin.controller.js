@@ -13,7 +13,7 @@ getAllUsers = async (req, res) => {
         } catch (error) {
           res.status(500).json({ message: "Error fetching users", error });
         }
- };
+   };
 
 // Signup API: createAdmin
 createAdmin = async (req, res) => {
@@ -55,9 +55,7 @@ createAdmin = async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: "Error creating admin", error });
   }
-};
-
-
+    };
 
 loginAdmin = async (req, res) => {
   const { email, password } = req.body;
@@ -90,10 +88,9 @@ loginAdmin = async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: "Error logging in", error });
   }
-};
+   };
 
-
- getUserById = async (req, res) => {
+getUserById = async (req, res) => {
         const { id } = req.params;
       
         try {
@@ -107,7 +104,8 @@ loginAdmin = async (req, res) => {
         } catch (error) {
           res.status(500).json({ message: "Error fetching user", error });
         }
-};
+
+   };
 
 
 }
