@@ -3,7 +3,7 @@ import axios from "axios"; // You'll need to install axios: npm install axios
 
 const FamilyDetailsComponent = () => {
   const [familyDetails, setFamilyDetails] = useState([{ name: "", email: "" }]);
-  const userId = "6799205044bf1cf19496061a"; // Hardcoded for now; replace with dynamic value if needed
+  const userId = localStorage.getItem("userId"); // Hardcoded for now; replace with dynamic value if needed
 
   const handleInputChange = (index, field, value) => {
     const updatedDetails = [...familyDetails];
