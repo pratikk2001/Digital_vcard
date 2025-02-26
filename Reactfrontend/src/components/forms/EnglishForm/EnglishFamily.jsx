@@ -1,44 +1,47 @@
 import React, { useState } from "react";
-import axios from "axios"; // You'll need to install axios: npm install axios
+import axios from "axios"; // Ensure axios is installed: npm install axios
 
 const FamilyDetailsComponent = () => {
   const [familyDetails, setFamilyDetails] = useState([{ name: "", email: "" }]);
-  const userId = localStorage.getItem("userId"); // Hardcoded for now; replace with dynamic value if needed
+  const userId = "6799205044bf1cf19496061a"; // Hardcoded for now; replace with dynamic value if needed
 
-  const handleInputChange = (index, field, value) => {
+  // Handle input change for the name field
+  const handleInputChange = (index, value) => {
     const updatedDetails = [...familyDetails];
-    updatedDetails[index][field] = value;
+    updatedDetails[index].name = value;
     setFamilyDetails(updatedDetails);
   };
 
+  // Add new family member input field
   const addNewPoint = () => {
-    setFamilyDetails([...familyDetails, { name: "", email: "" }]);
+    setFamilyDetails([...familyDetails, { name: "" }]);
   };
 
+  // Remove a family member input field
   const removePoint = (index) => {
     const updatedDetails = familyDetails.filter((_, i) => i !== index);
-    setFamilyDetails(updatedDetails);
+    setFamilyDetails(updatedDetails.length ? updatedDetails : [{ name: "" }]); // Ensure at least one input remains
   };
 
+  // Save family details to the API
   const saveDetails = async () => {
     try {
       const response = await axios.put(
         `http://localhost:4500/api/template/save/familyDetails/${userId}`,
         familyDetails,
-        {
-          headers: { "Content-Type": "application/json" },
-        }
+        { headers: { "Content-Type": "application/json" } }
       );
       console.log("Response:", response.data);
       alert("Family details saved successfully!");
     } catch (error) {
       console.error("Error saving details:", error);
-      alert("Failed to save family details: " + error.response?.data?.message || error.message);
+      alert("Failed to save family details: " + (error.response?.data?.message || error.message));
     }
   };
 
+  // Reset family details
   const resetDetails = () => {
-    setFamilyDetails([{ name: "", email: "" }]);
+    setFamilyDetails([{ name: "" }]);
   };
 
   return (
@@ -53,16 +56,9 @@ const FamilyDetailsComponent = () => {
             <input
               type="text"
               value={detail.name}
-              onChange={(e) => handleInputChange(index, "name", e.target.value)}
-              className="p-3 border border-gray-300 rounded-md w-1/2 focus:ring-2 focus:ring-blue-500"
-              placeholder={`Name ${index + 1}`}
-            />
-            <input
-              type="email"
-              value={detail.email}
-              onChange={(e) => handleInputChange(index, "email", e.target.value)}
-              className="p-3 border border-gray-300 rounded-md w-1/2 focus:ring-2 focus:ring-blue-500"
-              placeholder={`Email ${index + 1}`}
+              onChange={(e) => handleInputChange(index, e.target.value)}
+              className="p-3 border border-gray-300 rounded-md w-full focus:ring-2 focus:ring-blue-500"
+              placeholder={`Family Member ${index + 1}`}
             />
             {familyDetails.length > 1 && (
               <button
@@ -81,7 +77,7 @@ const FamilyDetailsComponent = () => {
         onClick={addNewPoint}
         className="mt-4 p-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
       >
-        ➕ Add Details
+        ➕ Add Family Member
       </button>
 
       {/* Save & Reset Buttons */}

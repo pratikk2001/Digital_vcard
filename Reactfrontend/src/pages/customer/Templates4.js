@@ -1,15 +1,37 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react"; // Added useEffect
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 import { Pagination, Navigation } from "swiper/modules";
+import axios from "axios"; // Added axios import
+import { useParams } from "react-router"; // Added useParams import
 
 const VCard = () => {
+  const { userUrl } = useParams(); // Get userUrl from route params
+  const [cardData, setCardData] = useState(null); // State for fetched data
+  const [isLoading, setIsLoading] = useState(true); // Loading state
+
+  // Fetch data from getcardbyurl API
+  useEffect(() => {
+    const fetchData = async () => {
+      setIsLoading(true);
+      try {
+        const response = await axios.get(`http://localhost:4500/api/template/getcardbyurl/${userUrl}`);
+        setCardData(response.data.data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchData();
+  }, [userUrl]);
+
   const imageCategories = {
-    "सामाजिक कार्य": ["sw-1.jpg", "sw-2.jpg", "sw-3.jpg"],
-    "क्षणचित्रे:": ["cap-1.jpg", "cap-2.jpg", "cap-3.jpg"],
-    "वर्तमान पत्रांनी घेतलेली दखल:": ["news-1.jpg", "news-2.jpg", "news-3.jpg"],
+    "सामाजिक कार्य": cardData?.socialWorkImages || ["sw-1.jpg", "sw-2.jpg", "sw-3.jpg"],
+    "क्षणचित्रे:": cardData?.eventImages || ["cap-1.jpg", "cap-2.jpg", "cap-3.jpg"],
+    "वर्तमान पत्रांनी घेतलेली दखल:": cardData?.newsImages || ["news-1.jpg", "news-2.jpg", "news-3.jpg"],
   };
 
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -22,40 +44,74 @@ const VCard = () => {
 
   const closeModal = () => setIsModalOpen(false);
 
+  // Show loading state while fetching data
+  if (isLoading) {
+    return <div className="text-center mt-10">Loading...</div>;
+  }
+
+  // Show message if no data is returned
+  if (!cardData) {
+    return <div className="text-center mt-10">No data found</div>;
+  }
+
   return (
     <div className="bg-white flex flex-col items-center py-10">
       <div className="bg-orange-400 text-black w-full max-w-[500px] p-4 md:p-6 rounded-lg shadow-lg text-center mx-4">
         <div className="relative">
           <img
-            src="Shiv.jpg"
+            src={
+              cardData?.bannerImage
+                ? `http://localhost:4500/api/template/getBanerImage/${cardData.bannerImage}`
+                : "Shiv.jpg"
+            }
             alt="Header"
             className="w-full h-24 md:h-40 object-cover rounded-t-2xl"
           />
           <div className="absolute top-16 md:top-28 left-1/2 transform -translate-x-1/2">
             <img
-              src="profile.jpg"
+              src={
+                cardData?.profilePicture
+                  ? `http://localhost:4500/api/template/getprofileImage/${cardData.profilePicture}`
+                  : "profile.jpg"
+              }
               alt="Profile"
               className="w-20 md:w-28 h-20 md:h-28 rounded-full border-4 border-white shadow-lg transform hover:scale-105"
             />
           </div>
         </div>
         <div className="text-center mt-12 md:mt-16">
-          <h2 className="text-2xl md:text-3xl font-bold text-gray-800">श्री. ABC</h2>
-          <p className="text-sm md:text-md text-gray-600">मा. नगरसेवक ठा.म.पा.(Shivsena)</p>
+          <h2 className="text-2xl md:text-3xl font-bold text-gray-800">
+            {cardData?.firstName && cardData?.lastName
+              ? `${cardData.firstName} ${cardData.lastName}`
+              : "श्री. ABC"}
+          </h2>
+          <p className="text-sm md:text-md text-gray-600">
+            {cardData?.positionTitle || "मा. नगरसेवक ठा.म.पा.(Shivsena)"}
+          </p>
         </div>
 
         <div className="mt-4 md:mt-6 space-y-2 md:space-y-4 text-gray-800">
-          {["वाढदिवस:: १९ ऑगस्ट १९७०", "संपर्क: +91 987654321", "ई-मेल: Shivsena@gmail.com", "शिक्षण: कला शाखेत पदवीधर (BA)"].map(
-            (item, index) => (
-              <p key={index} className="bg-gray-100 p-2 md:p-3 rounded-lg shadow-md">{item}</p>
-            )
-          )}
+          {[
+            `वाढदिवस: ${cardData?.dob ? new Date(cardData.dob).toLocaleDateString("mr-IN") : "१९ ऑगस्ट १९७०"}`,
+            `संपर्क: ${cardData?.phone || "+91 987654321"}`,
+            `ई-मेल: ${cardData?.email || "Shivsena@gmail.com"}`,
+            `शिक्षण: ${cardData?.education || "कला शाखेत पदवीधर (BA)"}`,
+          ].map((item, index) => (
+            <p key={index} className="bg-gray-100 p-2 md:p-3 rounded-lg shadow-md">
+              {item}
+            </p>
+          ))}
         </div>
 
         <div className="mt-4 md:mt-6">
           <h3 className="font-bold text-lg md:text-xl text-gray-800">भूषवलेले पदे:</h3>
           <ul className="list-disc ml-4 md:ml-6 space-y-1 md:space-y-2 text-gray-800">
-            {["नगरसेवक - ठा.म.पा. प्रभाग क्र. ४", "सदस्य - शिक्षण समिती ठा.म.पा.", "विशेष कार्यकारी अधिकारी (SEO)", "कार्यध्यक्ष - नवयुग मित्र मंडळ (रजि.ठाणे)"].map((position, index) => (
+            {(cardData?.positionsHeld || [
+              "नगरसेवक - ठा.म.पा. प्रभाग क्र. ४",
+              "सदस्य - शिक्षण समिती ठा.म.पा.",
+              "विशेष कार्यकारी अधिकारी (SEO)",
+              "कार्यध्यक्ष - नवयुग मित्र मंडळ (रजि.ठाणे)",
+            ]).map((position, index) => (
               <li key={index}>{position}</li>
             ))}
           </ul>
@@ -64,7 +120,12 @@ const VCard = () => {
         <div className="mt-4 md:mt-6">
           <h3 className="font-bold text-lg md:text-xl text-gray-800">कुटुंब:</h3>
           <ul className="list-disc ml-4 md:ml-6 space-y-1 md:space-y-2 text-gray-800">
-            {["पत्नी - श्री. ABC", "मुलगा - ABC  (MBBS, MS जनरल सर्जरी, FMAS, ऑनको सर्जरी फेलोशिप, हेड अँड नेक कॅन्सर सर्जरी, AIIMS ऋषिकेश ब्रेस्ट कॅन्सर सर्जरी कोर्स, फेलो TNMC मुंबई असिस्टंट)", "मुलगी - ABC (MBBS, DMRE (रेडिओलॉजिस्ट))", "सून - ABC (MBBS, DMRE (रेडिओलॉजिस्ट))"].map((member, index) => (
+            {(cardData?.family || [
+              "पत्नी - श्री. ABC",
+              "मुलगा - ABC  (MBBS, MS जनरल सर्जरी, FMAS, ऑनको सर्जरी फेलोशिप, हेड अँड नेक कॅन्सर सर्जरी, AIIMS ऋषिकेश ब्रेस्ट कॅन्सर सर्जरी कोर्स, फेलो TNMC मुंबई असिस्टंट)",
+              "मुलगी - ABC (MBBS, DMRE (रेडिओलॉजिस्ट))",
+              "सून - ABC (MBBS, DMRE (रेडिओलॉजिस्ट))",
+            ]).map((member, index) => (
               <li key={index}>{member}</li>
             ))}
           </ul>
@@ -72,7 +133,9 @@ const VCard = () => {
 
         {Object.entries(imageCategories).map(([title, images]) => (
           <div key={title} className="mt-4 md:mt-6">
-            <h2 className="text-black text-2xl md:text-3xl font-bold text-center mb-2 md:mb-4">{title}</h2>
+            <h2 className="text-black text-2xl md:text-3xl font-bold text-center mb-2 md:mb-4">
+              {title}
+            </h2>
             <Swiper
               slidesPerView={1}
               spaceBetween={10}
@@ -86,10 +149,28 @@ const VCard = () => {
               {images.map((src, index) => (
                 <SwiperSlide key={index}>
                   <img
-                    src={src}
+                    src={
+                      cardData?.socialWorkImages && title === "सामाजिक कार्य"
+                        ? `http://localhost:4500/api/template/getSocialWorkImage/${src}`
+                        : cardData?.eventImages && title === "क्षणचित्रे:"
+                        ? `http://localhost:4500/api/template/getEventImage/${src.imageUrl || src}`
+                        : cardData?.newsImages && title === "वर्तमान पत्रांनी घेतलेली दखल:"
+                        ? `http://localhost:4500/api/template/getNewsImage/${src}`
+                        : src
+                    }
                     alt={`${title} Image`}
                     className="w-full h-32 md:h-64 object-cover rounded-lg cursor-pointer transform hover:scale-105"
-                    onClick={() => handleImageClick(src)}
+                    onClick={() =>
+                      handleImageClick(
+                        cardData?.socialWorkImages && title === "सामाजिक कार्य"
+                          ? `http://localhost:4500/api/template/getSocialWorkImage/${src}`
+                          : cardData?.eventImages && title === "क्षणचित्रे:"
+                          ? `http://localhost:4500/api/template/getEventImage/${src.imageUrl || src}`
+                          : cardData?.newsImages && title === "वर्तमान पत्रांनी घेतलेली दखल:"
+                          ? `http://localhost:4500/api/template/getNewsImage/${src}`
+                          : src
+                      )
+                    }
                   />
                 </SwiperSlide>
               ))}

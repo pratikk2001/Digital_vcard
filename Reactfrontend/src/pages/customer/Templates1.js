@@ -5,11 +5,17 @@ import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 import { Pagination, Navigation } from "swiper/modules";
+import axios from "axios"; // Added axios import
+import { useParams } from "react-router"; // Added useParams import
 
 const VCard = () => {
   const vCardRef = useRef(null);
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
+  const { userUrl } = useParams(); // Get userUrl from route params
+  const [cardData, setCardData] = useState(null); // State for fetched data
+  const [isLoading, setIsLoading] = useState(true); // Loading state
 
+  // Fetch dimensions of the card
   useEffect(() => {
     if (vCardRef.current) {
       setDimensions({
@@ -17,7 +23,23 @@ const VCard = () => {
         height: vCardRef.current.offsetHeight,
       });
     }
-  }, []);
+  }, [cardData]); // Depend on cardData to update dimensions after data loads
+
+  // Fetch data from getcardbyurl API
+  useEffect(() => {
+    const fetchData = async () => {
+      setIsLoading(true);
+      try {
+        const response = await axios.get(`http://localhost:4500/api/template/getcardbyurl/${userUrl}`);
+        setCardData(response.data.data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchData();
+  }, [userUrl]);
 
   const socialWorkImages = ["sw-1.jpg", "sw-2.jpg", "sw-3.jpg"];
   const momentsImages = ["cap-1.jpg", "cap-2.jpg", "cap-3.jpg"];
@@ -41,6 +63,16 @@ const VCard = () => {
     }
   };
 
+  // Show loading state while fetching data
+  if (isLoading) {
+    return <div className="text-center mt-10">Loading...</div>;
+  }
+
+  // Show message if no data is returned
+  if (!cardData) {
+    return <div className="text-center mt-10">No data found</div>;
+  }
+
   return (
     <div className="bg-white flex flex-col items-center py-10">
       <div
@@ -54,34 +86,43 @@ const VCard = () => {
       >
         {/* Header Image */}
         <img
-          src="bg.jpg"
-          alt="Backgorund Image"
+          src={
+            cardData.bannerImage
+              ? `http://localhost:4500/api/template/getBanerImage/${cardData.bannerImage}`
+              : "bg.jpg"
+          }
+          alt="Background Image"
           className="w-full h-24 md:h-32 object-cover rounded-t-lg"
         />
         {/* Profile Image */}
         <img
-          src="profile.jpg"
+          src={
+            cardData.profilePicture
+              ? `http://localhost:4500/api/template/getprofileImage/${cardData.profilePicture}`
+              : "profile.jpg"
+          }
           alt="Profile Image"
           className="w-20 h-20 md:w-24 md:h-24 rounded-full mx-auto -mt-10 md:-mt-12 border-4 border-white"
         />
-        <h2 className="text-lg md:text-xl font-bold mt-2 md:mt-4">ABC</h2>
-        <p className="text-xs md:text-sm text-black">
-          मा. नगरसेवक ठा.म.पा. (भारतीय जनता पार्टी)
-        </p>
+        <h2 className="text-lg md:text-xl font-bold mt-2 md:mt-4">
+          {cardData.firstName} {cardData.lastName}
+        </h2>
+        <p className="text-xs md:text-sm text-black">{cardData.positionTitle || "मा. नगरसेवक ठा.म.पा. (भारतीय जनता पार्टी)"}</p>
 
         {/* Personal Information */}
         <div className="mt-2 md:mt-4 text-left text-xs md:text-sm">
           <p>
-            <strong>वाढदिवस:</strong> १९ ऑगस्ट १९७०
+            <strong>वाढदिवस:</strong>{" "}
+            {cardData.dob ? new Date(cardData.dob).toLocaleDateString("mr-IN") : "१९ ऑगस्ट १९७०"}
           </p>
           <p>
-            <strong>संपर्क:</strong> +91 987654321
+            <strong>संपर्क:</strong> {cardData.phone || "+91 987654321"}
           </p>
           <p>
-            <strong>ई-मेल:</strong> bjp@gmail.com
+            <strong>ई-मेल:</strong> {cardData.email || "bjp@gmail.com"}
           </p>
           <p>
-            <strong>शिक्षण:</strong> कला शाखेत पदवीधर (BA)
+            <strong>शिक्षण:</strong> {cardData.education || "कला शाखेत पदवीधर (BA)"}
           </p>
         </div>
 
@@ -89,10 +130,16 @@ const VCard = () => {
         <div className="mt-2 md:mt-4 text-left text-xs md:text-sm">
           <h3 className="font-bold">भूषवलेले पदे:</h3>
           <ul className="list-disc list-inside">
-            <li>नगरसेवक - ठा.म.पा. प्रभाग क्र. ४</li>
-            <li>सदस्य - शिक्षण समिती ठा.म.पा.</li>
-            <li>विशेष कार्यकारी अधिकारी (SEO)</li>
-            <li>कार्यध्यक्ष - नवयुग मित्र मंडळ (रजि.ठाणे)</li>
+            {cardData.positionsHeld ? (
+              cardData.positionsHeld.map((position, index) => <li key={index}>{position}</li>)
+            ) : (
+              <>
+                <li>नगरसेवक - ठा.म.पा. प्रभाग क्र. ४</li>
+                <li>सदस्य - शिक्षण समिती ठा.म.पा.</li>
+                <li>विशेष कार्यकारी अधिकारी (SEO)</li>
+                <li>कार्यध्यक्ष - नवयुग मित्र मंडळ (रजि.ठाणे)</li>
+              </>
+            )}
           </ul>
         </div>
 
@@ -100,10 +147,19 @@ const VCard = () => {
         <div className="mt-2 md:mt-4 text-left text-xs md:text-sm">
           <h3 className="font-bold">कुटुंब:</h3>
           <ul className="list-disc list-inside">
-            <li>पत्नी - ABC </li>
-            <li>मुलगा - ABC (MBBS, MS जनरल सर्जरी, FMAS, ऑनको सर्जरी फेलोशिप, हेड अँड नेक कॅन्सर सर्जरी, AIIMS ऋषिकेश ब्रेस्ट कॅन्सर सर्जरी कोर्स, फेलो TNMC मुंबई असिस्टंट)</li>
-            <li>मुलगी - ABC (MBBS, DMRE (रेडिओलॉजिस्ट))</li>
-            <li>सून - ABC (MBBS, DMRE (रेडिओलॉजिस्ट))</li>
+            {cardData.family ? (
+              cardData.family.map((member, index) => <li key={index}>{member}</li>)
+            ) : (
+              <>
+                <li>पत्नी - ABC </li>
+                <li>
+                  मुलगा - ABC (MBBS, MS जनरल सर्जरी, FMAS, ऑनको सर्जरी फेलोशिप, हेड अँड नेक कॅन्सर सर्जरी, AIIMS
+                  ऋषिकेश ब्रेस्ट कॅन्सर सर्जरी कोर्स, फेलो TNMC मुंबई असिस्टंट)
+                </li>
+                <li>मुलगी - ABC (MBBS, DMRE (रेडिओलॉजिस्ट))</li>
+                <li>सून - ABC (MBBS, DMRE (रेडिओलॉजिस्ट))</li>
+              </>
+            )}
           </ul>
         </div>
 
@@ -111,19 +167,19 @@ const VCard = () => {
         <div className="mt-4 md:mt-6 flex justify-around flex-wrap">
           {/* Mobile Section */}
           <div className="text-center w-full md:w-auto">
-            <a href="tel:+919870447272" aria-label="Call Mobile Number">
+            <a href={`tel:${cardData.phone || "+919870447272"}`} aria-label="Call Mobile Number">
               <FaPhone className="text-lg md:text-2xl mx-auto" />
               <p className="text-xs md:text-sm">Mobile</p>
-              <p className="text-xs md:text-sm">+91 987654321</p>
+              <p className="text-xs md:text-sm">{cardData.phone || "+91 987654321"}</p>
             </a>
           </div>
 
           {/* Email Section */}
           <div className="text-center w-full md:w-auto">
-            <a href="mailto:bjpkaryalay04@gmail.com" aria-label="Send Email">
+            <a href={`mailto:${cardData.email || "bjpkaryalay04@gmail.com"}`} aria-label="Send Email">
               <FaEnvelope className="text-lg md:text-2xl mx-auto" />
               <p className="text-xs md:text-sm">Email</p>
-              <p className="text-xs md:text-sm">bjp@gmail.com</p>
+              <p className="text-xs md:text-sm">{cardData.email || "bjp@gmail.com"}</p>
             </a>
           </div>
 
@@ -137,7 +193,7 @@ const VCard = () => {
             >
               <FaMapMarkerAlt className="text-lg md:text-2xl mx-auto" />
               <p className="text-xs md:text-sm">Address</p>
-              <p className="text-xs md:text-sm">Thane, Mumbai</p>
+              <p className="text-xs md:text-sm">{cardData.address || "Thane, Mumbai"}</p>
             </a>
           </div>
         </div>
@@ -145,13 +201,13 @@ const VCard = () => {
         {/* QR Code */}
         <div className="mt-10 text-center">
           <a
-            href="https://your-link-here.com" // Replace with the desired URL to open
+            href={cardData.qrLink || "https://your-link-here.com"}
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Scan QR Code"
           >
             <img
-              src="QR_code.png" // Replace with the actual QR code image URL
+              src={cardData.qrCodeImage || "QR_code.png"}
               alt="QR Code"
               className="w-32 h-32 mx-auto"
             />
@@ -161,60 +217,76 @@ const VCard = () => {
 
         {/* Social Work Section */}
         <div className="mt-6 text-left text-sm">
-          <h2 className="text-black text-xl font-bold mb-4 text-center">
-            सामाजिक कार्य:
-          </h2>
+          <h2 className="text-black text-xl font-bold mb-4 text-center">सामाजिक कार्य:</h2>
           <Swiper
             slidesPerView={1}
             spaceBetween={10}
             loop={true}
             autoplay={{
-              delay: 1000, // Change image every 1 second
-              disableOnInteraction: false, // Keep autoplay running even after user interacts
+              delay: 1000,
+              disableOnInteraction: false,
             }}
             pagination={{ clickable: true }}
             navigation={true}
             modules={[Pagination, Navigation]}
             className="rounded-lg overflow-hidden"
           >
-            {socialWorkImages.map((src, index) => (
+            {(cardData.socialWorkImages || socialWorkImages).map((src, index) => (
               <SwiperSlide key={index}>
                 <img
-                  src={src}
-                  alt={`Social work event by BJP party, showcasing community engagement`}
+                  src={
+                    cardData.socialWorkImages
+                      ? `http://localhost:4500/api/template/getSocialWorkImage/${src}`
+                      : src
+                  }
+                  alt={`Social work event ${index + 1}`}
                   className="w-full h-64 object-cover rounded-lg cursor-pointer"
-                  onClick={() => handleImageClick(src)}
+                  onClick={() =>
+                    handleImageClick(
+                      cardData.socialWorkImages
+                        ? `http://localhost:4500/api/template/getSocialWorkImage/${src}`
+                        : src
+                    )
+                  }
                 />
               </SwiperSlide>
             ))}
           </Swiper>
         </div>
 
-        {/* Moments Section */}
+        {/* Event Section */}
         <div className="mt-6 text-left text-sm">
-          <h2 className="text-black text-xl font-bold mb-4 text-center">
-            क्षणचित्रे:
-          </h2>
+          <h2 className="text-black text-xl font-bold mb-4 text-center">क्षणचित्रे:</h2>
           <Swiper
             slidesPerView={1}
             spaceBetween={10}
             loop={true}
             autoplay={{
-              delay: 1000, // Change image every 1 second
+              delay: 1000,
               disableOnInteraction: false,
             }}
             pagination={{ clickable: true }}
-            navigation={true }
+            navigation={true}
             modules={[Pagination, Navigation]}
             className="rounded-lg overflow-hidden"
           >
-            {momentsImages.map((src, index) => (
+            {(cardData.eventImages || momentsImages).map((src, index) => (
               <SwiperSlide key={index}>
                 <img
-                  src={src}
-                  alt={`Moments of personal events and memories from various moments`}
+                  src={
+                    cardData.eventImages
+                      ? `http://localhost:4500/api/template/getEventImage/${src.imageUrl || src}`
+                      : src
+                  }
+                  alt={`Moment ${index + 1}`}
                   className="w-full h-64 object-cover rounded-lg cursor-pointer"
-                  onClick={() => handleImageClick(src)}
+                  onClick={() =>
+                    handleImageClick(
+                      cardData.eventImages
+                        ? `http://localhost:4500/api/template/getEventImage/${src.imageUrl || src}`
+                        : src
+                    )
+                  }
                 />
               </SwiperSlide>
             ))}
@@ -231,21 +303,31 @@ const VCard = () => {
             spaceBetween={10}
             loop={true}
             autoplay={{
-              delay: 10000, // Change image every 1 second
+              delay: 10000,
               disableOnInteraction: false,
             }}
             pagination={{ clickable: true }}
-            navigation={true }
+            navigation={true}
             modules={[Pagination, Navigation]}
             className="rounded-lg overflow-hidden"
           >
-            {newsImages.map((src, index) => (
+            {(cardData.newsImages || newsImages).map((src, index) => (
               <SwiperSlide key={index}>
                 <img
-                  src={src}
-                  alt={`News coverage highlighting achievements of the BJP party`}
+                  src={
+                    cardData.newsImages
+                      ? `http://localhost:4500/api/template/getNewsImage/${src}`
+                      : src
+                  }
+                  alt={`News coverage ${index + 1}`}
                   className="w-full h-64 object-cover rounded-lg cursor-pointer"
-                  onClick={() => handleImageClick(src)}
+                  onClick={() =>
+                    handleImageClick(
+                      cardData.newsImages
+                        ? `http://localhost:4500/api/template/getNewsImage/${src}`
+                        : src
+                    )
+                  }
                 />
               </SwiperSlide>
             ))}
@@ -268,15 +350,15 @@ const VCard = () => {
               role="button"
               aria-label="Close modal"
             >
-              &times;
+              ×
             </button>
             <img src={selectedImage} alt="Preview of the selected image" className="w-96 h-auto" />
           </div>
         </div>
       )}
       <p className="mt-4 text-sm text-gray-600">
-          Template Width: {dimensions.width}px | Height: {dimensions.height}px
-        </p>
+        Template Width: {dimensions.width}px | Height: {dimensions.height}px
+      </p>
     </div>
   );
 };

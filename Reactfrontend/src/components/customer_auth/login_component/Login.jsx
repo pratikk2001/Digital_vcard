@@ -49,7 +49,7 @@ const Login = () => {
           localStorage.setItem("role", role);
           localStorage.setItem("userId", userId);
         }
-        alert("Login Successful!"); // Replace with toast in production
+        // alert("Login Successful!"); // Replace with toast in production
         navigate("/CustomerDashboard"); // Adjust to your admin dashboard route
       } else {
         setErrorMessage(

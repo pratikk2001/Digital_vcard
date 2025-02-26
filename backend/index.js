@@ -1,9 +1,9 @@
 const express = require("express");
 const app = express();
-const routes = require("./api/routes"); // Verify this path
+const routes = require("./api/routes");
 const connectDB = require("./config/db");
 require("dotenv").config();
-const port = process.env.PORT || 3000;
+const port = 4500; // Changed to 4500 explicitly
 const cors = require("cors");
 
 // Database connection with error handling
@@ -11,7 +11,7 @@ connectDB()
   .then(() => console.log("Database connected successfully"))
   .catch((err) => {
     console.error("Database connection failed:", err);
-    process.exit(1); // Exit if DB connection fails
+    process.exit(1);
   });
 
 // Middleware
@@ -35,7 +35,7 @@ app.get("/", (req, res) => {
   res.status(200).json({
     status_code: 200,
     message: "Welcome to the API",
-    available_endpoints: { health: "/health", api: "/api" },
+    available_endpoints: { health: "/health", "api": "/api" },
   });
 });
 

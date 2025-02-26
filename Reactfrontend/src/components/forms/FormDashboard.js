@@ -10,53 +10,65 @@ const DashboardPage = () => {
   const handleNavigation = (path) => () => navigate(path);
 
   return (
-    <div className="min-h-screen flex flex-col bg-gray-50">
+    <div className="min-h-screen flex flex-col bg-gray-100">
       {/* Top Navigation */}
-      <div className="w-full bg-blue-600 text-white shadow-md">
+      <div className="w-full bg-gradient-to-r from-blue-600 to-blue-800 text-white shadow-lg">
         <Topnav />
       </div>
 
       {/* Main Layout */}
       <div className="flex flex-1">
         {/* Sidebar */}
-        <div className="hidden lg:block w-64 bg-gray-100 overflow-y-auto">
+        <div className="hidden lg:block w-64 bg-white shadow-md overflow-y-auto">
           <Sidenav />
         </div>
 
         {/* Main Content */}
-        <main className="flex-1 p-6">
-          <h1 className="text-3xl font-bold mb-6 text-gray-800">Language Preview</h1>
+        <main className="flex-1 p-6 md:p-8">
+          <h1 className="text-3xl md:text-4xl font-bold mb-8 text-gray-900 tracking-tight">
+            Language Preview
+          </h1>
 
           {/* Language Selection Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
             {/* English Preview */}
-            <div 
-              className="bg-white p-6 rounded-xl shadow-lg transition-shadow duration-300 ease-in-out hover:shadow-2xl"
+            <div
+              className="bg-white p-6 rounded-xl shadow-md transition-all duration-300 ease-in-out hover:shadow-xl hover:scale-105 cursor-pointer border border-gray-200"
               onClick={handleNavigation("/EnglishForm")}
             >
-              <h2 className="text-2xl font-semibold mb-4 text-blue-600 text-center">English</h2>
-              <p className="text-gray-700 mb-4 text-center">This is an example of English text preview.</p>
-              <img 
-                src="https://via.placeholder.com/300x200?text=English+Flag"
-                alt="English Preview"
-                className="w-full rounded-lg mb-4"
-              />
-              <button className="w-full py-2 px-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none">Explore</button>
+              <h2 className="text-xl md:text-2xl font-semibold mb-3 text-blue-700 text-center">
+                English Form
+              </h2>
+              <div className="w-full h-48 md:h-56 overflow-hidden rounded-lg mb-4">
+                <img
+                  src="English.jpg"
+                  alt="English Preview"
+                  className="w-full h-full object-cover transition-transform duration-300 hover:scale-110"
+                />
+              </div>
+              <button className="w-full py-2 px-4 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors duration-200">
+              Fill the Information 
+              </button>
             </div>
 
             {/* Marathi Preview */}
-            <div 
-              className="bg-white p-6 rounded-xl shadow-lg transition-shadow duration-300 ease-in-out hover:shadow-2xl"
+            <div
+              className="bg-white p-6 rounded-xl shadow-md transition-all duration-300 ease-in-out hover:shadow-xl hover:scale-105 cursor-pointer border border-gray-200"
               onClick={handleNavigation("/MarathiForm")}
             >
-              <h2 className="text-2xl font-semibold mb-4 text-blue-600 text-center">मराठी</h2>
-              <p className="text-gray-700 mb-4 text-center">हे मराठी मजकूर पूर्वावलोकनाचे उदाहरण आहे.</p>
-              <img 
-                src="https://via.placeholder.com/300x200?text=Marathi+Flag"
-                alt="Marathi Preview"
-                className="w-full rounded-lg mb-4"
-              />
-              <button className="w-full py-2 px-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none">पाहा</button>
+              <h2 className="text-xl md:text-2xl font-semibold mb-3 text-blue-700 text-center">
+              मराठी फॉर्म
+              </h2>
+              <div className="w-full h-48 md:h-56 overflow-hidden rounded-lg mb-4">
+                <img
+                  src="Marathi.jpg"
+                  alt="Marathi Preview"
+                  className="w-full h-full object-cover transition-transform duration-300 hover:scale-110"
+                />
+              </div>
+              <button className="w-full py-2 px-4 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors duration-200">
+                माहिती भरा
+              </button>
             </div>
           </div>
         </main>

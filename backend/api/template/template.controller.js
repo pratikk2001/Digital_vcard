@@ -1,12 +1,15 @@
 const Template = require("../template/template.model"); // Adjust path as needed
-const fs = require("fs");
 
+const fs = require("fs");
 const path = require("path");
 const mime = require("mime-types");
 
 
+
 class TemplateController {
   // Save or Update Basic Details
+
+
 
 async saveBasicDetails(req, res) {
     try {
@@ -23,39 +26,43 @@ async saveBasicDetails(req, res) {
         whatsappShare,
         urlAlias,
       } = req.body;
-
       const userId = req.params.id;
-  
-      // Basic validation
-      if (!userId) {
-        return res.status(400).json({ status_code: 400, message: "User ID is required" });
+
+      if (!userId || typeof userId !== "string" || userId.trim() === "") {
+        return res.status(400).json({
+          status_code: 400,
+          message: "User ID is required and must be a non-empty string",
+        });
       }
-  
-      // Ensure firstName & lastName start with uppercase
-      const formattedFirstName = firstName.trim().charAt(0).toUpperCase() + firstName.trim().slice(1).toLowerCase();
-      const formattedLastName = lastName.trim().charAt(0).toUpperCase() + lastName.trim().slice(1).toLowerCase();
-  
-      // Upsert (update if exists, else create)
+
+      // Basic validation for required fields
+      if (!firstName || typeof firstName !== "string" || firstName.trim() === "") {
+        return res.status(400).json({
+          status_code: 400,
+          message: "First name is required and must be a non-empty string",
+        });
+      }
+
+      const updateData = {
+        firstName,
+        lastName,
+        email,
+        phone,
+        dob,
+        positionTitle,
+        address,
+        education,
+        showQrCode: showQrCode === undefined ? true : showQrCode, // Default value
+        whatsappShare: whatsappShare === undefined ? false : whatsappShare, // Default value
+        urlAlias,
+      };
+
       const template = await Template.findOneAndUpdate(
-        { userId }, // Search by userId
-        {
-          $set: {
-            firstName,
-            lastName,
-            email,
-            phone,
-            dob,
-            positionTitle,
-            address,
-            education,
-            showQrCode,
-            whatsappShare,
-            urlAlias,
-          },
-        },
-        { new: true, upsert: true, setDefaultsOnInsert: true } // Return new doc if updated, insert if not exists
+        { userId },
+        { $set: updateData },
+        { new: true, upsert: true, setDefaultsOnInsert: true }
       );
-  
+
       return res.status(200).json({
         status_code: 200,
         message: "Basic details saved successfully",
@@ -69,21 +76,26 @@ async saveBasicDetails(req, res) {
         error: error.name === "ValidationError" ? error.message : "Internal server error",
       });
     }
-}
- 
+  }
+  
 async getByUrlAlias(req, res) {
   try {
     const { urlAlias } = req.params;
 
-    // Find the template by urlAlias
-    const theme = await Template.findOne({ urlAlias });
+      if (!urlAlias || typeof urlAlias !== "string" || urlAlias.trim() === "") {
+        return res.status(400).json({
+          status_code: 400,
+          message: "URL alias is required and must be a non-empty string",
+        });
+      }
 
-    if (!theme) {
-      return res.status(404).json({
-        status_code: 404,
-        message: "Theme not found",
-      });
-    }
+      const template = await Template.findOne({ urlAlias }).lean(); // Use lean for performance
+      if (!template) {
+        return res.status(404).json({
+          status_code: 404,
+          message: "Template not found",
+        });
+      }
 
     res.status(200).json({
       status_code: 200,
@@ -97,44 +109,57 @@ async getByUrlAlias(req, res) {
       error: "Internal server error",
     });
   }
-}             
-                             
-// Save or Update Profile and Banner
+}
+
+
+  // Save or Update Profile and Banner
 saveProfileBanner=async(req, res) => {
   try {
     const userId = req.params.id;
 
-    if (!userId) {
-      return res.status(400).json({ status_code: 400, message: "User ID is required" });
+      if (!userId || typeof userId !== "string" || userId.trim() === "") {
+        return res.status(400).json({
+          status_code: 400,
+          message: "User ID is required and must be a non-empty string",
+        });
+      }
+
+      const profilePicture = req.files?.profilePicture?.[0]?.filename || null;
+      const bannerImage = req.files?.bannerImage?.[0]?.filename || null;
+
+      if (!profilePicture && !bannerImage) {
+        return res.status(400).json({
+          status_code: 400,
+          message: "At least one of profile picture or banner image is required",
+        });
+      }
+
+      const updateData = {};
+      if (profilePicture) updateData.profilePicture = profilePicture;
+      if (bannerImage) updateData.bannerImage = bannerImage;
+
+      const template = await Template.findOneAndUpdate(
+        { userId },
+        { $set: updateData },
+        { new: true, upsert: true }
+      );
+
+      return res.status(200).json({
+        status_code: 200,
+        message: "Profile and banner updated successfully",
+        data: template,
+      });
+    } catch (error) {
+      console.error("Error in saveProfileBanner:", error);
+      return res.status(500).json({
+        status_code: 500,
+        message: "Failed to update profile and banner",
+        error: error.message || "Internal server error",
+      });
     }
-
-    // Store only the unique file names, not the full path
-    const profilePicture = req.files?.profilePicture ? req.files.profilePicture[0].filename : null;
-    const bannerImage = req.files?.bannerImage ? req.files.bannerImage[0].filename : null;
-
-    // Update or insert the record
-    const template = await Template.findOneAndUpdate(
-      { userId },
-      { profilePicture, bannerImage },
-      { new: true, upsert: true }
-    );
-
-    return res.status(200).json({
-      status_code: 200,
-      message: "Profile and banner updated successfully",
-      data: template,
-    });
-  } catch (error) {
-    console.error("Error in saveProfileBanner:", error);
-    return res.status(500).json({
-      status_code: 500,
-      message: "Failed to update profile and banner",
-      error: error.message,
-    });
   }
-}
 
-// Save Awards
+  // Save Awards
 saveAwards = async (req, res) => {
       try {
 
@@ -175,8 +200,7 @@ saveAwards = async (req, res) => {
           error: error.message,
         });
       }
-};
-
+    };
 
 deleteAward = async (req, res) => {
       try {
@@ -216,144 +240,90 @@ deleteAward = async (req, res) => {
           error: error.message,
         });
       }
-};    
+    };    
 
   // Save Family Details
-async saveFamilyDetails(req, res) {
+  async saveFamilyDetails(req, res) {
     try {
       const { familyDetails } = req.body;
-      const userId = req.params. id;
+      const userId = req.params.id;
 
-    if (!userId) {
-      return res.status(400).json({ status_code: 400, message: "User ID is required" });
-    }
-    if (!Array.isArray(familyDetails) || familyDetails.length === 0) {
-      return res.status(400).json({ status_code: 400, message: "Family details must be a non-empty array" });
-    }
-
-    // Validate familyDetails structure: only name is required
-    for (const detail of familyDetails) {
-      if (!detail.name) {
+      if (!userId || typeof userId !== "string" || userId.trim() === "") {
         return res.status(400).json({
           status_code: 400,
-          message: "Each family detail must have a name",
+          message: "User ID is required and must be a non-empty string",
         });
       }
-      // Email is optional, no need to check
+
+      if (!Array.isArray(familyDetails)) {
+        return res.status(400).json({
+          status_code: 400,
+          message: "Family details must be an array",
+        });
+      }
+      if (familyDetails.length === 0) {
+        return res.status(400).json({
+          status_code: 400,
+          message: "Family details array cannot be empty",
+        });
+      }
+
+      for (const detail of familyDetails) {
+        if (
+          !detail ||
+          typeof detail !== "object" ||
+          !detail.name ||
+          typeof detail.name !== "string" ||
+          detail.name.trim() === ""
+        ) {
+          return res.status(400).json({
+            status_code: 400,
+            message: "Each family detail must be an object with a non-empty string 'name' property",
+          });
+        }
+      }
+
+      const template = await Template.findOneAndUpdate(
+        { userId },
+        { $push: { familyDetails: { $each: familyDetails } } },
+        { new: true, upsert: true }
+      );
+
+      if (!template) {
+        throw new Error("Failed to create or update template");
+      }
+
+      return res.status(200).json({
+        status_code: 200,
+        message: "Family details updated successfully",
+        data: template,
+      });
+    } catch (error) {
+      console.error("Error in saveFamilyDetails:", error);
+      return res.status(500).json({
+        status_code: 500,
+        message: "Failed to update family details",
+        error:
+          error.name === "CastError"
+            ? "Invalid family details format"
+            : error.message || "Internal server error",
+      });
     }
-
-    const template = await Template.findOneAndUpdate(
-      { userId },
-      { $push: { familyDetails: { $each: familyDetails } } },
-      { new: true, upsert: true }
-    );
-
-    return res.status(200).json({
-      status_code: 200,
-      message: "Family details updated successfully",
-      data: template,
-    });
-  } catch (error) {
-    console.error("Error in saveFamilyDetails:", error);
-    return res.status(500).json({
-      status_code: 500,
-      message: "Failed to update family details",
-      error: error.name === "CastError" ? "Invalid family details format" : error.message,
-    });
   }
-}
 
   // Save Social Work Images
   async saveSocialWorkImages(req, res) {
     try {
-      const captions = req.body.captions ? JSON.parse(req.body.captions) : [];
-      const userId = req.params.id;
-
-    if (!userId) {
-      return res.status(400).json({ status_code: 400, message: "User ID is required" });
-    }
-
-    if (!req.files || req.files.length === 0) {
-      return res.status(400).json({ status_code: 400, message: "At least one social image is required" });
-    }
-
-    const formattedEventImages = req.files.map((file, index) => ({
-      imageUrl: file.filename, // Store relative path
-      caption: captions[index] || "", 
-    }));
-
-    const template = await Template.findOneAndUpdate(
-      { userId },
-      { $push: { socialWorkImages: { $each: formattedEventImages } } },
-      { new: true, upsert: true }
-    );
-
-    return res.status(200).json({
-      status_code: 200,
-      message: "social images uploaded successfully",
-      data: template,
-    });
-  } catch (error) {
-    console.error("Error in save social Images:", error);
-    return res.status(500).json({
-      status_code: 500,
-      message: "Failed to upload social images",
-      error: error.message,
-    });
-  }
-
-  }
-
-  // Save Event Images
-saveEventImages = async (req, res) => {
-    try {
+      const { socialWorkImages } = req.body;
       const userId = req.params.id;
       const captions = req.body.captions ? JSON.parse(req.body.captions) : [];
-  
-      if (!userId) {
-        return res.status(400).json({ status_code: 400, message: "User ID is required" });
+
+      if (!userId || typeof userId !== "string" || userId.trim() === "") {
+        return res.status(400).json({
+          status_code: 400,
+          message: "User ID is required and must be a non-empty string",
+        });
       }
-  
-      if (!req.files || req.files.length === 0) {
-        return res.status(400).json({ status_code: 400, message: "At least one event image is required" });
-      }
-  
-      const formattedEventImages = req.files.map((file, index) => ({
-        imageUrl: file.filename, // Store relative path
-        caption: captions[index] || "",
-      }));
-  
-      const template = await Template.findOneAndUpdate(
-        { userId },
-        { $push: { eventImages: { $each: formattedEventImages } } },
-        { new: true, upsert: true }
-      );
-  
-      return res.status(200).json({
-        status_code: 200,
-        message: "Event images uploaded successfully",
-        data: template,
-      });
-    } catch (error) {
-      console.error("Error in saveEventImages:", error);
-      return res.status(500).json({
-        status_code: 500,
-        message: "Failed to upload event images",
-        error: error.message,
-      });
-    }
-};
-
-
-  // Save News Center Images
-async saveNewsCenterImages(req, res) {
-  try {
-    const userId = req.params.id;
-    const captions = req.body.captions ? JSON.parse(req.body.captions) : [];
-
-    if (!userId) {
-      return res.status(400).json({ status_code: 400, message: "User ID is required" });
-    }
 
     if (!req.files || req.files.length === 0) {
       return res.status(400).json({ status_code: 400, message: "At least one event image is required" });
@@ -364,11 +334,11 @@ async saveNewsCenterImages(req, res) {
       caption: captions[index] || "",
     }));
 
-    const template = await Template.findOneAndUpdate(
-      { userId },
-      { $push: { newsCenterImages: { $each: formattedEventImages } } },
-      { new: true, upsert: true }
-    );
+      const template = await Template.findOneAndUpdate(
+        { userId },
+        { $push: { socialWorkImages: { $each: formattedSocialImages } } },
+        { new: true, upsert: true }
+      );
 
     return res.status(200).json({
       status_code: 200,
@@ -384,16 +354,153 @@ async saveNewsCenterImages(req, res) {
     });
   }
 
-}
+  }
 
+  // Save Event Images
+  async saveEventImages(req, res) {
+    try {
+      const userId = req.params.id;
+      const captions = req.body.captions ? JSON.parse(req.body.captions) : [];
+
+      if (!userId || typeof userId !== "string" || userId.trim() === "") {
+        return res.status(400).json({
+          status_code: 400,
+          message: "User ID is required and must be a non-empty string",
+        });
+      }
+
+      if (!req.files || !Array.isArray(req.files) || req.files.length === 0) {
+        return res.status(400).json({
+          status_code: 400,
+          message: "At least one event image is required",
+        });
+      }
+
+      const formattedEventImages = req.files.map((file, index) => ({
+        imageUrl: file.filename,
+        caption: captions[index] || "",
+      }));
+
+      const template = await Template.findOneAndUpdate(
+        { userId },
+        { $push: { eventImages: { $each: formattedEventImages } } },
+        { new: true, upsert: true }
+      );
+
+      return res.status(200).json({
+        status_code: 200,
+        message: "Event images uploaded successfully",
+        data: template,
+      });
+    } catch (error) {
+      console.error("Error in saveEventImages:", error);
+      return res.status(500).json({
+        status_code: 500,
+        message: "Failed to upload event images",
+        error: error.message || "Internal server error",
+      });
+    }
+  };
+
+
+  // Save News Center Images
+  async saveNewsCenterImages(req, res) {
+    try {
+      const userId = req.params.id;
+      const captions = req.body.captions ? JSON.parse(req.body.captions) : [];
+
+      if (!userId || typeof userId !== "string" || userId.trim() === "") {
+        return res.status(400).json({
+          status_code: 400,
+          message: "User ID is required and must be a non-empty string",
+        });
+      }
+
+      if (!req.files || !Array.isArray(req.files) || req.files.length === 0) {
+        return res.status(400).json({
+          status_code: 400,
+          message: "At least one news image is required",
+        });
+      }
+
+      const formattedNewsImages = req.files.map((file, index) => ({
+        imageUrl: file.filename,
+        caption: captions[index] || "",
+      }));
+
+      const template = await Template.findOneAndUpdate(
+        { userId },
+        { $push: { newsCenterImages: { $each: formattedNewsImages } } },
+        { new: true, upsert: true }
+      );
+
+      return res.status(200).json({
+        status_code: 200,
+        message: "News center images uploaded successfully",
+        data: template,
+      });
+    } catch (error) {
+      console.error("Error in saveNewsCenterImages:", error);
+      return res.status(500).json({
+        status_code: 500,
+        message: "Failed to upload news center images",
+        error: error.message || "Internal server error",
+      });
+    }
+  }
+
+  // Save Social Links
+  async saveSocialLinks(req, res) {
+    try {
+      const userId = req.params.id;
+      const socialLinks = req.body;
+
+      if (!userId || typeof userId !== "string" || userId.trim() === "") {
+        return res.status(400).json({
+          status_code: 400,
+          message: "User ID is required and must be a non-empty string",
+        });
+      }
+
+      if (!socialLinks || Object.keys(socialLinks).length === 0) {
+        return res.status(400).json({
+          status_code: 400,
+          message: "At least one social link is required",
+        });
+      }
+
+      const template = await Template.findOneAndUpdate(
+        { userId },
+        { $set: socialLinks },
+        { new: true, upsert: true }
+      );
+
+    return res.status(200).json({
+      status_code: 200,
+      message: "Event images uploaded successfully",
+      data: template,
+    });
+  } catch (error) {
+    console.error("Error in saveEventImages:", error);
+    return res.status(500).json({
+      status_code: 500,
+      message: "Failed to upload event images",
+      error: error.message,
+    });
+  }
+
+  }
 
   // Get Form Data by ID
-async getFormData(req, res) {
+  async getFormData(req, res) {
     try {
       const userId = req.params.id;
 
-      if (!userId) {
-        return res.status(400).json({ status_code: 400, message: "User ID is required" });
+      if (!userId || typeof userId !== "string" || userId.trim() === "") {
+        return res.status(400).json({
+          status_code: 400,
+          message: "User ID is required and must be a non-empty string",
+        });
       }
 
       const template = await Template.findOne({ userId }).lean();
@@ -414,10 +521,11 @@ async getFormData(req, res) {
       return res.status(500).json({
         status_code: 500,
         message: "Failed to fetch form data",
-        error: error.message,
+        error: error.message || "Internal server error",
       });
     }
 }
+
 
 
 getProfileImage = async (req, res) => {
@@ -453,7 +561,7 @@ getProfileImage = async (req, res) => {
       });
     }
 
-};
+   };
 
 getBanerImage = async (req, res) => {
     try {
@@ -488,26 +596,17 @@ getBanerImage = async (req, res) => {
       });
     }
 
-};   
+   };   
 
 getAwardsImage = async (req, res) => {
     try {
       const { imageId } = req.params;
-      
-      // console.log("Product ID:", productId);
-
-      const imagePath = path.resolve(
-        __dirname,
-        `../../uploads/awardsImages/${imageId}`
-      );
-
-      // console.log("Image path:", imagePath);
-
+      const imagePath = path.resolve(__dirname, `../../uploads/${folder}/${imageId}`);
       const document = await this.getDocument(imagePath);
 
       if (!document) {
-        return res.status(200).json({
-          status_code: 200,
+        return res.status(404).json({
+          status_code: 404,
           message: "Image not found",
         });
       }
@@ -516,12 +615,15 @@ getAwardsImage = async (req, res) => {
       res.set("Content-Type", mimeType);
       res.send(document);
     } catch (error) {
-      res.status(500).json({
+      console.error(`Error fetching image from ${folder}:`, error);
+      return res.status(500).json({
         status_code: 500,
+        message: "Failed to fetch image",
         error: "Internal server error",
       });
     }
-};   
+
+   };   
 
 getEventImage = async (req, res) => {
     try {
@@ -625,9 +727,9 @@ getSocialImage = async (req, res) => {
 
    };   
 
-async getDocument(filePath) {
+   async getDocument(filePath) {
     try {
-      const file = fs.readFileSync(filePath);
+      const file = await fs.readFile(filePath); // Use async fs.promises
       return file;
     } catch (error) {
       console.error("Error reading file:", error);
@@ -635,6 +737,8 @@ async getDocument(filePath) {
     }
   }
   
+
+
 }
 
 module.exports = new TemplateController();

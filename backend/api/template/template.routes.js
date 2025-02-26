@@ -40,5 +40,3 @@ router.get("/getNewsImage/:imageId", TemplateController.getNewsImage);
 
 
 module.exports = router;
-
-// saveNewsCenterImages

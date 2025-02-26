@@ -21,7 +21,7 @@ import CustomersMyCard from './pages/customer/mycards';
 import CustomerGetCard from './pages/customer/getcard';
 // import Customerform from './components/forms/Cardform';
 import CustomerHome from './pages/customer/home';
-import DigitalCard from './components/customerCard/custumerCardDisplay';
+// import DigitalCard from './components/customerCard/custumerCardDisplay';
 import FormDashboard from './components/forms/FormDashboard';
 
 // Forms
