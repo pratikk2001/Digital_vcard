@@ -1,9 +1,7 @@
 import React, { useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-import Box from "@mui/material/Box";
-import CircularProgress from "@mui/material/CircularProgress";
+import { Box, CircularProgress } from "@mui/material"; // Assuming you're using Material-UI for CircularProgress
 
-// Theme data with additional properties
 const themes = [
   { 
     id: 1, 
@@ -59,41 +57,39 @@ export default function Theme() {
   const [activeThemeId, setActiveThemeId] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
-  const navigate = useNavigate();
+  const navigate = useNavigate(); // Still imported but not used in handleThemeSelection
 
-  // Memoized navigation handler
+  // Memoized theme selection handler (no navigation)
   const handleThemeSelection = useCallback((id) => {
     setIsLoading(true);
     setError(null);
     
     try {
       setActiveThemeId(id);
-      
-      const themeAliases = {
-        1: "/theme-one",
-        2: "/theme-two",
-        3: "/theme-three",
-        4: "/theme-four",
-        5: "/theme-five",
-        6: "/theme-six",
-      };
-
-      const redirectUrl = themeAliases[id] || "/default-theme";
-      
       setTimeout(() => {
-        navigate(redirectUrl);
-        setIsLoading(false);
+        setIsLoading(false); // Simulate a slight delay for UX, then stop loading
       }, 500);
     } catch (err) {
       setError("Failed to select theme. Please try again.");
       setIsLoading(false);
     }
-  }, [navigate]);
+  }, []); // Removed navigate from dependencies since it's not used
 
   // Reset selection handler
   const handleReset = () => {
     setActiveThemeId(null);
     setError(null);
+  };
+
+  // Save handler (placeholder for actual save logic)
+  const handleSave = () => {
+    if (activeThemeId) {
+      const selectedTheme = themes.find((theme) => theme.id === activeThemeId);
+      console.log("Theme saved:", selectedTheme); // Replace with actual save logic
+      alert(`Theme "${selectedTheme.title}" has been saved!`); // Temporary feedback
+    } else {
+      setError("Please select a theme to save.");
+    }
   };
 
   return (
@@ -197,6 +193,23 @@ export default function Theme() {
             </div>
           </div>
         )}
+
+        {/* Save and Reset Buttons */}
+        <div className="mt-12 flex justify-center space-x-4">
+          <button
+            onClick={handleSave}
+            className="px-6 py-3 text-lg font-semibold text-white bg-blue-600 rounded-lg shadow-md hover:bg-blue-700 transition-all duration-300 disabled:opacity-50"
+            disabled={isLoading || !activeThemeId}
+          >
+            Save Theme
+          </button>
+          <button
+            onClick={handleReset}
+            className="px-6 py-3 text-lg font-semibold text-gray-800 bg-gray-200 rounded-lg shadow-md hover:bg-gray-300 transition-all duration-300"
+          >
+            Reset
+          </button>
+        </div>
       </div>
 
       {/* Custom CSS for animation */}

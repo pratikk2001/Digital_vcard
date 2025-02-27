@@ -1,28 +1,61 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react"; // Added useEffect for optional fetching
 import { FaUsers, FaChartBar, FaEdit } from "react-icons/fa";
 import Sidenav from "../../components/customer_nav/Customersidenav";
 import TopNavbar from "../../components/customer_nav/Topnavbar";
-import ProfileForm from "./popupForm"; // Import Profile Form
+import ProfileForm from "./popupForm";
 
 const Mycards = () => {
   const [selectedVCard, setSelectedVCard] = useState(null);
   const [isFormOpen, setIsFormOpen] = useState(false);
+  const [vcards, setVcards] = useState([]); // State for dynamic data
 
+  // Hardcoded data with urlAlias (for demonstration; replace with API fetch if needed)
   const data = [
     {
       avatar: "PK",
       name: "Pratik Kankarej",
       role: "Software Engineer",
-      url: "https://myviscards.xyz/pratikkankarej",
+      urlAlias: "pratikkankarej", // Added urlAlias
       createdAt: "12 Sep 2024",
     },
   ];
+
+  // Optional: Fetch VCards from backend (uncomment to use)
+  /*
+  useEffect(() => {
+    const fetchVCards = async () => {
+      try {
+        const apiBaseUrl = process.env.REACT_APP_API_BASE_URL || "http://localhost:4500";
+        const userId = localStorage.getItem("userId");
+        const response = await fetch(`${apiBaseUrl}/api/template/getUserVCards/${userId}`, {
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
+        });
+        const result = await response.json();
+        if (response.ok && result.status_code === 200) {
+          setVcards(result.data);
+        } else {
+          throw new Error(result.message || "Failed to fetch VCards");
+        }
+      } catch (error) {
+        console.error("Fetch Error:", error);
+      }
+    };
+    fetchVCards();
+  }, []);
+  */
+
+  // Use fetched data if available, otherwise use hardcoded data
+  const vcardData = vcards.length > 0 ? vcards : data;
 
   // Handle Edit Button Click
   const handleEditClick = (vcard) => {
     setSelectedVCard(vcard);
     setIsFormOpen(true);
   };
+
+  // Base URL for dynamic preview
+  const baseUrl = "https://myviscards.xyz"; // Replace with your production URL if different
 
   return (
     <div className="min-h-screen flex flex-col bg-gray-100">
@@ -57,7 +90,7 @@ const Mycards = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {data.map((item, index) => (
+                    {vcardData.map((item, index) => (
                       <tr key={index} className="border-b hover:bg-gray-50">
                         <td className="p-4 flex items-center">
                           <div className="w-12 h-12 bg-blue-500 text-white flex items-center justify-center rounded-full text-lg font-semibold">
@@ -69,8 +102,13 @@ const Mycards = () => {
                           </div>
                         </td>
                         <td className="p-4">
-                          <a href={item.url} target="_blank" rel="noopener noreferrer" className="text-lg text-blue-500 underline">
-                            {item.url}
+                          <a
+                            href={`${baseUrl}/${item.urlAlias}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-lg text-blue-500 underline break-all"
+                          >
+                            {`${baseUrl}/${item.urlAlias}`}
                           </a>
                         </td>
                         <td className="p-4">

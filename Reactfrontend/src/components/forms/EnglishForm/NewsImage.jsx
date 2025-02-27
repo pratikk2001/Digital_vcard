@@ -19,13 +19,13 @@ const NewsImage = ({ formData: parentFormData, setFormData: setParentFormData })
     }
 
     const totalImages = newsImages.length + files.length;
-    if (totalImages > 5) { // Matches backend limit of 5 from multer config
+    if (totalImages > 5) {
       alert("You can upload a maximum of 5 news images.");
       return;
     }
 
     files.forEach((file) => {
-      if (file.size > 5 * 1024 * 1024) { // 5MB limit
+      if (file.size > 5 * 1024 * 1024) {
         alert(`File "${file.name}" exceeds 5MB limit.`);
         return;
       }
@@ -57,7 +57,6 @@ const NewsImage = ({ formData: parentFormData, setFormData: setParentFormData })
     const updatedImages = newsImages.filter((_, i) => i !== index);
     const updatedCaptions = { ...captions };
     delete updatedCaptions[index];
-    // Re-index captions to match new image array
     const reIndexedCaptions = {};
     updatedImages.forEach((_, i) => {
       reIndexedCaptions[i] = updatedCaptions[i] || "";
@@ -81,7 +80,7 @@ const NewsImage = ({ formData: parentFormData, setFormData: setParentFormData })
     setIsSubmitting(true);
     const formData = new FormData();
     newsImages.forEach((file) => {
-      formData.append("news", file); // Matches multer field name in backend
+      formData.append("news", file);
     });
 
     const captionsArray = newsImages.map((_, index) => captions[index] || "");
@@ -89,7 +88,7 @@ const NewsImage = ({ formData: parentFormData, setFormData: setParentFormData })
 
     try {
       const apiBaseUrl = process.env.REACT_APP_API_BASE_URL || "http://localhost:4500";
-      const endpoint = `${apiBaseUrl}/save/newsCenterImages/${userId}`; // Adjusted to match backend route
+      const endpoint = `${apiBaseUrl}/save/newsCenterImages/${userId}`;
       const response = await fetch(endpoint, {
         method: "POST",
         body: formData,
@@ -99,7 +98,7 @@ const NewsImage = ({ formData: parentFormData, setFormData: setParentFormData })
       if (response.ok && result.status_code === 200) {
         setParentFormData((prev) => ({
           ...prev,
-          newsCenterImages: result.data.newsCenterImages, // Update with server data
+          newsCenterImages: result.data.newsCenterImages,
           captions: captionsArray.reduce((acc, caption, i) => ({ ...acc, [i]: caption }), {}),
         }));
         alert("News images and captions saved successfully!");
@@ -121,6 +120,8 @@ const NewsImage = ({ formData: parentFormData, setFormData: setParentFormData })
       setParentFormData((prev) => ({ ...prev, newsCenterImages: [], captions: {} }));
     }
   };
+
+  const captionMaxLength = 100;
 
   return (
     <div className="max-w-4xl mx-auto p-8 bg-white rounded-xl shadow-2xl border border-gray-100">
@@ -163,14 +164,20 @@ const NewsImage = ({ formData: parentFormData, setFormData: setParentFormData })
                 >
                   ❌
                 </button>
-                <input
-                  type="text"
-                  placeholder="Enter caption..."
-                  value={captions[index] || ""}
-                  onChange={(e) => handleCaptionChange(index, e.target.value)}
-                  className="mt-2 w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
-                  disabled={isSubmitting}
-                />
+                <div className="mt-2">
+                  <input
+                    type="text"
+                    placeholder={`Caption (max ${captionMaxLength} chars)`}
+                    value={captions[index] || ""}
+                    onChange={(e) => handleCaptionChange(index, e.target.value)}
+                    maxLength={captionMaxLength}
+                    className="w-full h-10 p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
+                    disabled={isSubmitting}
+                  />
+                  <p className="text-xs text-gray-500 mt-1">
+                    {captions[index]?.length || 0}/{captionMaxLength} characters
+                  </p>
+                </div>
               </div>
             );
           })}
