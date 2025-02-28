@@ -13,8 +13,8 @@ const Home = () => {
     { img: "Temp-5.png", title: "National Congress Party", desc: "" }, 
   ];
 
-  const handleThemeSelect = (theme) => {
-    navigate(`/theme/${theme.title}`);
+  const handleThemeSelect = () => {
+    navigate("/CustomerLogin"); // Redirect to CustomerLogin page when a theme is selected
   };
 
   return (
@@ -25,16 +25,16 @@ const Home = () => {
           <h1 className="text-3xl font-extrabold text-white">Web Visiting Card</h1>
           <div className="flex space-x-4">
             <button
-              onClick={() => navigate("./CustomerLogin")}
+              onClick={() => navigate("/MultiAdminLogin")}
               className="px-5 py-2 bg-white text-blue-700 font-bold rounded-full shadow-lg hover:bg-pink-400 transition-all duration-300"
             >
-              Login
+              Admin Login
             </button>
             <button
-              onClick={() => navigate("./AdminLogin")}
+              onClick={() => navigate("/AdminLogin")}
               className="px-5 py-2 bg-gray-100 text-blue-700 font-bold rounded-full shadow-lg hover:bg-pink-400 transition-all duration-300"
             >
-              Admin Login
+              Super Admin Login
             </button>
           </div>
         </div>
@@ -46,7 +46,7 @@ const Home = () => {
           <h1 className="text-5xl font-extrabold mb-6">Create Your Digital Visiting Card</h1>
           <p className="text-lg mb-8">Stand out and make a great impression with customizable card themes.</p>
           <button
-            onClick={() => navigate("./Adminsignup")}
+            onClick={() => navigate("/CustomerLogin")}
             className="px-8 py-3 bg-blue-700 text-white font-bold rounded-full shadow-lg hover:bg-pink-700 transition-all duration-300"
           >
             Get Started
@@ -56,7 +56,8 @@ const Home = () => {
 
       {/* Card Themes Section */}
       <section className="container mx-auto px-6 py-16">
-      <h2 className="text-3xl font-extrabold text-gray-800 text-center mb-12">Choose Your Card Theme</h2>        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
+        <h2 className="text-3xl font-extrabold text-gray-800 text-center mb-12">Choose Your Card Theme</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
           {themes.map((theme, index) => (
             <div
               key={index}
@@ -73,7 +74,7 @@ const Home = () => {
                 <h3 className="text-xl font-bold text-gray-800">{theme.title}</h3>
                 <p className="text-gray-600 text-sm mt-2">{theme.desc}</p>
                 <button
-                  onClick={() => handleThemeSelect(theme)}
+                  onClick={handleThemeSelect} // Updated to call handleThemeSelect without passing CustomerLogin
                   className="mt-4 px-5 py-2 bg-blue-500 text-white font-semibold rounded-full shadow-lg hover:bg-pink-400 transition-all duration-300"
                 >
                   Select Theme

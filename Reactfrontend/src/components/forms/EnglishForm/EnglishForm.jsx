@@ -7,10 +7,10 @@ import {
 } from "react-icons/fa";
 
 // Lazy-loaded components for better performance
-const BasicDetails = lazy(() => import("./EnglishFormBasicDetails"));
-const ProfileBanner = lazy(() => import("./EnglishProfileandBanner"));
-const AwardsComponent = lazy(() => import("./EnglishAwards"));
-const FamilyDetailsComponent = lazy(() => import("./EnglishFamily"));
+const BasicDetails = lazy(() => import("./BasicDetails"));
+const ProfileBanner = lazy(() => import("./ProfileBanner"));
+const AwardsComponent = lazy(() => import("./Awards"));
+const FamilyDetailsComponent = lazy(() => import("./Family"));
 const SocialImage = lazy(() => import("./SocialImage"));
 const EventImage = lazy(() => import("./EventImage"));
 const NewsImage = lazy(() => import("./NewsImage"));

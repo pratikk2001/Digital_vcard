@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const EnglishFormBasicDetails = ({ formData: parentFormData, setFormData: setParentFormData }) => {
+const BasicDetails = ({ formData: parentFormData, setFormData: setParentFormData }) => {
   const [localFormData, setLocalFormData] = useState({
     firstName: parentFormData.firstName || "",
     middleName: parentFormData.middleName || "",
@@ -523,4 +523,4 @@ const EnglishFormBasicDetails = ({ formData: parentFormData, setFormData: setPar
   );
 };
 
-export default EnglishFormBasicDetails;
+export default BasicDetails;

@@ -24,7 +24,7 @@ const Login = () => {
 
     try {
       const apiBaseUrl = process.env.REACT_APP_API_BASE_URL || "http://localhost:4500"; // Match backend port
-      const response = await fetch(`${apiBaseUrl}/api/admin/login`, {
+      const response = await fetch(`${apiBaseUrl}/api/multiadmin/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -44,19 +44,30 @@ const Login = () => {
         const email = data.data?.email;
         const firstName = data.data?.first_name;
 
-        if (token || role || userId ) {
+        if (token && role && userId) {
+          // Store authentication data in localStorage
           localStorage.setItem("authToken", token);
           localStorage.setItem("role", role);
           localStorage.setItem("userId", userId);
+
+          // Redirect based on role (multi-admin specific)
+          if (role === "superadmin") {
+            navigate("/Dashboard"); // Super admin dashboard
+          } else if (role === "multiadmin") {
+            navigate("/MultiAdminDashboard"); // Multi-admin specific dashboard (adjust path as needed)
+          } else {
+            navigate("/CustomerDashboard"); // Fallback or default dashboard (optional)
+          }
+          // alert("Login Successful!"); // Replace with toast in production
+        } else {
+          setErrorMessage("Invalid response from server. Please try again.");
         }
-        // alert("Login Successful!"); // Replace with toast in production
-        navigate("/CustomerDashboard"); // Adjust to your admin dashboard route
       } else {
         setErrorMessage(
           data.status_code === 401
             ? "Invalid email or password."
             : data.status_code === 404
-            ? "Admin not found."
+            ? "Multi-Admin not found."
             : data.message || "Login failed. Please try again."
         );
       }
@@ -71,8 +82,8 @@ const Login = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-blue-500 to-indigo-600">
       <div className="bg-white shadow-2xl rounded-2xl p-8 w-96 transform transition-all duration-300 hover:scale-105">
-        <h1 className="text-4xl font-extrabold text-indigo-600 text-center mb-4">Web Visiting Card</h1>
-        <h2 className="text-2xl font-semibold text-gray-700 text-center mb-6">Log in  </h2>
+        <h1 className="text-4xl font-extrabold text-indigo-600 text-center mb-4">Digital VCard</h1>
+        <h2 className="text-2xl font-semibold text-gray-700 text-center mb-6">Multi-Admin Login</h2>
 
         <form onSubmit={handleLogin} className="space-y-5">
           <div>
@@ -149,7 +160,7 @@ const Login = () => {
           <p className="text-sm text-gray-600">
             Don't have an account?{" "}
             <span
-              onClick={() => navigate("/CustomerSignup")} // Match admin signup route
+              onClick={() => navigate("/MultiAdminSignup")} // Match multi-admin signup route
               className="text-indigo-600 font-medium hover:text-indigo-800 cursor-pointer"
             >
               Create One

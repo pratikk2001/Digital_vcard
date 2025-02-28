@@ -37,15 +37,15 @@ function Login() {
   return (
     <div className="min-h-screen bg-gradient-to-r from-blue-500 to-blue-800 flex justify-center items-center">
       <div className="bg-white rounded-lg shadow-lg w-full max-w-sm p-8">
-        <h1 className="text-4xl font-bold text-blue-600 text-center mb-6">Digital Vcard</h1>
-        <h2 className="text-3xl font-semibold text-blue-600 text-center mb-4">
-          Login
+        <h1 className="text-4xl font-bold text-blue-600 text-center mb-6">Web Visiting Card</h1>
+        <h2 className="text-2xl font-semibold text-black text-center mb-4">
+         Super Admin Login
         </h2>
         <form onSubmit={handleLogin} className="space-y-6">
           <div>
             <label
               htmlFor="email"
-              className="block text-sm font-medium text-gray-700"
+              className="block text-lg font-medium text-gray-700"
             >
               Email
             </label>
@@ -56,7 +56,7 @@ function Login() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="w-full mt-2 px-4 py-3 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+              className="w-full mt-2 px-4 py-3 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-lg"
             />
           </div>
           <div>
@@ -96,13 +96,13 @@ function Login() {
         </div>
         <div className="mt-4 text-center">
           <p className="text-sm text-gray-600">
-            Don't have an account?{" "}
+            {/* Don't have an account?{" "} */}
             <a
               href=""
               className="text-blue-600 hover:text-blue-800 underline"
               onClick={() => navigate("/AdminSignup")}
             >
-              Create One
+              {/* Create One */}
             </a>
           </p>
         </div>

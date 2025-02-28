@@ -30,7 +30,7 @@ export default function Sidenav() {
       >
         <div className="p-5 flex items-center space-x-2 border-b-2 border-black">
           <SettingsIcon className="w-6 h-6" />
-          <h1 className="text-xl font-bold">Digital Vcard Admin</h1>
+          <h1 className="text-2xl font-bold">Super  Admin</h1>
         </div>
 
         {/* Sidebar menu items */}

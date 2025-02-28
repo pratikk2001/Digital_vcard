@@ -88,7 +88,7 @@ const NewsImage = ({ formData: parentFormData, setFormData: setParentFormData })
 
     try {
       const apiBaseUrl = process.env.REACT_APP_API_BASE_URL || "http://localhost:4500";
-      const endpoint = `${apiBaseUrl}/save/newsCenterImages/${userId}`;
+      const endpoint = `${apiBaseUrl}/api/template/save/newsCenterImages/${userId}`;
       const response = await fetch(endpoint, {
         method: "POST",
         body: formData,
