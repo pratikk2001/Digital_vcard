@@ -1,15 +1,21 @@
 const mongoose = require("mongoose");
 
 const TemplateSchema = new mongoose.Schema({
-  userId: { type: String, required: true, unique: true },
+  userId: { type: String, required: true },
   firstName: { type: String },
+  middleName: { type: String },
   lastName: { type: String },
   email: { type: String },
   phone: { type: String },
+  whatsappNo: { type: String },
   dob: { type: String }, // Consider Date type if applicable
-  positionTitle: { type: String },
-  address: { type: String },
+  positionTitle: [{ type: String }],
+  homeAddress: { type: String },
+  officeAddress: { type: String },
   education: { type: String },
+  showEducation: { type: Boolean },
+  partyAffiliation: { type: String },
+  showPartyAffiliation: { type: Boolean },
   showQrCode: { type: Boolean },
   whatsappShare: { type: Boolean },
   urlAlias: { type: String },

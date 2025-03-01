@@ -9,6 +9,7 @@ import axios from "axios";
 import { useParams } from "react-router-dom"; // Updated to react-router-dom
 
 const VCard = () => {
+  
   const { userUrl } = useParams();
   const [cardData, setCardData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);

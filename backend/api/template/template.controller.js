@@ -13,133 +13,73 @@ class TemplateController {
         lastName,
         email,
         phone,
-        whatsappNumber,
         dob,
-        positionTitles,
+        positionTitle,
         homeAddress,
         officeAddress,
-        education,
         showEducation,
+        education,
         showQrCode,
+        whatsappNo,
         whatsappShare,
-        urlAlias,
         partyAffiliation,
+        showPartyAffiliation,
+        urlAlias,
       } = req.body;
+
       const userId = req.params.id;
-
-      // Validate User ID
-      if (!userId || typeof userId !== 'string' || userId.trim() === '') {
-        return res.status(400).json({
-          status_code: 400,
-          message: 'User ID is required and must be a non-empty string',
-        });
+  
+      // Basic validation
+      if (!userId) {
+        return res.status(400).json({ status_code: 400, message: "User ID is required" });
       }
-
-      // Basic validation for required fields
-      const requiredFields = ['firstName', 'lastName', 'email', 'phone', 'whatsappNumber'];
-      for (const field of requiredFields) {
-        if (!req.body[field] || typeof req.body[field] !== 'string' || req.body[field].trim() === '') {
-          return res.status(400).json({
-            status_code: 400,
-            message: `${field.charAt(0).toUpperCase() + field.slice(1)} is required and must be a non-empty string`,
-          });
-        }
-      }
-
-      // Validate email format
-      if (email && !/^\S+@\S+\.\S+$/.test(email.trim().toLowerCase())) {
-        return res.status(400).json({
-          status_code: 400,
-          message: 'Enter a valid email address.',
-        });
-      }
-
-      // Validate phone and WhatsApp numbers (10 digits)
-      if (phone && !/^\d{10}$/.test(phone.trim())) {
-        return res.status(400).json({
-          status_code: 400,
-          message: 'Phone number must be 10 digits.',
-        });
-      }
-
-      if (whatsappNumber && !/^\d{10}$/.test(whatsappNumber.trim())) {
-        return res.status(400).json({
-          status_code: 400,
-          message: 'WhatsApp number must be 10 digits.',
-        });
-      }
-
-      // Validate Date of Birth format (optional, assuming ISO format from React or converted)
-      if (dob) {
-        const isIsoFormat = /^\d{4}-\d{2}-\d{2}$/.test(dob);
-        const isMmDdFormat = /^\d{2}\/\d{2}$/.test(dob);
-        if (!isIsoFormat && !isMmDdFormat) {
-          return res.status(400).json({
-            status_code: 400,
-            message: 'Enter a valid date in MM/DD or YYYY-MM-DD format.',
-          });
-        }
-      }
-
-      // Validate positionTitles (array, non-empty strings)
-      if (!Array.isArray(positionTitles) || positionTitles.length === 0 || positionTitles.some(title => !title || typeof title !== 'string' || title.trim() === '')) {
-        return res.status(400).json({
-          status_code: 400,
-          message: 'Position titles must be a non-empty array of non-empty strings.',
-        });
-      }
-
-      // Format data for consistency (matching React component behavior)
-      const formattedData = {
-        firstName: firstName.trim().charAt(0).toUpperCase() + firstName.trim().slice(1).toLowerCase(),
-        middleName: middleName ? middleName.trim().charAt(0).toUpperCase() + middleName.trim().slice(1).toLowerCase() : '',
-        lastName: lastName.trim().charAt(0).toUpperCase() + lastName.trim().slice(1).toLowerCase(),
-        email: email.trim().toLowerCase(),
-        phone: phone.trim(),
-        whatsappNumber: whatsappNumber.trim(),
-        dob, // Keep as-is (ISO or MM/DD format, handle in model if needed)
-        positionTitles: positionTitles.map(title => title.trim()),
-        homeAddress: homeAddress ? homeAddress.trim() : '',
-        officeAddress: officeAddress ? officeAddress.trim() : '',
-        education: education ? education.trim() : '',
-        showEducation: showEducation === undefined ? false : Boolean(showEducation),
-        showQrCode: showQrCode === undefined ? false : Boolean(showQrCode),
-        whatsappShare: whatsappShare === undefined ? false : Boolean(whatsappShare),
-        urlAlias: urlAlias ? urlAlias.trim() : '',
-        partyAffiliation: partyAffiliation || 'BJP', // Default to BJP if not provided
-      };
-
-      // Ensure urlAlias is unique (optional, depending on your needs)
-      const existingTemplate = await Template.findOne({ urlAlias: formattedData.urlAlias, userId: { $ne: userId } });
-      if (existingTemplate) {
-        return res.status(400).json({
-          status_code: 400,
-          message: 'URL alias must be unique for this user.',
-        });
-      }
-
-      // Save or update the template in MongoDB
+  
+      // Ensure firstName & lastName start with uppercase
+      const formattedFirstName = firstName.trim().charAt(0).toUpperCase() + firstName.trim().slice(1).toLowerCase();
+      const formattedLastName = lastName.trim().charAt(0).toUpperCase() + lastName.trim().slice(1).toLowerCase();
+  
+      // Upsert (update if exists, else create)
       const template = await Template.findOneAndUpdate(
-        { userId },
-        { $set: formattedData },
-        { new: true, upsert: true, setDefaultsOnInsert: true }
-      );
+        { userId }, // Search by userId
+        {
+          firstName: formattedFirstName,
+          middleName,
+          lastName: formattedLastName,
+          userId,
+          email,
+          phone,
+          dob,
+          positionTitle,
+          education,
+          showQrCode,
+          whatsappShare,
+          homeAddress,
+          officeAddress,
+          showEducation,
+          whatsappNo,
+          urlAlias,
+          partyAffiliation,
+          showPartyAffiliation,
 
+        },
+        { new: true, upsert: true, setDefaultsOnInsert: true } // Return new doc if updated, insert if not exists
+      );
+  
       return res.status(200).json({
         status_code: 200,
-        message: 'Basic details saved successfully',
+        message: "Basic details saved successfully",
         data: template,
       });
     } catch (error) {
-      console.error('Error in saveBasicDetails:', error);
+      console.error("Error in saveBasicDetails:", error);
       return res.status(500).json({
         status_code: 500,
-        message: 'Failed to save basic details',
-        error: error.name === 'ValidationError' ? error.message : 'Internal server error',
+        message: "Failed to save basic details",
+        error: error.message,
       });
     }
   }
-
+  
   // Get Template by URL Alias
   async getByUrlAlias(req, res) {
     try {
@@ -580,32 +520,37 @@ class TemplateController {
   }
 
   // Get Profile Image
-  async getProfileImage(req, res) {
-    try {
-      const { imageId } = req.params;
-      const imagePath = path.resolve(__dirname, '../../uploads/profileImages', imageId);
-      const document = await this.getDocument(imagePath);
+  async  getProfileImage(req, res) {
+  try {
+    const { imageId } = req.params;
 
-      if (!document) {
-        return res.status(404).json({
-          status_code: 404,
-          message: 'Image not found',
-        });
-      }
+    console.log('Fetching profile image:', imageId);
+    const imagePath = path.resolve(__dirname, '../../uploads/profileImages', imageId);
 
-      const mimeType = mime.lookup(imagePath) || 'application/octet-stream';
-      res.set('Content-Type', mimeType);
-      res.send(document);
-    } catch (error) {
-      console.error('Error fetching profile image:', error);
-      return res.status(500).json({
-        status_code: 500,
-        message: 'Failed to fetch profile image',
-        error: 'Internal server error',
+    // Check if file exists
+    if (!fs.existsSync(imagePath)) {
+      return res.status(404).json({
+        status_code: 404,
+        message: 'Image not found',
       });
     }
-  }
 
+    // Get MIME type
+    const mimeType = mime.getType(imagePath) || 'application/octet-stream';
+    res.set('Content-Type', mimeType);
+
+    // Stream the file instead of reading it entirely
+    const readStream = fs.createReadStream(imagePath);
+    readStream.pipe(res);
+  } catch (error) {
+    console.error('Error fetching profile image:', error);
+    return res.status(500).json({
+      status_code: 500,
+      message: 'Failed to fetch profile image',
+      error: 'Internal server error',
+    });
+  }
+}
   // Get Banner Image
   async getBanerImage(req, res) { // Corrected typo: 'Baner' to 'Banner'
     try {

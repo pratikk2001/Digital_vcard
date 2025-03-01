@@ -31,6 +31,7 @@ router.get("/getFormData/:id", TemplateController.getFormData);
 
 
 router.get("/getprofileImage/:imageId", TemplateController.getProfileImage);
+
 router.get("/getBanerImage/:imageId", TemplateController.getBanerImage);
 router.get("/getAwardsImage/:imageId", TemplateController.getAwardsImage);
 router.get("/getEventImage/:imageId", TemplateController.getEventImage);

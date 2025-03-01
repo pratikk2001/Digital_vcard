@@ -7,9 +7,9 @@ const BasicDetails = ({ formData: parentFormData, setFormData: setParentFormData
     lastName: parentFormData.lastName || "",
     email: parentFormData.email || "",
     phone: parentFormData.phone || "",
-    whatsappNumber: parentFormData.whatsappNumber || "",
+    whatsappNo: parentFormData.whatsappNumber || "",
     dob: parentFormData.dob || "",
-    positionTitles: parentFormData.positionTitles || [""],
+    positionTitle: parentFormData.positionTitle || [""],
     homeAddress: parentFormData.homeAddress || "",
     officeAddress: parentFormData.officeAddress || "",
     education: parentFormData.education || "",
@@ -33,9 +33,9 @@ const BasicDetails = ({ formData: parentFormData, setFormData: setParentFormData
     if (name.startsWith("positionTitle")) {
       const index = parseInt(name.split("-")[1], 10);
       setLocalFormData((prev) => {
-        const updatedTitles = [...prev.positionTitles];
+        const updatedTitles = [...prev.positionTitle];
         updatedTitles[index] = value;
-        return { ...prev, positionTitles: updatedTitles };
+        return { ...prev, positionTitle: updatedTitles };
       });
       setErrors((prev) => ({ ...prev, [`positionTitle-${index}`]: "" }));
     } else {
@@ -45,19 +45,19 @@ const BasicDetails = ({ formData: parentFormData, setFormData: setParentFormData
   };
 
   const handleAddPosition = () => {
-    if (localFormData.positionTitles.length < 3) {
+    if (localFormData.positionTitle.length < 3) {
       setLocalFormData((prev) => ({
         ...prev,
-        positionTitles: [...prev.positionTitles, ""],
+        positionTitle: [...prev.positionTitle, ""],
       }));
     }
   };
 
   const handleRemovePosition = (index) => {
-    if (localFormData.positionTitles.length > 1) {
+    if (localFormData.positionTitle.length > 1) {
       setLocalFormData((prev) => ({
         ...prev,
-        positionTitles: prev.positionTitles.filter((_, i) => i !== index),
+        positionTitle: prev.positionTitle.filter((_, i) => i !== index),
       }));
       setErrors((prev) => {
         const newErrors = { ...prev };
@@ -102,7 +102,7 @@ const BasicDetails = ({ formData: parentFormData, setFormData: setParentFormData
       }
     }
 
-    localFormData.positionTitles.forEach((title, index) => {
+    localFormData.positionTitle.forEach((title, index) => {
       if (title.trim() === "") {
         newErrors[`positionTitle-${index}`] = "Position title cannot be empty.";
       }
@@ -125,9 +125,9 @@ const BasicDetails = ({ formData: parentFormData, setFormData: setParentFormData
         lastName: localFormData.lastName.trim().charAt(0).toUpperCase() + localFormData.lastName.trim().slice(1).toLowerCase(),
         email: localFormData.email.toLowerCase().trim(),
         phone: localFormData.phone.trim(),
-        whatsappNumber: localFormData.whatsappNumber.trim(),
+        whatsappNo: localFormData.whatsappNo.trim(),
         dob: localFormData.dob,
-        positionTitles: localFormData.positionTitles.map((title) => title.trim()),
+        positionTitle: localFormData.positionTitle.map((title) => title.trim()),
         homeAddress: localFormData.homeAddress.trim(),
         officeAddress: localFormData.officeAddress.trim(),
         education: localFormData.education.trim(),
@@ -169,7 +169,7 @@ const BasicDetails = ({ formData: parentFormData, setFormData: setParentFormData
       phone: "",
       whatsappNumber: "",
       dob: "",
-      positionTitles: [""],
+      positionTitle: [""],
       homeAddress: "",
       officeAddress: "",
       education: "",
@@ -379,7 +379,7 @@ const BasicDetails = ({ formData: parentFormData, setFormData: setParentFormData
         {/* Position Titles */}
         <div className="flex flex-col">
           <label className="text-gray-700 font-medium mb-2">💼 Position Titles:</label>
-          {localFormData.positionTitles.map((title, index) => (
+          {localFormData.positionTitle.map((title, index) => (
             <div key={index} className="flex items-center mb-2">
               <input
                 type="text"
@@ -390,7 +390,7 @@ const BasicDetails = ({ formData: parentFormData, setFormData: setParentFormData
                 placeholder={`Enter position title ${index + 1}`}
                 disabled={isSubmitting}
               />
-              {localFormData.positionTitles.length > 1 && (
+              {localFormData.positionTitle.length > 1 && (
                 <button
                   type="button"
                   onClick={() => handleRemovePosition(index)}
@@ -405,7 +405,7 @@ const BasicDetails = ({ formData: parentFormData, setFormData: setParentFormData
               )}
             </div>
           ))}
-          {localFormData.positionTitles.length < 3 && (
+          {localFormData.positionTitle.length < 3 && (
             <button
               type="button"
               onClick={handleAddPosition}
