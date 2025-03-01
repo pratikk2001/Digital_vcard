@@ -40,45 +40,26 @@ app.get("/", (req, res) => {
 });
 
 // 404 Handler
-app.use((req, res) => {
-  res.status(404).json({
-    status_code: 404,
-    message: `Route ${req.method} ${req.path} not found`,
-    timestamp: new Date().toISOString(),
-  });
-});
+// app.use((req, res) => {
+//   res.status(404).json({
+//     status_code: 404,
+//     message: `Route ${req.method} ${req.path} not found`,
+//     timestamp: new Date().toISOString(),
+//   });
+// });
 
 // Global error handling middleware
-app.use((err, req, res, next) => {
-  console.error("Error:", err.stack);
-  res.status(500).json({
-    status_code: 500,
-    message: "Something went wrong!",
-    error: process.env.NODE_ENV === "development" ? err.message : undefined,
-    timestamp: new Date().toISOString(),
-  });
-});
+// app.use((err, req, res, next) => {
+//   console.error("Error:", err.stack);
+//   res.status(500).json({
+//     status_code: 500,
+//     message: "Something went wrong!",
+//     error: process.env.NODE_ENV === "development" ? err.message : undefined,
+//     timestamp: new Date().toISOString(),
+//   });
+// });
 
 // Start server
 const server = app.listen(port, () => {
   console.log(`Server is running on port ${port} - http://localhost:${port}/`);
-});
-
-// Process-level error handlers
-process.on("uncaughtException", (err) => {
-  console.error("Uncaught Exception:", err);
-  process.exit(1);
-});
-
-process.on("unhandledRejection", (err) => {
-  console.error("Unhandled Rejection:", err);
-  process.exit(1);
-});
-
-process.on("SIGTERM", () => {
-  console.log("SIGTERM received. Shutting down gracefully...");
-  server.close(() => {
-    console.log("Server closed.");
-    process.exit(0);
-  });
 });

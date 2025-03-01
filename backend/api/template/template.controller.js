@@ -1,5 +1,6 @@
 const Template = require('../template/template.model'); // Adjust path as needed
-const fs = require('fs').promises; // Use promises for async/await compatibility
+
+const fs = require('fs'); 
 const path = require('path');
 const mime = require('mime-types');
 
@@ -524,33 +525,28 @@ class TemplateController {
   try {
     const { imageId } = req.params;
 
-    console.log('Fetching profile image:', imageId);
-    const imagePath = path.resolve(__dirname, '../../uploads/profileImages', imageId);
+    // console.log('Fetching profile image:', imageId);
+    const imagePath = path.resolve(__dirname, `../../uploads/profileImages/${imageId}`);
 
-    // Check if file exists
-    if (!fs.existsSync(imagePath)) {
-      return res.status(404).json({
-        status_code: 404,
-        message: 'Image not found',
+    const document = await getDocument(imagePath);
+
+    if (!document) {
+      return res.status(200).json({
+        status_code: 400,
+        message: "Image not found",
       });
     }
 
-    // Get MIME type
-    const mimeType = mime.getType(imagePath) || 'application/octet-stream';
-    res.set('Content-Type', mimeType);
-
-    // Stream the file instead of reading it entirely
-    const readStream = fs.createReadStream(imagePath);
-    readStream.pipe(res);
+    const mimeType = mime.lookup(imagePath) || "application/octet-stream";
+    res.set("Content-Type", mimeType);
+    res.send(document);
   } catch (error) {
-    console.error('Error fetching profile image:', error);
-    return res.status(500).json({
+    res.status(500).json({
       status_code: 500,
-      message: 'Failed to fetch profile image',
-      error: 'Internal server error',
+      error: "Internal server error",
     });
   }
-}
+};
   // Get Banner Image
   async getBanerImage(req, res) { // Corrected typo: 'Baner' to 'Banner'
     try {
@@ -597,7 +593,7 @@ class TemplateController {
       res.set('Content-Type', mimeType);
       res.send(document);
     } catch (error) {
-      console.error(`Error fetching image from ${folder}:`, error);
+      // console.error(`Error fetching image from ${folder}:`, error);
       return res.status(500).json({
         status_code: 500,
         message: 'Failed to fetch image',
@@ -698,5 +694,15 @@ class TemplateController {
     }
   }
 }
+
+async function getDocument(filePath) {
+  try {
+    const file = fs.readFileSync(filePath);
+    return file;
+  } catch (error) {
+    console.error("Error reading file:", error);
+    return null;
+  }
+};
 
 module.exports = new TemplateController();

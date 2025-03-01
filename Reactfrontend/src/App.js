@@ -79,7 +79,7 @@ function App() {
         <Route path="/Templates6" element={<Templates6 />} />
 
         {/* Dynamic Template Route */}
-        <Route path="/:userUrl" element={<DynamicTemplate />} />
+        <Route path="/:userUrl" element={<Templates2 />} />
       </Routes>
     </BrowserRouter>
   );
