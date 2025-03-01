@@ -9,8 +9,6 @@ const mime = require("mime-types");
 class TemplateController {
   // Save or Update Basic Details
 
-
-
 async saveBasicDetails(req, res) {
     try {
       const {
