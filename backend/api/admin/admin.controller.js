@@ -3,6 +3,7 @@ const jwt = require("jsonwebtoken");
 const Admin = require("./admin.model");
 
 class AdminController {
+  
   async getAllAdmins(req, res) {
     try {
       const admins = await Admin.find().select("-password");
@@ -157,6 +158,7 @@ class AdminController {
       });
     }
   }
+
 }
 
 module.exports = AdminController;

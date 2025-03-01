@@ -1,17 +1,22 @@
-import React, { useState } from "react";
+import React, { useState, useCallback, lazy, Suspense } from "react";
 import Topnav from "../../customer_nav/Topnavbar";
 import Sidenav from "../../customer_nav/Customersidenav";
-import { FaInfoCircle, FaImage, FaAward, FaUsers, FaHandsHelping, FaCalendarAlt, FaNewspaper, FaFont, FaFontAwesome, FaWpforms } from "react-icons/fa";
-import BasicDetails from "./EnglishFormBasicDetails";
-import ProfileBanner from "./EnglishProfileandBanner";
-import AwardsComponent from "./EnglishAwards";
-import FamilyDetailsComponent from "./EnglishFamily";
-import SocialImage from "./SocialImage";
-import EventImage from "./EventImage";
-import NewsImage from "./NewsImage";
-import SocialLink from "./SocialLink";
-import Fonts from "./Fonts";
-import Theme from "./Theme";
+import { 
+  FaInfoCircle, FaImage, FaAward, FaUsers, FaHandsHelping, FaCalendarAlt, 
+  FaNewspaper, FaFont, FaWpforms 
+} from "react-icons/fa";
+
+// Lazy-loaded components for better performance
+const BasicDetails = lazy(() => import("./BasicDetails"));
+const ProfileBanner = lazy(() => import("./ProfileBanner"));
+const AwardsComponent = lazy(() => import("./Awards"));
+const FamilyDetailsComponent = lazy(() => import("./Family"));
+const SocialImage = lazy(() => import("./SocialImage"));
+const EventImage = lazy(() => import("./EventImage"));
+const NewsImage = lazy(() => import("./NewsImage"));
+const SocialLink = lazy(() => import("./SocialLink"));
+const Fonts = lazy(() => import("./Fonts"));
+const Theme = lazy(() => import("./Theme"));
 
 const EditVCard = () => {
   const [activeSection, setActiveSection] = useState("Basic Details");
@@ -23,16 +28,13 @@ const EditVCard = () => {
     address: "",
     dob: "",
     education: "",
-    awards: [],  // Initialize as an array
-    currentAward: "",
-    familyDetails: [],  // Initialize as an array
-    currentFamilyDetail: "",
+    awards: [],
+    familyDetails: [],
     profilePicture: null,
     bannerImage: null,
-    socialWorkImages: [],  // Initialize as an array
-    eventImages: [],  // Initialize as an array
-    newsCenterImages: [],  // Initialize as an array
-    previewImage: null,  // For image preview
+    socialWorkImages: [],
+    eventImages: [],
+    newsCenterImages: [],
     websiteURL: "",
     facebookURL: "",
     twitterURL: "",
@@ -44,7 +46,7 @@ const EditVCard = () => {
     whatsappURL: "",
     pinterestURL: "",
     tiktokURL: "",
-    snapchatURL: ""
+    snapchatURL: "",
   });
 
   const sidebarItems = [
@@ -56,12 +58,32 @@ const EditVCard = () => {
     { name: "Events", icon: <FaCalendarAlt /> },
     { name: "News Center", icon: <FaNewspaper /> },
     { name: "Social Links", icon: <FaImage /> },
-    { name: "Fonts", icon:<FaFont/>},
+    { name: "Fonts", icon: <FaFont /> },
     { name: "Select Theme", icon: <FaWpforms /> }
   ];
 
-  return (
+  // Optimized function for setting active section
+  const handleSectionClick = useCallback((name) => {
+    setActiveSection(name);
+  }, []);
 
+  // Object mapping for dynamic section rendering
+  const sectionComponents = {
+    "Basic Details": BasicDetails,
+    "Profile and Banner": ProfileBanner,
+    "Awards": AwardsComponent,
+    "Family Details": FamilyDetailsComponent,
+    "Social Work": SocialImage,
+    "Events": EventImage,
+    "News Center": NewsImage,
+    "Social Links": SocialLink,
+    "Fonts": Fonts,
+    "Select Theme": Theme
+  };
+
+  const ActiveComponent = sectionComponents[activeSection];
+
+  return (
     <div className="min-h-screen flex flex-col bg-gray-50">
       {/* Top Navigation */}
       <div className="w-full bg-blue-600 text-white shadow-md">
@@ -95,7 +117,7 @@ const EditVCard = () => {
                           ? "bg-blue-600 text-white shadow-md"
                           : "text-gray-700 hover:bg-gray-100"
                       }`}
-                      onClick={() => setActiveSection(item.name)}
+                      onClick={() => handleSectionClick(item.name)}
                     >
                       <span className="text-xl">{item.icon}</span>
                       {item.name}
@@ -106,24 +128,15 @@ const EditVCard = () => {
 
               {/* Main Content */}
               <div className="col-span-1 lg:col-span-9 p-6 bg-gray-50 rounded-lg shadow-md">
-                {/* Section Render Logic */}
-                {activeSection === "Basic Details" && <BasicDetails formData={formData} setFormData={setFormData} />}
-                {activeSection === "Profile and Banner" && <ProfileBanner formData={formData} setFormData={setFormData} />}
-                {activeSection === "Awards" && <AwardsComponent formData={formData} setFormData={setFormData} />}
-                {activeSection === "Family Details" && <FamilyDetailsComponent formData={formData} setFormData={setFormData} />}
-                {activeSection === "Social Work" && <SocialImage formData={formData} setFormData={setFormData} />}
-                {activeSection === "Events" && <EventImage formData={formData} setFormData={setFormData} />}
-                {activeSection === "News Center" && <NewsImage formData={formData} setFormData={setFormData} />}
-                {activeSection === "Social Links" && <SocialLink formData={formData} setFormData={setFormData} />}
-                {activeSection === "Fonts" && <Fonts formData={formData} setFormData={setFormData} />}
-                {activeSection === "Theme" && <Theme formData = {formData} setFormData = {setFormData}/>}
+                <Suspense fallback={<div>Loading...</div>}>
+                  <ActiveComponent formData={formData} setFormData={setFormData} />
+                </Suspense>
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-    
   );
 };
 

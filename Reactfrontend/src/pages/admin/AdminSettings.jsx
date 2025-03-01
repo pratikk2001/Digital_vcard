@@ -6,7 +6,9 @@ const AdminSettings = () => {
   const navigate = useNavigate();
 
   return (
+    
     <div className="min-h-screen flex bg-gray-100">
+
       {/* Sidebar */}
       <Sidenav />
       
@@ -37,6 +39,7 @@ const AdminSettings = () => {
         </div>
       </div>
     </div>
+
   );
 };
 

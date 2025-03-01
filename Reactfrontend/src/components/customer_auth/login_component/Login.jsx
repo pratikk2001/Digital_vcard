@@ -49,7 +49,7 @@ const Login = () => {
           localStorage.setItem("role", role);
           localStorage.setItem("userId", userId);
         }
-        alert("Login Successful!"); // Replace with toast in production
+        // alert("Login Successful!"); // Replace with toast in production
         navigate("/CustomerDashboard"); // Adjust to your admin dashboard route
       } else {
         setErrorMessage(
@@ -71,7 +71,7 @@ const Login = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-blue-500 to-indigo-600">
       <div className="bg-white shadow-2xl rounded-2xl p-8 w-96 transform transition-all duration-300 hover:scale-105">
-        <h1 className="text-4xl font-extrabold text-indigo-600 text-center mb-4">Digital VCard</h1>
+        <h1 className="text-4xl font-extrabold text-indigo-600 text-center mb-4">Web Visiting Card</h1>
         <h2 className="text-2xl font-semibold text-gray-700 text-center mb-6">Log in  </h2>
 
         <form onSubmit={handleLogin} className="space-y-5">

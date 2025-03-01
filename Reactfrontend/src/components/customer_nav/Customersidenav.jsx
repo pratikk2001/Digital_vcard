@@ -51,7 +51,7 @@ export default function Sidenav() {
         <div className="mt-0 space-y-3">
           {/* Sidebar Header */}
           <div className="h-10 my-4 flex items-center justify-center text-black font-bold text-2xl">
-            Digital VCard
+            Web Visiting Card
           </div>
 
           {/* Divider */}
