@@ -5,11 +5,13 @@ const router = express.Router();
 const templateRoutes = require("./template/template.routes");
 const superAdminRoutes = require("./super_admin/super_admin.routes");
 const adminRoutes = require("./admin/admin.routes");
+const multiadminRoutes = require("./multiadmin/multiadmin.routes");
 
 // Mount sub-routers with consistent naming
 
 router.use("/template", templateRoutes);
-router.use("/super_admin", superAdminRoutes); // Changed to case for consistency
+router.use("/super_admin", superAdminRoutes);
+router.use("/multiadmin", multiadminRoutes);
 router.use("/admin", adminRoutes);
 
 
@@ -22,6 +24,7 @@ router.get("/", (req, res) => {
       template: "/api/template",
       "super-admin": "/api/super_admin",
       admin: "/api/admin",
+      multiadmmin: "/api/multiadmin",
     },
   });
 });
