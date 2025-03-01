@@ -55,9 +55,7 @@ const Login = () => {
             navigate("/Dashboard"); // Super admin dashboard
           } else if (role === "multiadmin") {
             navigate("/MultiAdminDashboard"); // Multi-admin specific dashboard (adjust path as needed)
-          } else {
-            navigate("/CustomerDashboard"); // Fallback or default dashboard (optional)
-          }
+          } 
           // alert("Login Successful!"); // Replace with toast in production
         } else {
           setErrorMessage("Invalid response from server. Please try again.");
