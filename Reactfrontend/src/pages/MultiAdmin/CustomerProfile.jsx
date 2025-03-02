@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
-import Navbar from "../../components/customer_nav/Topnavbar";
-import Sidenav from "../../components/customer_nav/Customersidenav";
+import Sidenav from "../../components/multiadmin_nav/sidenav";
+import Navbar from "../../components/multiadmin_nav/Topnavbar";
 
 const fetchUserProfile = async () => {
   // Simulating an API call (Replace this with actual API call)

@@ -4,7 +4,6 @@ import {
   Logout as LogoutIcon,
   AccountBox as AccountBoxIcon,
   Settings as SettingsIcon,
-  Notifications as NotificationsIcon,
   Menu as MenuIcon,
   Close as CloseIcon,
 } from "@mui/icons-material";
@@ -35,7 +34,6 @@ const Navbar = () => {
         {/* Right Section (Desktop View) */}
         <div className="hidden lg:flex items-center space-x-6">
           <button className="text-white hover:scale-110 transition-all" aria-label="Notifications">
-            <NotificationsIcon fontSize="large" />
           </button>
           <button
             className="text-white hover:scale-110 transition-all"

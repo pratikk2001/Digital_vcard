@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import SettingsIcon from "@mui/icons-material/Settings";
+import SupervisorAccountIcon from "@mui/icons-material/SupervisorAccount"; // Updated from SettingsIcon to SupervisorAccountIcon
 import AccountTreeIcon from "@mui/icons-material/AccountTree";
 import BarChartIcon from "@mui/icons-material/BarChart";
 import DashboardIcon from "@mui/icons-material/Dashboard";
@@ -29,8 +29,8 @@ export default function Sidenav() {
         } lg:translate-x-0 transition-transform duration-300 z-50 shadow-2xl`}
       >
         <div className="p-5 flex items-center space-x-2 border-b-2 border-black">
-          <SettingsIcon className="w-6 h-6" />
-          <h1 className="text-2xl font-bold">Super  Admin</h1>
+          <SupervisorAccountIcon className="w-6 h-6" /> {/* Replaced SettingsIcon with SupervisorAccountIcon */}
+          <h1 className="text-2xl font-bold">Super Admin</h1>
         </div>
 
         {/* Sidebar menu items */}

@@ -4,11 +4,11 @@ import TopNavbar from "../../components/admin_nav/topnav"; // Import the Navbar 
 
 const CustomerDetails = () => {
   const [users, setUsers] = useState([
-    { name: "Karan Sharma", email: "karanmitash@gmail.com", theme: "Political 1", status: "Active" },
-    { name: "Sinan Mintaş", email: "sinanmintas04@gmail.com", theme: "Political 2", status: "Inactive" },
-    { name: "Mondesign Web", email: "mondesignweb.agency@gmail.com", theme: "Personal 1", status: "Active" },
-    { name: "Hebron Lot", email: "karomfinger@gmail.com", theme: "Personal 2", status: "Inactive" },
-    { name: "Vineeth Kumar", email: "printfastme@gmail.com", theme: "Personal 2", status: "Active" },
+    { name: "Karan Sharma", email: "karanmitash@gmail.com", status: "Active" },
+    { name: "Sinan Mintaş", email: "sinanmintas04@gmail.com", status: "Inactive" },
+    { name: "Mondesign Web", email: "mondesignweb.agency@gmail.com", status: "Active" },
+    { name: "Hebron Lot", email: "karomfinger@gmail.com", status: "Inactive" },
+    { name: "Vineeth Kumar", email: "printfastme@gmail.com", status: "Active" },
   ]);
 
   const [currentPage, setCurrentPage] = useState(1);
@@ -45,7 +45,7 @@ const CustomerDetails = () => {
                 <tr>
                   <th className="p-4">User Name</th>
                   <th className="p-4">Email</th>
-                  <th className="p-4">Theme</th>
+              
                   <th className="p-4">View</th>
                   <th className="p-4">Status</th>
                   <th className="p-4">Action</th>
@@ -61,7 +61,7 @@ const CustomerDetails = () => {
                       {user.name}
                     </td>
                     <td className="p-4">{user.email}</td>
-                    <td className="p-4">{user.theme}</td>
+                    
                     <td className="p-4">
                       <button
                         onClick={() => handleViewUser(user)}
@@ -100,7 +100,7 @@ const CustomerDetails = () => {
                 <div className="border p-4 rounded-lg">
                   <p><strong>Name:</strong> {selectedUser.name}</p>
                   <p><strong>Email:</strong> {selectedUser.email}</p>
-                  <p><strong>Theme:</strong> {selectedUser.theme}</p>
+
                   <p><strong>Status:</strong> {selectedUser.status}</p>
                 </div>
                 <button onClick={() => setViewUserModal(false)} className="mt-4 px-4 py-2 bg-gray-400 text-white rounded-md hover:bg-gray-500">
@@ -119,8 +119,7 @@ const CustomerDetails = () => {
                 <input type="text" value={editUser.name} onChange={(e) => setEditUser({ ...editUser, name: e.target.value })} className="w-full p-2 border rounded-md mb-3" />
                 <label className="block text-sm font-medium mb-2">Email</label>
                 <input type="email" value={editUser.email} disabled className="w-full p-2 border rounded-md bg-gray-200 cursor-not-allowed mb-3" />
-                <label className="block text-sm font-medium mb-2">Theme</label>
-                <input type="text" value={editUser.theme} onChange={(e) => setEditUser({ ...editUser, theme: e.target.value })} className="w-full p-2 border rounded-md mb-3" />
+                
                 <div className="flex justify-end gap-2">
                   <button onClick={() => setShowModal(false)} className="px-4 py-2 bg-gray-400 text-white rounded-md hover:bg-gray-500">Cancel</button>
                   <button onClick={handleSave} className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">Save</button>

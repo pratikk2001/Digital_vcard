@@ -72,9 +72,7 @@ const Mycards = () => {
                   placeholder="Search"
                   className="w-full md:w-1/3 p-2 border rounded-md focus:ring-2 focus:ring-blue-500"
                 />
-                <button className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300">
-                  New VCard
-                </button>
+              
               </div>
               <div className="overflow-x-auto">
                 <table className="w-full text-left table-auto">
@@ -82,9 +80,6 @@ const Mycards = () => {
                     <tr>
                       <th className="p-4">VCARD NAME</th>
                       <th className="p-4">PREVIEW URL</th>
-                      <th className="p-4">STATS</th>
-                      <th className="p-4">SUBSCRIBERS</th>
-                      <th className="p-4">STATUS</th>
                       <th className="p-4">CREATED AT</th>
                       <th className="p-4">ACTION</th>
                     </tr>
@@ -110,18 +105,6 @@ const Mycards = () => {
                           >
                             {`${baseUrl}/${item.urlAlias}`}
                           </a>
-                        </td>
-                        <td className="p-4">
-                          <FaChartBar className="text-blue-500" size={24} />
-                        </td>
-                        <td className="p-4">
-                          <FaUsers className="text-blue-500" size={24} />
-                        </td>
-                        <td className="p-4">
-                          <label className="switch">
-                            <input type="checkbox" defaultChecked />
-                            <span className="slider round"></span>
-                          </label>
                         </td>
                         <td className="p-4 text-lg text-gray-600">{item.createdAt}</td>
                         <td className="p-4">

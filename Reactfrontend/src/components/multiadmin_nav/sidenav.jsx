@@ -7,12 +7,12 @@ export default function Sidenav() {
   const location = useLocation();
   const [isOpen, setIsOpen] = React.useState(false);
 
-  // Sidebar links stored in useMemo for optimization
+  // Sidebar links for multi-admin
   const sidebarLinks = React.useMemo(() => [
     { name: "Dashboard", path: "/MultiAdminDashboard", icon: <Dashboard /> },
-    { name: "Add Details", path: "/FormDashboard", icon: <MoveToInbox /> },
-    { name: "My Cards", path: "/CustomerCard", icon: <BarChart /> },
-    { name: "Themes", path: "/CustomerThemes", icon: <AccountTree /> },
+    { name: "My VCards", path: "/MultiCards", icon: <BarChart /> },
+    { name: "Create Card", path: "/CustomerCard", icon: <MoveToInbox /> },
+    { name: "Themes", path: "/MultiTheme", icon: <AccountTree /> },
     { name: "Logout", path: "/", icon: <ExitToApp /> },
   ], []);
 
@@ -24,9 +24,29 @@ export default function Sidenav() {
 
   // Logout function
   const handleLogout = React.useCallback(() => {
-    // Here you would handle the actual logout logic, e.g., clearing local storage, API calls, etc.
-    navigate('/'); // Redirect to login page or wherever after logout
+    // Clear authentication data (e.g., token)
+    localStorage.removeItem("token");
+    // Optional: Add API call to invalidate token on server if needed
+    navigate("/"); // Redirect to login page
   }, [navigate]);
+
+  // Optional: Fetch multi-admin name or role (uncomment if you want to display it)
+  /*
+  const [adminName, setAdminName] = React.useState("");
+  React.useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      fetch("http://localhost:5000/api/multiadmin/me", {
+        headers: { "Authorization": `Bearer ${token}` },
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.status_code === 200) setAdminName(`${data.data.first_name} ${data.data.last_name}`);
+        })
+        .catch((err) => console.error("Error fetching admin data:", err));
+    }
+  }, []);
+  */
 
   return (
     <div className="flex">
@@ -51,7 +71,9 @@ export default function Sidenav() {
         <div className="mt-0 space-y-3">
           {/* Sidebar Header */}
           <div className="h-10 my-4 flex items-center justify-center text-black font-bold text-2xl">
-           Web Admin 
+            Admin Portal
+            {/* Optional: Display admin name */}
+            {/* {adminName && <span className="text-sm font-normal block">{adminName}</span>} */}
           </div>
 
           {/* Divider */}
@@ -70,7 +92,7 @@ export default function Sidenav() {
       </nav>
 
       {/* Main Content Wrapper */}
-      <div className={`md:ml-64 flex-1 p-6 transition-all duration-300 ${isOpen ? 'ml-64' : ''}`}>
+      <div className={`md:ml-64 flex-1 p-6 transition-all duration-300 ${isOpen ? "ml-64" : ""}`}>
         {/* Main content goes here */}
       </div>
     </div>

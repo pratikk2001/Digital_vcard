@@ -10,7 +10,7 @@ const Signup = () => {
     email: "",
     password: "",
     confirmPassword: "",
-    role: "multiadmin", // Default role for multi-admin signup (can be modified or selected)
+    role: "multiadmin", 
   });
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);

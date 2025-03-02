@@ -26,28 +26,28 @@ const themes = [
   { 
     id: 3, 
     title: "Shivsena", 
-    bgColor: "bg-orange-200", 
+    bgColor: "bg-white", 
     previewImage: "Temp-3.png",
     primaryColor: "saffron",
   },
   { 
     id: 4, 
     title: "शिवसेना", 
-    bgColor: "bg-orange-200", 
+    bgColor: "bg-white", 
     previewImage: "Temp-4.png",
     primaryColor: "saffron",
   },
   { 
     id: 5, 
     title: "National Congress Party", 
-    bgColor: "bg-blue-100", 
+    bgColor: "bg-white", 
     previewImage: "Temp-5.png",
     primaryColor: "blue",
   },
   { 
     id: 6, 
     title: "राष्ट्रीय काँग्रेस पार्टी", 
-    bgColor: "bg-blue-100", 
+    bgColor: "bg-white", 
     previewImage: "Temp-6.png",
     primaryColor: "blue",
   },
@@ -175,7 +175,7 @@ export default function Theme() {
                   </div>
                   <div className="px-6 pb-6">
                     <span
-                      className={`w-full py-3 text-lg font-bold rounded-lg shadow-sm transition-all duration-300 ${
+                      className={`w-full flex justify-center items-center py-3 text-lg font-bold rounded-lg shadow-sm transition-all duration-300 ${
                         activeThemeIds.includes(theme.id)
                           ? "bg-green-600 text-white"
                           : "bg-red-500 text-white"

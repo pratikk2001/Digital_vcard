@@ -5,17 +5,19 @@ import Settings from './pages/admin/AdminSettings';
 import Profile from './pages/admin/adminProfile';
 import Themes from './pages/admin/themes';
 import CustomerCard from './pages/admin/customer_card';
-import Costomer from './pages/admin/customer_details';
+import Costomer from './pages/admin/customer_details.jsx';
 
-import Login from './components/admin_auth/login_component/Login';
+import SuperLogin from './components/admin_auth/login_component/Login';
 import Signup from './components/admin_auth/signup_component/signup';
 
 import CustomerLogin from './components/customer_auth/login_component/Login';
 import CustomerSignup from './components/customer_auth/signup_component/signup';
 
-import MultiAdminLogin from './components/multiadmin_auth/login_component/MultiAdminLogin.jsx'; 
-import MultiAdminSignup from './components/multiadmin_auth/signup_component/MultiAdminSignup.jsx'; 
-import MultiAdminDashboard from './pages/MultiAdmin/MultiDashboard.jsx';
+import MultiAdminLogin from './components/multiadmin_auth/login_component/MultiAdminLogin'; 
+import MultiAdminSignup from './components/multiadmin_auth/signup_component/MultiAdminSignup'; 
+import MultiAdminDashboard from './pages/MultiAdmin/MultiDashboard';
+import MultiCards from './pages/MultiAdmin/multicards';
+import MultiTheme from './pages/MultiAdmin/themes';
 
 import CustomerDashboard from './pages/customer/dashboard';
 import CustomerProfile from './pages/customer/CustomerProfile';
@@ -52,10 +54,12 @@ function App() {
         {/* <Route path="/CustomerCard" element={<CustomerCard />} />} */}
         <Route path="/Customers" element={<Costomer />} /> 
         <Route path="/FormDashboard" element={<FormDashboard />} />
-        <Route path="/AdminLogin" element={<Login />} />
+        <Route path="/AdminLogin" element={<SuperLogin />} />
         <Route path="/MultiAdminLogin" element={<MultiAdminLogin />} />
         <Route path="/MultiAdminSignup" element={<MultiAdminSignup />} />
         <Route path= "/MultiAdminDashboard" element={<MultiAdminDashboard />} />
+        <Route path="/MultiCards" element={<MultiCards />} />
+        <Route path="/MultiThemes" element={<MultiTheme />} />
       
         {/* Customer Routes */}
         <Route path="/CustomerLogin" element={<CustomerLogin />} />

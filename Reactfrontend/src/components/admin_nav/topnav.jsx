@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import LogoutIcon from "@mui/icons-material/Logout";
 import AccountBoxIcon from "@mui/icons-material/AccountBox";
 import SettingsIcon from "@mui/icons-material/Settings";
-import NotificationsIcon from "@mui/icons-material/Notifications";
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
 
@@ -53,7 +52,7 @@ const Navbar = () => {
 
         <div className="hidden lg:flex items-center space-x-6">
           <button className="text-white hover:scale-110 transition-all" aria-label="Notifications">
-            <NotificationsIcon fontSize="large" />
+            
           </button>
           <button
             className="text-white hover:scale-110 transition-all"

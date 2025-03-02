@@ -1,72 +1,64 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import Box from "@mui/material/Box";
 import CircularProgress from "@mui/material/CircularProgress";
-import Sidenav from "../../components/customer_nav/Customersidenav";
-import TopNavbar from "../../components/customer_nav/Topnavbar";
+import Sidenav from "../../components/multiadmin_nav/sidenav";
+import TopNavbar from "../../components/multiadmin_nav/Topnavbar";
+import axios from "axios"; // For API calls
+import jwtDecode from "jwt-decode"; // For role-based access
 
-const themes = [
-  { 
-    id: 1, 
-    title: "भारतीय जनता पार्टी", 
-    bgColor: "bg-white", 
-    previewImage: "Temp-1.png",
-    primaryColor: "orange"
-  },
-  { 
-    id: 2, 
-    title: "Bhartiya Janata Party", 
-    bgColor: "bg-white", 
-    previewImage: "Temp-2.png",
-    primaryColor: "orange"
-  },
-  { 
-    id: 3, 
-    title: "Shivsena", 
-    bgColor: "bg-orange-200", 
-    previewImage: "Temp-3.png",
-    primaryColor: "saffron"
-  },
-  { 
-    id: 4, 
-    title: "शिवसेना", 
-    bgColor: "bg-orange-200", 
-    previewImage: "Temp-4.png",
-    primaryColor: "saffron"
-  },
-  { 
-    id: 5, 
-    title: "National Congress Party", 
-    bgColor: "bg-blue-100", 
-    previewImage: "Temp-5.png",
-    primaryColor: "blue"
-  },
-  { 
-    id: 6, 
-    title: "राष्ट्रीय काँग्रेस पार्टी", 
-    bgColor: "bg-blue-100", 
-    previewImage: "Temp-6.png",
-    primaryColor: "blue"
-  },
-];
-
-export default function Theme() {
+const Theme = () => {
+  const [themes, setThemes] = useState([]); // State for themes fetched from backend
   const [activeThemeId, setActiveThemeId] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false); // Define sidebar state
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false); // Sidebar state
   const navigate = useNavigate();
 
-  // Memoized theme selection handler (no navigation)
+  // Fetch themes from backend on component mount
+  useEffect(() => {
+    const fetchThemes = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        if (!token) {
+          navigate("/multiadmin/login"); // Redirect to Multi Admin login if no token
+          return;
+        }
+
+        const decoded = jwtDecode(token);
+        if (decoded.role !== "multiadmin") {
+          navigate("/multiadmin/login"); // Restrict access to Multi Admins only
+          return;
+        }
+
+        const apiBaseUrl = process.env.REACT_APP_API_BASE_URL || "http://localhost:4500";
+        const response = await axios.get(`${apiBaseUrl}/api/multiadmin/themes`, {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        setThemes(response.data.data || []);
+      } catch (err) {
+        setError("Failed to load themes. Please try again.");
+        console.error("Error fetching themes:", err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchThemes();
+  }, [navigate]);
+
+  // Memoized theme selection handler
   const handleThemeSelection = useCallback((id) => {
     setIsLoading(true);
     setError(null);
-    
+
     try {
       setActiveThemeId(id);
-      setTimeout(() => {
-        setIsLoading(false); // Simulate a slight delay for UX, then stop loading
-      }, 500);
+      setTimeout(() => setIsLoading(false), 500); // Simulate a slight delay for UX
     } catch (err) {
       setError("Failed to select theme. Please try again.");
       setIsLoading(false);
@@ -79,16 +71,53 @@ export default function Theme() {
     setError(null);
   };
 
-  // Save handler (placeholder for actual save logic)
-  const handleSave = () => {
-    if (activeThemeId) {
-      const selectedTheme = themes.find((theme) => theme.id === activeThemeId);
-      console.log("Theme saved:", selectedTheme);
-      alert(`Theme "${selectedTheme.title}" has been saved!`);
-    } else {
+  // Save selected theme to backend
+  const handleSave = async () => {
+    if (!activeThemeId) {
       setError("Please select a theme to save.");
+      return;
+    }
+
+    try {
+      const token = localStorage.getItem("token");
+      const apiBaseUrl = process.env.REACT_APP_API_BASE_URL || "http://localhost:4500";
+      const selectedTheme = themes.find((theme) => theme.id === activeThemeId);
+
+      await axios.post(
+        `${apiBaseUrl}/api/multiadmin/themes/save`,
+        { themeId: activeThemeId, userId: jwtDecode(token).userId }, // Adjust payload as needed
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      alert(`Theme "${selectedTheme.title}" has been saved successfully!`);
+    } catch (err) {
+      setError("Failed to save theme. Please try again.");
+      console.error("Error saving theme:", err);
     }
   };
+
+  if (isLoading && !error) {
+    return (
+      <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "100vh", bgcolor: "grey.50" }}>
+        <CircularProgress />
+      </Box>
+    );
+  }
+
+  if (error) {
+    return (
+      <Box sx={{ p: 3, bgcolor: "grey.50" }}>
+        <div className="max-w-6xl mx-auto p-4 bg-red-100 text-red-700 rounded-lg">
+          {error}
+        </div>
+      </Box>
+    );
+  }
 
   return (
     <Box sx={{ display: "flex", flexDirection: "column", minHeight: "100vh", bgcolor: "grey.50" }}>
@@ -106,6 +135,7 @@ export default function Theme() {
             flexGrow: 1,
             p: { xs: 2, sm: 3 },
             width: { xs: "100%", sm: `calc(100% - ${isSidebarOpen ? "240px" : "60px"})` },
+            transition: "width 0.3s ease-in-out",
           }}
         >
           <div className="max-w-6xl mx-auto">
@@ -116,18 +146,12 @@ export default function Theme() {
               {activeThemeId && (
                 <button
                   onClick={handleReset}
-                  className="px-4 py-2 text-sm font-medium text-black bg-blue-500 rounded-lg hover:bg-blue-500"
+                  className="px-4 py-2 text-sm font-medium text-black bg-blue-500 rounded-lg hover:bg-blue-600"
                 >
                   Reset Selection
                 </button>
               )}
             </div>
-
-            {error && (
-              <div className="mb-6 p-4 bg-red-100 text-red-700 rounded-lg">
-                {error}
-              </div>
-            )}
 
             {/* Theme Selection Grid */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -138,17 +162,16 @@ export default function Theme() {
                     activeThemeId === theme.id
                       ? "ring-4 ring-blue-500 scale-102"
                       : "hover:shadow-xl hover:scale-105"
-                  } ${theme.bgColor} cursor-pointer`}
+                  } ${theme.bgColor || "bg-white"} cursor-pointer`}
                   onClick={() => !isLoading && handleThemeSelection(theme.id)}
                 >
                   <div className="p-6">
                     <h3 className="font-semibold text-xl mb-2 text-gray-900">
                       {theme.title}
                     </h3>
-                    <p className="text-sm text-gray-600 mb-4">{theme.description}</p>
                     <div className="relative h-48 w-full overflow-hidden rounded-lg">
                       <img
-                        src={theme.previewImage}
+                        src={theme.previewImage ? `/themes/${theme.previewImage}` : "/fallback-image.png"}
                         alt={`Preview of ${theme.title}`}
                         className="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
                         onError={(e) => {
@@ -188,13 +211,13 @@ export default function Theme() {
                   <h3 className="text-xl font-semibold mb-3 text-gray-900">
                     {themes.find((theme) => theme.id === activeThemeId)?.title}
                   </h3>
-                  <p className="text-gray-600 mb-4">
-                    {themes.find((theme) => theme.id === activeThemeId)?.description}
-                  </p>
                   <img
-                    src={themes.find((theme) => theme.id === activeThemeId)?.previewImage}
+                    src={themes.find((theme) => theme.id === activeThemeId)?.previewImage ? `/themes/${themes.find((theme) => theme.id === activeThemeId)?.previewImage}` : "/fallback-image.png"}
                     alt="Selected Theme Preview"
                     className="w-full max-w-md mx-auto rounded-lg shadow-md"
+                    onError={(e) => {
+                      e.target.src = "/fallback-image.png";
+                    }}
                   />
                 </div>
               </div>
@@ -204,7 +227,7 @@ export default function Theme() {
             <div className="mt-12 flex justify-center space-x-4">
               <button
                 onClick={handleSave}
-                className="px-6 py-3 text-lg font-bold text-white bg-blue-500 rounded-lg shadow-md hover:bg-white transition-all duration-300"
+                className="px-6 py-3 text-lg font-bold text-white bg-blue-500 rounded-lg shadow-md hover:bg-blue-600 transition-all duration-300"
                 disabled={isLoading || !activeThemeId}
               >
                 Save Theme
@@ -232,4 +255,6 @@ export default function Theme() {
       </Box>
     </Box>
   );
-}
+};
+
+export default Theme;
