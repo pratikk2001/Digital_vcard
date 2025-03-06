@@ -13,7 +13,7 @@ const SocialLinks = ({ formData: parentFormData, setFormData: setParentFormData 
     { label: "LinkedIn", icon: "🔗", field: "linkedinURL" },
     { label: "WhatsApp", icon: "💬", field: "whatsappURL" },
     { label: "Pinterest", icon: "📌", field: "pinterestURL" },
-    { label: "TikTok", icon: "🎵", field: "tiktokURL" },
+    { label: "WikiPedia", icon: "🎵", field: "WekipediaURL" },
     { label: "Snapchat", icon: "👻", field: "snapchatURL" },
   ];
 

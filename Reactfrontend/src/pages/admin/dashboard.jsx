@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Sidenav from "../../components/admin_nav/SuperadminSidenav";
 import BarAnimation from "./graph/Bar";
-import CommunityFeedback from "./graph/feedback";
 import TopNavbar from "../../components/admin_nav/topnav";
 
 export default function Home() {
@@ -73,11 +72,7 @@ export default function Home() {
               <BarAnimation />
             </div>
 
-            {/* Feedback Section */}
-            <div className="bg-gray-100 p-5 rounded-lg shadow-lg">
-              <p className="text-lg font-semibold mb-3">User Feedback</p>
-              <CommunityFeedback />
-            </div>
+      
           </main>
         </div>
       </div>

@@ -4,11 +4,11 @@ import TopNavbar from "../../components/admin_nav/topnav"; // Import the Navbar 
 
 const CustomerDetails = () => {
   const [users, setUsers] = useState([
-    { name: "Karan Sharma", email: "karanmitash@gmail.com", theme: "Political 1", status: "Active" },
-    { name: "Sinan Mintaş", email: "sinanmintas04@gmail.com", theme: "Political 2", status: "Inactive" },
-    { name: "Mondesign Web", email: "mondesignweb.agency@gmail.com", theme: "Personal 1", status: "Active" },
-    { name: "Hebron Lot", email: "karomfinger@gmail.com", theme: "Personal 2", status: "Inactive" },
-    { name: "Vineeth Kumar", email: "printfastme@gmail.com", theme: "Personal 2", status: "Active" },
+    { name: "Karan Sharma", email: "karanmitash@gmail.com", status: "Active" },
+    { name: "Sinan Mintaş", email: "sinanmintas04@gmail.com", status: "Inactive" },
+    { name: "Mondesign Web", email: "mondesignweb.agency@gmail.com",  status: "Active" },
+    { name: "Hebron Lot", email: "karomfinger@gmail.com", status: "Inactive" },
+    { name: "Vineeth Kumar", email: "printfastme@gmail.com",  status: "Active" },
   ]);
 
   const [currentPage, setCurrentPage] = useState(1);
@@ -45,7 +45,6 @@ const CustomerDetails = () => {
                 <tr>
                   <th className="p-4">User Name</th>
                   <th className="p-4">Email</th>
-                  <th className="p-4">Theme</th>
                   <th className="p-4">View</th>
                   <th className="p-4">Status</th>
                   <th className="p-4">Action</th>
@@ -61,7 +60,6 @@ const CustomerDetails = () => {
                       {user.name}
                     </td>
                     <td className="p-4">{user.email}</td>
-                    <td className="p-4">{user.theme}</td>
                     <td className="p-4">
                       <button
                         onClick={() => handleViewUser(user)}

@@ -31,7 +31,7 @@ const AwardsComponent = ({ initialAwards = [], onAwardsChange = () => {} }) => {
     // Check file sizes
     const oversizedFiles = files.filter(file => file.size > MAX_FILE_SIZE);
     if (oversizedFiles.length > 0) {
-      alert(`The following files exceed 5MB limit: ${oversizedFiles.map(f => f.name).join(", ")}`);
+      alert(`The following files exceed 2MB limit: ${oversizedFiles.map(f => f.name).join(", ")}`);
       return;
     }
 
@@ -144,7 +144,7 @@ const AwardsComponent = ({ initialAwards = [], onAwardsChange = () => {} }) => {
           className="p-3 border border-gray-300 rounded-md w-full focus:ring-2 focus:ring-blue-500"
         />
         <div className="text-gray-500 text-sm mt-1">
-          Max file size: 5MB. Current: {awards.length}/{MAX_IMAGES} images
+          Max file size: 2MB. Current: {awards.length}/{MAX_IMAGES} images
         </div>
       </div>
 

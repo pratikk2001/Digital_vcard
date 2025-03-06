@@ -176,7 +176,7 @@ const SocialImage = ({ formData: parentFormData, setFormData: setParentFormData 
           disabled={isSubmitting}
         />
         <p className="text-sm text-gray-500 mt-1">
-          Max file size: 5MB. Current: {socialImages.length}/5 images.
+          Max file size: 2MB. Current: {socialImages.length}/5 images.
         </p>
       </div>
 
@@ -194,7 +194,7 @@ const SocialImage = ({ formData: parentFormData, setFormData: setParentFormData 
                 <button
                   type="button"
                   onClick={() => handleRemoveImage(index)}
-                  className="absolute top-2 right-2 bg-red-600 text-white rounded-full p-2 shadow-md opacity-0 group-hover:opacity-100 transition-opacity duration-200 hover:bg-red-700 disabled:bg-gray-400"
+                  className="absolute top-2 right-2 bg-red-600 text-white rounded-full p-2 shadow-md opacity-0 group-hover:opacity-100 transition-opacity duration-200 hover:bg-red-700"
                   disabled={isSubmitting}
                 >
                   ❌
@@ -222,14 +222,14 @@ const SocialImage = ({ formData: parentFormData, setFormData: setParentFormData 
       <div className="flex justify-end gap-4 mt-8">
         <button
           onClick={handleSave}
-          className="p-3 bg-green-500 hover:bg-green-400 rounded-md text-white disabled:bg-gray-400"
+          className="p-3 bg-green-500 hover:bg-green-400 rounded-md text-white"
           disabled={isSubmitting || socialImages.length === 0}
         >
           {isSubmitting ? "Saving..." : "💾 Save"}
         </button>
         <button
           onClick={handleReset}
-          className="p-3 bg-gray-500 hover:bg-gray-400 rounded-md text-white disabled:bg-gray-400"
+          className="p-3 bg-gray-500 hover:bg-gray-400 rounded-md text-white"
           disabled={isSubmitting}
         >
           🔄 Reset

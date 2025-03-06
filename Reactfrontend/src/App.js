@@ -16,6 +16,8 @@ import CustomerSignup from './components/customer_auth/signup_component/signup';
 import MultiAdminLogin from './components/multiadmin_auth/login_component/MultiAdminLogin.jsx'; 
 import MultiAdminSignup from './components/multiadmin_auth/signup_component/MultiAdminSignup.jsx'; 
 import MultiAdminDashboard from './pages/MultiAdmin/MultiDashboard.jsx';
+import Multithemes from './pages/MultiAdmin/multithemes.jsx';
+import MultiProfile from './pages/MultiAdmin/MultiProfile.jsx';
 
 import CustomerDashboard from './pages/customer/dashboard';
 import CustomerProfile from './pages/customer/CustomerProfile';
@@ -56,6 +58,8 @@ function App() {
         <Route path="/MultiAdminLogin" element={<MultiAdminLogin />} />
         <Route path="/MultiAdminSignup" element={<MultiAdminSignup />} />
         <Route path= "/MultiAdminDashboard" element={<MultiAdminDashboard />} />
+        <Route path="/MultiThemes" element={<Multithemes />} />
+        <Route path="/MultiProfile" element={<MultiProfile />} />
       
         {/* Customer Routes */}
         <Route path="/CustomerLogin" element={<CustomerLogin />} />

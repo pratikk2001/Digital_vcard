@@ -2,8 +2,8 @@ import React, { useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import Box from "@mui/material/Box";
 import CircularProgress from "@mui/material/CircularProgress";
-import Sidenav from "../../components/customer_nav/Customersidenav";
-import TopNavbar from "../../components/customer_nav/Topnavbar";
+import Sidenav from "../../components/multiadmin_nav/sidenav";
+import TopNavbar from "../../components/multiadmin_nav/Topnavbar";
 
 const themes = [
   { 

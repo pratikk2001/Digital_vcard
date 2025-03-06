@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Sidenav from "../../components/multiadmin_nav/sidenav";
-import TopNavbar from "../../components/customer_nav/Topnavbar";
+import TopNavbar from "../../components/multiadmin_nav/Topnavbar";
 
 export default function Home() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);

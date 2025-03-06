@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react"; // Added useEffect for optional fetching
 import { FaUsers, FaChartBar, FaEdit } from "react-icons/fa";
-import Sidenav from "../../components/customer_nav/Customersidenav";
-import TopNavbar from "../../components/customer_nav/Topnavbar";
+import Sidenav from "../../components/multiadmin_nav/sidenav";
+import TopNavbar from "../../components/multiadmin_nav/Topnavbar";
 import ProfileForm from "./popupForm";
 
 const Mycards = () => {

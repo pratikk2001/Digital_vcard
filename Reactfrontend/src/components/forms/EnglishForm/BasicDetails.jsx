@@ -34,9 +34,9 @@ const BasicDetails = ({ formData: parentFormData, setFormData: setParentFormData
                 // console.log("Data first name:", data.firstName);
                 // Prefill form values
                
-                setLocalFormData({
-                    firstName: "sid",
-                })
+                // setLocalFormData({
+                //     firstName: "sid",
+                // })
 
               // }
         } catch (error) {

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import Sidenav from "../../components/customer_nav/Customersidenav";
-import TopNavbar from "../../components/customer_nav/Topnavbar"; // Import the Navbar component
+import Sidenav from "../../components/multiadmin_nav/sidenav";
+import TopNavbar from "../../components/multiadmin_nav/Topnavbar";
 
 const Getcard = () => {
   const [users, setUsers] = useState([

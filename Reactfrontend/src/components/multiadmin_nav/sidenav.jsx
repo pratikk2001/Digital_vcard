@@ -12,7 +12,7 @@ export default function Sidenav() {
     { name: "Dashboard", path: "/MultiAdminDashboard", icon: <Dashboard /> },
     { name: "Add Details", path: "/FormDashboard", icon: <MoveToInbox /> },
     { name: "My Cards", path: "/CustomerCard", icon: <BarChart /> },
-    { name: "Themes", path: "/CustomerThemes", icon: <AccountTree /> },
+    { name: "Themes", path: "/Multithemes", icon: <AccountTree /> },
     { name: "Logout", path: "/", icon: <ExitToApp /> },
   ], []);
 
@@ -51,7 +51,7 @@ export default function Sidenav() {
         <div className="mt-0 space-y-3">
           {/* Sidebar Header */}
           <div className="h-10 my-4 flex items-center justify-center text-black font-bold text-2xl">
-           Web Admin 
+            Admin 
           </div>
 
           {/* Divider */}

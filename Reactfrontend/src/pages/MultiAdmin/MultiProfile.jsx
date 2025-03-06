@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
-import Navbar from "../../components/customer_nav/Topnavbar";
-import Sidenav from "../../components/customer_nav/Customersidenav";
+import Sidenav from "../../components/multiadmin_nav/sidenav";
+import TopNavbar from "../../components/multiadmin_nav/Topnavbar";
 
 const fetchUserProfile = async () => {
   // Simulating an API call (Replace this with actual API call)
@@ -36,7 +36,7 @@ const ProfilePage = () => {
 
   return (
     <div className="min-h-screen bg-blue-50 flex flex-col">
-      <Navbar />
+      <TopNavbar />
 
       <div className="flex flex-1">
         <div className="hidden lg:block lg:w-1/4">
