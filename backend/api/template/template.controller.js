@@ -1,4 +1,4 @@
-const Template = require('../template/template.model'); // Adjust path as needed
+const Template = require('./template.model'); // Adjust path as needed
 
 const fs = require('fs'); 
 const path = require('path');
@@ -115,6 +115,62 @@ class TemplateController {
     }
   }
 
+  async getAllTemplates(req, res) {
+    try {
+      const templates = await Template.find().lean(); // Fetch all templates
+  
+      if (!templates || templates.length === 0) {
+        return res.status(404).json({
+          status_code: 404,
+          message: 'No templates found',
+        });
+      }
+  
+      res.status(200).json({
+        status_code: 200,
+        message: 'Templates retrieved successfully',
+        data: templates,
+      });
+    } catch (error) {
+      console.error('Error fetching templates:', error);
+      res.status(500).json({
+        status_code: 500,
+        error: 'Internal server error',
+      });
+    }
+  }
+
+  async getTemplatesByUserId(req, res) {
+    try {
+
+      const userId = req.params.id;
+
+      console.log('Fetching templates for user:', userId);
+
+      const templates = await Template.find({ userId }).lean();
+      // Fetch all templates
+  
+      if (!templates || templates.length === 0) {
+        return res.status(404).json({
+          status_code: 404,
+          message: 'No templates found',
+        });
+      }
+  
+      res.status(200).json({
+        status_code: 200,
+        message: 'Templates retrieved successfully',
+        data: templates,
+      });
+    } catch (error) {
+      console.error('Error fetching templates:', error);
+      res.status(500).json({
+        status_code: 500,
+        error: 'Internal server error',
+      });
+    }
+  }
+  
   // Save or Update Profile and Banner
   async saveProfileBanner(req, res) {
     try {
@@ -548,56 +604,56 @@ class TemplateController {
   }
 };
   // Get Banner Image
-  async getBanerImage(req, res) { // Corrected typo: 'Baner' to 'Banner'
+  async getBanerImage(req, res) { 
+    // Corrected typo: 'Baner' to 'Banner'
     try {
       const { imageId } = req.params;
-      const imagePath = path.resolve(__dirname, '../../uploads/bannerImages', imageId);
-      const document = await this.getDocument(imagePath);
+      const imagePath = path.resolve(__dirname, `../../uploads/bannerImages/${imageId}`);
+    
+      const document = await getDocument(imagePath);
 
       if (!document) {
-        return res.status(404).json({
-          status_code: 404,
-          message: 'Image not found',
+        return res.status(200).json({
+          status_code: 400,
+          message: "Image not found",
         });
       }
-
-      const mimeType = mime.lookup(imagePath) || 'application/octet-stream';
-      res.set('Content-Type', mimeType);
+  
+      const mimeType = mime.lookup(imagePath) || "application/octet-stream";
+      res.set("Content-Type", mimeType);
       res.send(document);
     } catch (error) {
-      console.error('Error fetching banner image:', error);
-      return res.status(500).json({
+      res.status(500).json({
         status_code: 500,
-        message: 'Failed to fetch banner image',
-        error: 'Internal server error',
+        error: "Internal server error",
       });
     }
+  
   }
 
   // Get Awards Image
   async getAwardsImage(req, res) {
     try {
       const { imageId } = req.params;
-      const folder = 'awards'; // Define the folder name
-      const imagePath = path.resolve(__dirname, `../../uploads/${folder}/${imageId}`);
-      const document = await this.getDocument(imagePath);
+      
+      const imagePath = path.resolve(__dirname, `../../uploads/awardsimages/${imageId}`);
+      
+      const document = await getDocument(imagePath);
 
       if (!document) {
-        return res.status(404).json({
-          status_code: 404,
-          message: 'Image not found',
+        return res.status(200).json({
+          status_code: 400,
+          message: "Image not found",
         });
       }
-
-      const mimeType = mime.lookup(imagePath) || 'application/octet-stream';
-      res.set('Content-Type', mimeType);
+  
+      const mimeType = mime.lookup(imagePath) || "application/octet-stream";
+      res.set("Content-Type", mimeType);
       res.send(document);
     } catch (error) {
-      // console.error(`Error fetching image from ${folder}:`, error);
-      return res.status(500).json({
+      res.status(500).json({
         status_code: 500,
-        message: 'Failed to fetch image',
-        error: 'Internal server error',
+        error: "Internal server error",
       });
     }
   }
@@ -607,24 +663,23 @@ class TemplateController {
     try {
       const { imageId } = req.params;
       const imagePath = path.resolve(__dirname, '../../uploads/eventImages', imageId);
-      const document = await this.getDocument(imagePath);
+    
+      const document = await getDocument(imagePath);
 
       if (!document) {
-        return res.status(404).json({
-          status_code: 404,
-          message: 'Image not found',
+        return res.status(200).json({
+          status_code: 400,
+          message: "Image not found",
         });
       }
-
-      const mimeType = mime.lookup(imagePath) || 'application/octet-stream';
-      res.set('Content-Type', mimeType);
+  
+      const mimeType = mime.lookup(imagePath) || "application/octet-stream";
+      res.set("Content-Type", mimeType);
       res.send(document);
     } catch (error) {
-      console.error('Error fetching event image:', error);
-      return res.status(500).json({
+      res.status(500).json({
         status_code: 500,
-        message: 'Failed to fetch event image',
-        error: 'Internal server error',
+        error: "Internal server error",
       });
     }
   }
@@ -634,65 +689,55 @@ class TemplateController {
     try {
       const { imageId } = req.params;
       const imagePath = path.resolve(__dirname, '../../uploads/newsImages', imageId);
-      const document = await this.getDocument(imagePath);
+      
+      const document = await getDocument(imagePath);
 
       if (!document) {
-        return res.status(404).json({
-          status_code: 404,
-          message: 'Image not found',
+        return res.status(200).json({
+          status_code: 400,
+          message: "Image not found",
         });
       }
-
-      const mimeType = mime.lookup(imagePath) || 'application/octet-stream';
-      res.set('Content-Type', mimeType);
+  
+      const mimeType = mime.lookup(imagePath) || "application/octet-stream";
+      res.set("Content-Type", mimeType);
       res.send(document);
     } catch (error) {
-      console.error('Error fetching news image:', error);
-      return res.status(500).json({
+      res.status(500).json({
         status_code: 500,
-        message: 'Failed to fetch news image',
-        error: 'Internal server error',
+        error: "Internal server error",
       });
     }
-  }
+ }
 
   // Get Social Work Image
   async getSocialImage(req, res) { // Renamed from getSocialImage to match method name
     try {
       const { imageId } = req.params;
       const imagePath = path.resolve(__dirname, '../../uploads/socialImages', imageId);
-      const document = await this.getDocument(imagePath);
+     
+      const document = await getDocument(imagePath);
 
       if (!document) {
-        return res.status(404).json({
-          status_code: 404,
-          message: 'Image not found',
+        return res.status(200).json({
+          status_code: 400,
+          message: "Image not found",
         });
       }
-
-      const mimeType = mime.lookup(imagePath) || 'application/octet-stream';
-      res.set('Content-Type', mimeType);
+  
+      const mimeType = mime.lookup(imagePath) || "application/octet-stream";
+      res.set("Content-Type", mimeType);
       res.send(document);
     } catch (error) {
-      console.error('Error fetching social work image:', error);
-      return res.status(500).json({
+      res.status(500).json({
         status_code: 500,
-        message: 'Failed to fetch social work image',
-        error: 'Internal server error',
+        error: "Internal server error",
       });
     }
+
   }
 
-  // Helper method to read a file
-  async getDocument(filePath) {
-    try {
-      const file = await fs.readFile(filePath);
-      return file;
-    } catch (error) {
-      console.error('Error reading file:', error);
-      return null;
-    }
-  }
+ 
 }
 
 async function getDocument(filePath) {
@@ -704,5 +749,7 @@ async function getDocument(filePath) {
     return null;
   }
 };
+
+
 
 module.exports = new TemplateController();

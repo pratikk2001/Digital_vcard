@@ -41,6 +41,7 @@ const TemplateSchema = new mongoose.Schema({
     caption: { type: String, default: "" }
   }],
   youtubeLink: { type: String },
+  createdAt: { type: Date, default: Date.now },
 });
 
    

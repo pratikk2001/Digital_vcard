@@ -1,6 +1,8 @@
-import React, { useState } from "react";
+import React, { useState , useEffect } from "react";
 
 const BasicDetails = ({ formData: parentFormData, setFormData: setParentFormData }) => {
+
+
   const [localFormData, setLocalFormData] = useState({
     firstName: parentFormData.firstName || "",
     middleName: parentFormData.middleName || "",
@@ -20,6 +22,33 @@ const BasicDetails = ({ formData: parentFormData, setFormData: setParentFormData
     partyAffiliation: parentFormData.partyAffiliation || "BJP", // New field with default value
   });
 
+  
+  useEffect(() => {
+    const fetchData = async () => {
+        try {
+            // const response = await fetch("http://localhost:4500/api/template/getFormData/678e2f60f4880e1e477c2e7f");
+            // const result = await response.json();
+            // if (result.status_code === 200) {
+                // const data = result.data;
+
+                // console.log("Data first name:", data.firstName);
+                // Prefill form values
+               
+                setLocalFormData({
+                    firstName: "sid",
+                })
+
+              // }
+        } catch (error) {
+            console.error("Error fetching data:", error);
+        } finally {
+          
+        }
+    };
+
+    fetchData();
+}, []);
+  
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [includeYear, setIncludeYear] = useState(false);
@@ -120,7 +149,7 @@ const BasicDetails = ({ formData: parentFormData, setFormData: setParentFormData
     try {
       const apiBaseUrl = process.env.REACT_APP_API_BASE_URL || "http://localhost:4500";
       const formattedData = {
-        firstName: localFormData.firstName.trim().charAt(0).toUpperCase() + localFormData.firstName.trim().slice(1).toLowerCase(),
+       firstName: localFormData.firstName.trim().charAt(0).toUpperCase() + localFormData.firstName.trim().slice(1).toLowerCase(),
         middleName: localFormData.middleName.trim().charAt(0).toUpperCase() + localFormData.middleName.trim().slice(1).toLowerCase(),
         lastName: localFormData.lastName.trim().charAt(0).toUpperCase() + localFormData.lastName.trim().slice(1).toLowerCase(),
         email: localFormData.email.toLowerCase().trim(),

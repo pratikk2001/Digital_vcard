@@ -29,6 +29,12 @@ router.post("/save/newsCenterImages/:id",uploadNewsCenterImages.array("news",5),
 router.get("/getFormData/:id", TemplateController.getFormData);
 
 
+//get the all the templates
+
+router.get("/getAllTemplates", TemplateController.getAllTemplates);
+router.get("/getUserVCards/:id", TemplateController.getTemplatesByUserId);
+
+// getAllTemplates
 
 router.get("/getprofileImage/:imageId", TemplateController.getProfileImage);
 
