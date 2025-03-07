@@ -1,7 +1,6 @@
-import React, { useState , useEffect } from "react";
+import React, { useState, useEffect } from "react";
 
 const BasicDetails = ({ formData: parentFormData, setFormData: setParentFormData }) => {
-
 
   const [localFormData, setLocalFormData] = useState({
     firstName: parentFormData.firstName || "",
@@ -9,7 +8,7 @@ const BasicDetails = ({ formData: parentFormData, setFormData: setParentFormData
     lastName: parentFormData.lastName || "",
     email: parentFormData.email || "",
     phone: parentFormData.phone || "",
-    whatsappNo: parentFormData.whatsappNumber || "",
+    whatsappNo: parentFormData.whatsappNo || "",
     dob: parentFormData.dob || "",
     positionTitle: parentFormData.positionTitle || [""],
     homeAddress: parentFormData.homeAddress || "",
@@ -19,47 +18,65 @@ const BasicDetails = ({ formData: parentFormData, setFormData: setParentFormData
     showQrCode: parentFormData.showQrCode || false,
     whatsappShare: parentFormData.whatsappShare || false,
     urlAlias: parentFormData.urlAlias || "",
-    partyAffiliation: parentFormData.partyAffiliation || "BJP", // New field with default value
+    partyAffiliation: parentFormData.partyAffiliation || "BJP",
   });
 
-  
   useEffect(() => {
     const fetchData = async () => {
-        try {
-            // const response = await fetch("http://localhost:4500/api/template/getFormData/678e2f60f4880e1e477c2e7f");
-            // const result = await response.json();
-            // if (result.status_code === 200) {
-                // const data = result.data;
+      try {
 
-                // console.log("Data first name:", data.firstName);
-                // Prefill form values
-               
-                setLocalFormData({
-                    firstName: "sid",
-                })
+        const UserId = localStorage.getItem("userId");
+      const apiBaseUrl = process.env.REACT_APP_API_BASE_URL || "http://localhost:4500";
 
-              // }
-        } catch (error) {
-            console.error("Error fetching data:", error);
-        } finally {
-          
+
+        const response = await fetch(`${apiBaseUrl}/api/template/getFormData/${UserId}`);
+        const result = await response.json();
+        if (result.status_code === 200) {
+          const data = result.data;
+
+          setLocalFormData((prev) => ({ 
+            ...prev,
+            firstName: data.firstName || prev.firstName || "",
+            middleName: data.middleName || prev.middleName || "", // Not in API response, so fallback
+            lastName: data.lastName || prev.lastName || "",
+            email: data.email || prev.email || "",
+            phone: data.phone || prev.phone || "",
+            whatsappNo: data.phone || prev.whatsappNo || "", // Assuming phone is used for WhatsApp too
+            dob: data.dob || prev.dob || "",
+            positionTitle: Array.isArray(data.positionTitle) ? data.positionTitle : [data.positionTitle || ""], // Handle string or array
+            homeAddress: data.address || prev.homeAddress || "", // Mapping "address" to homeAddress
+            officeAddress: prev.officeAddress || "", // No office address in API response
+            education: data.education || prev.education || "",
+            showEducation: prev.showEducation || false, // Not in API, default to false
+            showQrCode: data.showQrCode || prev.showQrCode || false,
+            whatsappShare: data.whatsappShare || prev.whatsappShare || false,
+            urlAlias: data.urlAlias || prev.urlAlias || "",
+            partyAffiliation: prev.partyAffiliation || "BJP", // Not in API, keep default
+         
+          }));
         }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
     };
 
     fetchData();
-}, []);
-  
+  }, []);
+
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [includeYear, setIncludeYear] = useState(false);
 
   const UserId = localStorage.getItem("userId");
 
-  const handleInputChange = (e) => {
+const handleInputChange = (e) => {
+
     const { name, value, type, checked } = e.target;
+
     const newValue = type === "checkbox" ? checked : value;
 
     if (name.startsWith("positionTitle")) {
+
       const index = parseInt(name.split("-")[1], 10);
       setLocalFormData((prev) => {
         const updatedTitles = [...prev.positionTitle];
@@ -104,7 +121,7 @@ const BasicDetails = ({ formData: parentFormData, setFormData: setParentFormData
 
   const validateForm = () => {
     const newErrors = {};
-    const requiredFields = ["firstName", "lastName", "email", "phone", "whatsappNumber"];
+    const requiredFields = ["firstName", "lastName", "email", "phone", "whatsappNo"];
     requiredFields.forEach((key) => {
       if (!localFormData[key].trim()) {
         newErrors[key] = "This field is required.";
@@ -119,8 +136,8 @@ const BasicDetails = ({ formData: parentFormData, setFormData: setParentFormData
       newErrors.phone = "Phone number must be 10 digits.";
     }
 
-    if (localFormData.whatsappNumber && !/^\d{10}$/.test(localFormData.whatsappNumber)) {
-      newErrors.whatsappNumber = "WhatsApp number must be 10 digits.";
+    if (localFormData.whatsappNo && !/^\d{10}$/.test(localFormData.whatsappNo)) {
+      newErrors.whatsappNo = "WhatsApp number must be 10 digits.";
     }
 
     if (localFormData.dob) {
@@ -149,22 +166,22 @@ const BasicDetails = ({ formData: parentFormData, setFormData: setParentFormData
     try {
       const apiBaseUrl = process.env.REACT_APP_API_BASE_URL || "http://localhost:4500";
       const formattedData = {
-       firstName: localFormData.firstName.trim().charAt(0).toUpperCase() + localFormData.firstName.trim().slice(1).toLowerCase(),
-        middleName: localFormData.middleName.trim().charAt(0).toUpperCase() + localFormData.middleName.trim().slice(1).toLowerCase(),
-        lastName: localFormData.lastName.trim().charAt(0).toUpperCase() + localFormData.lastName.trim().slice(1).toLowerCase(),
-        email: localFormData.email.toLowerCase().trim(),
-        phone: localFormData.phone.trim(),
-        whatsappNo: localFormData.whatsappNo.trim(),
-        dob: localFormData.dob,
-        positionTitle: localFormData.positionTitle.map((title) => title.trim()),
-        homeAddress: localFormData.homeAddress.trim(),
-        officeAddress: localFormData.officeAddress.trim(),
-        education: localFormData.education.trim(),
-        showEducation: localFormData.showEducation,
-        showQrCode: localFormData.showQrCode,
-        whatsappShare: localFormData.whatsappShare,
-        urlAlias: localFormData.urlAlias.trim(),
-        partyAffiliation: localFormData.partyAffiliation, // Include new field
+        firstName: (localFormData.firstName || "").trim().charAt(0).toUpperCase() + (localFormData.firstName || "").trim().slice(1).toLowerCase(),
+        middleName: (localFormData.middleName || "").trim().charAt(0).toUpperCase() + (localFormData.middleName || "").trim().slice(1).toLowerCase(),
+        lastName: (localFormData.lastName || "").trim().charAt(0).toUpperCase() + (localFormData.lastName || "").trim().slice(1).toLowerCase(),
+        email: (localFormData.email || "").toLowerCase().trim(),
+        phone: (localFormData.phone || "").trim(),
+        whatsappNo: (localFormData.whatsappNo || "").trim(),
+        dob: localFormData.dob || "",
+        positionTitle: (localFormData.positionTitle || [""]).map((title) => (title || "").trim()),
+        homeAddress: (localFormData.homeAddress || "").trim(),
+        officeAddress: (localFormData.officeAddress || "").trim(),
+        education: (localFormData.education || "").trim(),
+        showEducation: localFormData.showEducation || false,
+        showQrCode: localFormData.showQrCode || false,
+        whatsappShare: localFormData.whatsappShare || false,
+        urlAlias: (localFormData.urlAlias || "").trim(),
+        partyAffiliation: localFormData.partyAffiliation || "BJP",
       };
 
       const response = await fetch(`${apiBaseUrl}/api/template/save/basicDetails/${UserId}`, {
@@ -196,7 +213,7 @@ const BasicDetails = ({ formData: parentFormData, setFormData: setParentFormData
       lastName: "",
       email: "",
       phone: "",
-      whatsappNumber: "",
+      whatsappNo: "",
       dob: "",
       positionTitle: [""],
       homeAddress: "",
@@ -206,13 +223,12 @@ const BasicDetails = ({ formData: parentFormData, setFormData: setParentFormData
       showQrCode: false,
       whatsappShare: false,
       urlAlias: "",
-      partyAffiliation: "BJP", // Reset to default
+      partyAffiliation: "BJP",
     });
     setErrors({});
     setIncludeYear(false);
   };
 
-  // Determine which address to show based on what's filled
   const showHomeAddress = localFormData.homeAddress.trim() && !localFormData.officeAddress.trim();
   const showOfficeAddress = localFormData.officeAddress.trim() && !localFormData.homeAddress.trim();
   const showBothAddresses = localFormData.homeAddress.trim() && localFormData.officeAddress.trim();
@@ -224,8 +240,9 @@ const BasicDetails = ({ formData: parentFormData, setFormData: setParentFormData
     >
       <div className="flex justify-between items-center mb-8">
         <h2 className="text-2xl font-bold text-gray-800">Basic Details</h2>
+
         <div className="flex flex-col">
-          <label className="text-gray-700 font-medium mb-2">🏛️ Party Affiliation:</label>
+          <label className="text-gray-700 font-medium mb-2">Party Affiliation:</label>
           <select
             name="partyAffiliation"
             value={localFormData.partyAffiliation}
@@ -239,15 +256,16 @@ const BasicDetails = ({ formData: parentFormData, setFormData: setParentFormData
             <option value="OTHER">OTHER</option>
           </select>
         </div>
+
       </div>
 
-      {/* URL Alias Section */}
       <div className="mb-8 bg-gray-50 p-4 rounded-lg border border-gray-200 shadow-sm">
         <label className="text-gray-800 font-semibold mb-2 block text-lg">
           🔗 URL Alias
           <span className="text-gray-500 text-sm font-normal ml-2">(Unique identifier for your profile)</span>
         </label>
         <div className="flex gap-4 items-center">
+
           <input
             type="text"
             name="urlAlias"
@@ -257,6 +275,7 @@ const BasicDetails = ({ formData: parentFormData, setFormData: setParentFormData
             placeholder="Enter or generate a URL alias"
             disabled={isSubmitting}
           />
+
           <button
             type="button"
             onClick={handleRegenerateAlias}
@@ -269,9 +288,7 @@ const BasicDetails = ({ formData: parentFormData, setFormData: setParentFormData
         {errors.urlAlias && <span className="text-red-500 text-sm mt-1">{errors.urlAlias}</span>}
       </div>
 
-      {/* Other Fields */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-        {/* First Name */}
         <div className="flex flex-col">
           <label className="text-gray-700 font-medium mb-2">👤 First Name:</label>
           <input
@@ -286,7 +303,6 @@ const BasicDetails = ({ formData: parentFormData, setFormData: setParentFormData
           {errors.firstName && <span className="text-red-500 text-sm">{errors.firstName}</span>}
         </div>
 
-        {/* Middle Name */}
         <div className="flex flex-col">
           <label className="text-gray-700 font-medium mb-2">👤 Middle Name:</label>
           <input
@@ -301,7 +317,6 @@ const BasicDetails = ({ formData: parentFormData, setFormData: setParentFormData
           {errors.middleName && <span className="text-red-500 text-sm">{errors.middleName}</span>}
         </div>
 
-        {/* Last Name */}
         <div className="flex flex-col">
           <label className="text-gray-700 font-medium mb-2">👤 Last Name:</label>
           <input
@@ -316,7 +331,6 @@ const BasicDetails = ({ formData: parentFormData, setFormData: setParentFormData
           {errors.lastName && <span className="text-red-500 text-sm">{errors.lastName}</span>}
         </div>
 
-        {/* Email */}
         <div className="flex flex-col">
           <label className="text-gray-700 font-medium mb-2">📧 Email:</label>
           <input
@@ -331,7 +345,6 @@ const BasicDetails = ({ formData: parentFormData, setFormData: setParentFormData
           {errors.email && <span className="text-red-500 text-sm">{errors.email}</span>}
         </div>
 
-        {/* Phone Number */}
         <div className="flex flex-col">
           <label className="text-gray-700 font-medium mb-2">📱 Phone Number:</label>
           <input
@@ -346,22 +359,20 @@ const BasicDetails = ({ formData: parentFormData, setFormData: setParentFormData
           {errors.phone && <span className="text-red-500 text-sm">{errors.phone}</span>}
         </div>
 
-        {/* WhatsApp Number */}
         <div className="flex flex-col">
           <label className="text-gray-700 font-medium mb-2">💬 WhatsApp Number:</label>
           <input
             type="tel"
-            name="whatsappNumber"
-            value={localFormData.whatsappNumber}
+            name="whatsappNo"
+            value={localFormData.whatsappNo}
             onChange={handleInputChange}
             className="p-3 border rounded-md w-full focus:ring-2 focus:ring-blue-500"
             placeholder="Enter your WhatsApp number"
             disabled={isSubmitting}
           />
-          {errors.whatsappNumber && <span className="text-red-500 text-sm">{errors.whatsappNumber}</span>}
+          {errors.whatsappNo && <span className="text-red-500 text-sm">{errors.whatsappNo}</span>}
         </div>
 
-        {/* Date of Birth with Toggle */}
         <div className="flex flex-col">
           <label className="text-gray-700 font-medium mb-2">🎂 Date of Birth:</label>
           {includeYear ? (
@@ -405,7 +416,6 @@ const BasicDetails = ({ formData: parentFormData, setFormData: setParentFormData
           {errors.dob && <span className="text-red-500 text-sm mt-1">{errors.dob}</span>}
         </div>
 
-        {/* Position Titles */}
         <div className="flex flex-col">
           <label className="text-gray-700 font-medium mb-2">💼 Position Titles:</label>
           {localFormData.positionTitle.map((title, index) => (
@@ -446,7 +456,6 @@ const BasicDetails = ({ formData: parentFormData, setFormData: setParentFormData
           )}
         </div>
 
-        {/* Home Address */}
         {(showHomeAddress || !showOfficeAddress) && (
           <div className="flex flex-col">
             <label className="text-gray-700 font-medium mb-2">🏠 Home Address:</label>
@@ -462,7 +471,6 @@ const BasicDetails = ({ formData: parentFormData, setFormData: setParentFormData
           </div>
         )}
 
-        {/* Office Address */}
         {(showOfficeAddress || !showHomeAddress) && (
           <div className="flex flex-col">
             <label className="text-gray-700 font-medium mb-2">🏢 Office Address:</label>
@@ -478,7 +486,6 @@ const BasicDetails = ({ formData: parentFormData, setFormData: setParentFormData
           </div>
         )}
 
-        {/* Education with Show Toggle */}
         <div className="flex flex-col">
           <label className="text-gray-700 font-medium mb-2">🎓 Education:</label>
           <input
@@ -503,7 +510,6 @@ const BasicDetails = ({ formData: parentFormData, setFormData: setParentFormData
           </div>
         </div>
 
-        {/* Show QR Code */}
         <div className="flex items-center">
           <input
             type="checkbox"
@@ -516,7 +522,6 @@ const BasicDetails = ({ formData: parentFormData, setFormData: setParentFormData
           <label className="text-gray-700 font-medium">🔲 Show QR Code</label>
         </div>
 
-        {/* WhatsApp Share */}
         <div className="flex items-center">
           <input
             type="checkbox"
@@ -530,7 +535,6 @@ const BasicDetails = ({ formData: parentFormData, setFormData: setParentFormData
         </div>
       </div>
 
-      {/* Buttons */}
       <div className="flex justify-end gap-4 mt-8">
         <button
           type="submit"
@@ -550,6 +554,7 @@ const BasicDetails = ({ formData: parentFormData, setFormData: setParentFormData
       </div>
     </form>
   );
+
 };
 
 export default BasicDetails;
