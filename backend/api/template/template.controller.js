@@ -454,7 +454,7 @@ class TemplateController {
     }
   }
 
-  // Save News Center Images
+  // Save Paper News Center Images
   async saveNewsCenterImages(req, res) {
     try {
       const userId = req.params.id;
@@ -498,6 +498,53 @@ class TemplateController {
         error: error.message || 'Internal server error',
       });
     }
+  }
+
+  async saveElectronicNewsImages(req, res) {
+    try {
+      const userId = req.params.id;
+      const captions = req.body.captions ? JSON.parse(req.body.captions) : [];
+
+      if (!userId || typeof userId !== 'string' || userId.trim() === '') {
+        return res.status(400).json({
+          status_code: 400,
+          message: 'User ID is required and must be a non-empty string',
+        });
+      }
+
+      if (!req.files || !Array.isArray(req.files) || req.files.length === 0) {
+        return res.status(400).json({
+          status_code: 400,
+          message: 'At least one news image is required',
+        });
+      }
+
+      const formattedNewsImages = req.files.map((file, index) => ({
+        imageUrl: file.filename,
+        caption: captions[index] || '',
+      }));
+
+      const template = await Template.findOneAndUpdate(
+        { userId },
+        { $push: { electronicNewsImages: { $each: formattedNewsImages } } },
+        { new: true, upsert: true }
+      );
+
+      return res.status(200).json({
+        status_code: 200,
+        message: 'News images uploaded successfully',
+        data: template,
+      });
+
+    } catch (error) {
+      console.error('Error in saveNewsCenterImages:', error);
+      return res.status(500).json({
+        status_code: 500,
+        message: 'Failed to upload news center images',
+        error: error.message || 'Internal server error',
+      });
+    }
+  
   }
 
   // Save Social Links
@@ -603,6 +650,7 @@ class TemplateController {
     });
   }
 };
+
   // Get Banner Image
   async getBanerImage(req, res) { 
     // Corrected typo: 'Baner' to 'Banner'
@@ -710,6 +758,31 @@ class TemplateController {
     }
  }
 
+ async getElectronicNewsImage(req, res) {
+  try {
+    const { imageId } = req.params;
+    const imagePath = path.resolve(__dirname, '../../uploads/electronicImages', imageId);
+    
+    const document = await getDocument(imagePath);
+
+    if (!document) {
+      return res.status(200).json({
+        status_code: 400,
+        message: "Image not found",
+      });
+    }
+
+    const mimeType = mime.lookup(imagePath) || "application/octet-stream";
+    res.set("Content-Type", mimeType);
+    res.send(document);
+  } catch (error) {
+    res.status(500).json({
+      status_code: 500,
+      error: "Internal server error",
+    });
+  }
+}
+
   // Get Social Work Image
   async getSocialImage(req, res) { // Renamed from getSocialImage to match method name
     try {
@@ -737,7 +810,51 @@ class TemplateController {
 
   }
 
- 
+  async saveYoutubeLinks (req, res) {
+    try {
+      const userId = req.params.id;
+      const  youtubeLinks  = req.body.youtubeLink;
+
+      console.log(youtubeLinks);
+
+      if (!userId || typeof userId !== 'string' || userId.trim() === '') {
+        return res.status(400).json({
+          status_code: 400,
+          message: 'User ID is required and must be a non-empty string',
+        });
+      }
+
+      if (!youtubeLinks || Object.keys(youtubeLinks).length === 0) {
+        return res.status(400).json({
+          status_code: 400,
+          message: 'At least one youtube link is required',
+        });
+      }
+
+      const template = await Template.findOneAndUpdate(
+
+        { userId },
+        { youtubeLinks },
+        { new: true, upsert: true, setDefaultsOnInsert: true } // Return new doc if updated, insert if not exists
+      
+      );
+
+      return res.status(200).json({
+        status_code: 200,
+        message: 'Youtube links updated successfully',
+        data: template,
+      });
+
+    } catch (error) {
+      console.error('Error in saveYoutubeLinks:', error);
+      return res.status(500).json({
+        status_code: 500,
+        message: 'Failed to update youtube links',
+        error: error.message,
+      });
+    }
+  
+  }
 }
 
 async function getDocument(filePath) {

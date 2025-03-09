@@ -40,8 +40,17 @@ const TemplateSchema = new mongoose.Schema({
     imageUrl: { type: String },
     caption: { type: String, default: "" }
   }],
-  youtubeLink: { type: String },
+
+  electronicNewsImages: [{
+    imageUrl: { type: String },
+    caption: { type: String, default: "" }
+  }],
+
+  youtubeLinks: [{ type: String }],
+  
   createdAt: { type: Date, default: Date.now },
+
+
 });
 
    
