@@ -23,15 +23,15 @@ const Login = () => {
     setLoading(true);
 
     try {
-      const apiBaseUrl = process.env.REACT_APP_API_BASE_URL || "http://localhost:4500"; // Match backend port
-      const response = await fetch(`${apiBaseUrl}/api/admin/login`, {
+      const apiBaseUrl = process.env.REACT_APP_API_BASE_URL || "http://localhost:4500";
+      const response = await fetch(`${apiBaseUrl}/admin/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
           email: formData.email.toLowerCase().trim(),
-          password: String(formData.password).trim(), // Ensure string
+          password: String(formData.password).trim(),
         }),
       });
 
@@ -41,16 +41,16 @@ const Login = () => {
         const token = data.data?.token;
         const role = data.data?.role;
         const userId = data.data?._id;
-        const email = data.data?.email;
-        const firstName = data.data?.first_name;
 
-        if (token || role || userId ) {
-          localStorage.setItem("authToken", token);
+        if (token && role && userId) {
+          localStorage.setItem("authToken", token); // Use consistent key name
           localStorage.setItem("role", role);
           localStorage.setItem("userId", userId);
+          console.log("Login successful, stored:", { userId, token, role }); // Debug log
+          navigate("/CustomerDashboard"); // Redirect to ProfilePage
+        } else {
+          throw new Error("Missing token, role, or userId in response");
         }
-        // alert("Login Successful!"); // Replace with toast in production
-        navigate("/CustomerDashboard"); // Adjust to your admin dashboard route
       } else {
         setErrorMessage(
           data.status_code === 401
@@ -72,7 +72,7 @@ const Login = () => {
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-blue-500 to-indigo-600">
       <div className="bg-white shadow-2xl rounded-2xl p-8 w-96 transform transition-all duration-300 hover:scale-105">
         <h1 className="text-4xl font-extrabold text-indigo-600 text-center mb-4">Web Visiting Card</h1>
-        <h2 className="text-2xl font-semibold text-gray-700 text-center mb-6">Log in  </h2>
+        <h2 className="text-2xl font-semibold text-gray-700 text-center mb-6">Log in</h2>
 
         <form onSubmit={handleLogin} className="space-y-5">
           <div>
@@ -149,7 +149,7 @@ const Login = () => {
           <p className="text-sm text-gray-600">
             Don't have an account?{" "}
             <span
-              onClick={() => navigate("/CustomerSignup")} // Match admin signup route
+              onClick={() => navigate("/CustomerSignup")}
               className="text-indigo-600 font-medium hover:text-indigo-800 cursor-pointer"
             >
               Create One

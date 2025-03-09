@@ -7,14 +7,10 @@ const SocialLinks = ({ formData: parentFormData, setFormData: setParentFormData 
     { label: "Facebook", icon: "📘", field: "facebookURL" },
     { label: "Twitter", icon: "𝕏", field: "twitterURL" },
     { label: "Instagram", icon: "📸", field: "instagramURL" },
-    { label: "Reddit", icon: "👽", field: "redditURL" },
-    { label: "Tumblr", icon: "🖤", field: "tumblrURL" },
-    { label: "YouTube", icon: "▶️", field: "youtubeURL" },
     { label: "LinkedIn", icon: "🔗", field: "linkedinURL" },
     { label: "WhatsApp", icon: "💬", field: "whatsappURL" },
     { label: "Pinterest", icon: "📌", field: "pinterestURL" },
-    { label: "WikiPedia", icon: "🎵", field: "WekipediaURL" },
-    { label: "Snapchat", icon: "👻", field: "snapchatURL" },
+    { label: "Wikipedia", icon: "📖", field: "wikipediaURL" },
   ];
 
   const [errors, setErrors] = useState({});
@@ -29,7 +25,10 @@ const SocialLinks = ({ formData: parentFormData, setFormData: setParentFormData 
       setParentFormData((prev) => ({ ...prev, [name]: value }));
       setErrors((prev) => ({ ...prev, [name]: "" }));
     } else {
-      setErrors((prev) => ({ ...prev, [name]: `Invalid ${socialPlatforms.find(p => p.field === name).label} URL` }));
+      setErrors((prev) => ({
+        ...prev,
+        [name]: `Invalid ${socialPlatforms.find((p) => p.field === name).label} URL`,
+      }));
     }
   };
 

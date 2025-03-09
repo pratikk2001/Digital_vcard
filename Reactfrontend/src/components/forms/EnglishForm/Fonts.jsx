@@ -1,11 +1,30 @@
 import React, { useState } from "react";
-import { FaSave, FaRedo } from "react-icons/fa";
+import { FaSave, FaRedo, FaFont, FaTextHeight, FaPalette } from "react-icons/fa";
+
+// Function to convert CMYK to HEX (approximation)
+const cmykToHex = (c, m, y, k) => {
+  let c_ = c / 100;
+  let m_ = m / 100;
+  let y_ = y / 100;
+  let k_ = k / 100;
+
+  let r = 255 * (1 - c_) * (1 - k_);
+  let g = 255 * (1 - m_) * (1 - k_);
+  let b = 255 * (1 - y_) * (1 - k_);
+
+  r = Math.round(r);
+  g = Math.round(g);
+  b = Math.round(b);
+
+  return `#${((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1).toUpperCase()}`;
+};
 
 const Fonts = ({ formData: parentFormData, setFormData: setParentFormData }) => {
   const initialFontSettings = {
     fontFamily: parentFormData.fontFamily || "Arial",
     fontSize: parentFormData.fontSize || "16px",
-    fontColor: parentFormData.fontColor || "#000000",
+    fontColor: parentFormData.fontColor || "#000000", // Default to black in HEX
+    cmyk: parentFormData.cmyk || { c: 0, m: 0, y: 0, k: 100 }, // Default to black in CMYK
   };
 
   const [fontSettings, setFontSettings] = useState(initialFontSettings);
@@ -14,7 +33,22 @@ const Fonts = ({ formData: parentFormData, setFormData: setParentFormData }) => 
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    const newFontSettings = { ...fontSettings, [name]: value };
+    let newFontSettings = { ...fontSettings };
+
+    if (name === "c" || name === "m" || name === "y" || name === "k") {
+      // Update CMYK values
+      newFontSettings.cmyk = { ...newFontSettings.cmyk, [name]: parseInt(value, 10) || 0 };
+      // Convert CMYK to HEX for fontColor
+      newFontSettings.fontColor = cmykToHex(
+        newFontSettings.cmyk.c,
+        newFontSettings.cmyk.m,
+        newFontSettings.cmyk.y,
+        newFontSettings.cmyk.k
+      );
+    } else {
+      newFontSettings = { ...newFontSettings, [name]: value };
+    }
+
     setFontSettings(newFontSettings);
     setParentFormData((prev) => ({ ...prev, ...newFontSettings }));
   };
@@ -55,6 +89,7 @@ const Fonts = ({ formData: parentFormData, setFormData: setParentFormData }) => 
         fontFamily: "Arial",
         fontSize: "16px",
         fontColor: "#000000",
+        cmyk: { c: 0, m: 0, y: 0, k: 100 }, // Default to black in CMYK
       };
       setFontSettings(defaultSettings);
       setParentFormData((prev) => ({ ...prev, ...defaultSettings }));
@@ -63,10 +98,14 @@ const Fonts = ({ formData: parentFormData, setFormData: setParentFormData }) => 
 
   return (
     <div className="p-4 bg-white rounded-lg shadow-md mb-6">
-      <h2 className="text-xl font-semibold mb-4">Customize Your Font</h2>
+      <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
+        <FaFont className="text-blue-500" /> Customize Your Font
+      </h2>
 
       <div className="mb-4">
-        <label className="block text-gray-700 font-medium mb-2">Font Family:</label>
+        <label className="block text-gray-700 font-medium mb-2 flex items-center gap-2">
+          <FaFont className="text-blue-500" /> Font Family:
+        </label>
         <select
           name="fontFamily"
           value={fontSettings.fontFamily}
@@ -74,16 +113,16 @@ const Fonts = ({ formData: parentFormData, setFormData: setParentFormData }) => 
           className="p-2 border rounded-md w-full focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
           disabled={isSubmitting}
         >
-          <option value="Arial">Arial</option>
-          <option value="Verdana">Verdana</option>
-          <option value="Georgia">Georgia</option>
-          <option value="Times New Roman">Times New Roman</option>
-          <option value="Courier New">Courier New</option>
+          <option value="Arial"></option>
+          <option value="Times New Roman"></option>
+          <option value="Open Sans"></option>
         </select>
       </div>
 
-      <div className="mb-4">
-        <label className="block text-gray-700 font-medium mb-2">Font Size (px):</label>
+      {/* <div className="mb-4">
+        <label className="block text-gray-700 font-medium mb-2 flex items-center gap-2">
+          <FaTextHeight className="text-blue-500" /> 
+        </label>
         <input
           type="number"
           name="fontSize"
@@ -91,38 +130,75 @@ const Fonts = ({ formData: parentFormData, setFormData: setParentFormData }) => 
           onChange={(e) => handleChange({ target: { name: "fontSize", value: `${e.target.value}px` } })}
           className="p-2 border rounded-md w-full focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
           min="8"
-          max="48"
+          max="16"
           disabled={isSubmitting}
         />
-      </div>
+      </div> */}
 
       <div className="mb-4">
-        <label className="block text-gray-700 font-medium mb-2">Font Color:</label>
-        <input
-          type="color"
-          name="fontColor"
-          value={fontSettings.fontColor}
-          onChange={handleChange}
-          className="w-full h-10 cursor-pointer disabled:opacity-50"
-          disabled={isSubmitting}
-        />
+        <label className="block text-gray-700 font-medium mb-2 flex items-center gap-2">
+          <FaPalette className="text-blue-500" /> 
+        </label>
+        <div className="grid grid-cols-2 gap-4">
+          <div>
+            <label className="block text-sm text-gray-600">Cyan (%)</label>
+            <input
+              type="number"
+              name="c"
+              value={fontSettings.cmyk.c}
+              onChange={handleChange}
+              className="p-2 border rounded-md w-full focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
+              min="0"
+              max="100"
+              disabled={isSubmitting}
+            />
+          </div>
+          <div>
+            <label className="block text-sm text-gray-600">Magenta (%)</label>
+            <input
+              type="number"
+              name="m"
+              value={fontSettings.cmyk.m}
+              onChange={handleChange}
+              className="p-2 border rounded-md w-full focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
+              min="0"
+              max="100"
+              disabled={isSubmitting}
+            />
+          </div>
+          <div>
+            <label className="block text-sm text-gray-600">Yellow (%)</label>
+            <input
+              type="number"
+              name="y"
+              value={fontSettings.cmyk.y}
+              onChange={handleChange}
+              className="p-2 border rounded-md w-full focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
+              min="0"
+              max="100"
+              disabled={isSubmitting}
+            />
+          </div>
+          {/* <div>
+            <label className="block text-sm text-gray-600">Black (%)</label>
+            <input
+              type="number"
+              name="k"
+              value={fontSettings.cmyk.k}
+              onChange={handleChange}
+              className="p-2 border rounded-md w-full focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
+              min="0"
+              max="100"
+              disabled={isSubmitting}
+            />
+          </div> */}
+        </div>
+        {/* <div className="mt-2 text-sm text-gray-600">
+          Converted HEX: {fontSettings.fontColor}
+        </div> */}
       </div>
 
-      <div className="mb-6">
-        <label className="block text-gray-700 font-medium mb-2">Preview:</label>
-        <div
-          style={{
-            fontFamily: fontSettings.fontFamily,
-            fontSize: fontSettings.fontSize,
-            color: fontSettings.fontColor,
-            padding: "10px",
-            border: "1px solid #e5e7eb",
-            borderRadius: "4px",
-          }}
-        >
-          Sample Text: The quick brown fox jumps over the lazy dog.
-        </div>
-      </div>
+      
 
       <div className="flex justify-end gap-4 mt-6">
         <button

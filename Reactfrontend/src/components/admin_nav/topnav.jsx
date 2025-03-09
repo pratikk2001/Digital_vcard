@@ -9,32 +9,39 @@ import CloseIcon from "@mui/icons-material/Close";
 const Navbar = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [profileImage, setProfileImage] = useState(null);  // State for profile image
-  const [profile, setProfile] = useState(null); // Profile state
+  const [profileImage, setProfileImage] = useState(null);
+  const [userData, setUserData] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Example of setting profile (you can replace this with your logic)
-    setProfile({ username: "John Doe", initials: "JD" }); // Set your profile data here
+    const updateUserData = () => {
+      const storedUserData = localStorage.getItem("userData");
+      if (storedUserData) {
+        const parsedData = JSON.parse(storedUserData);
+        setUserData(parsedData);
+        setProfileImage(parsedData.profileImage || null);
+        console.log("User data updated in Navbar:", parsedData);
+      } else {
+        setUserData(null);
+        setProfileImage(null);
+        console.warn("No user data found in localStorage.");
+      }
+    };
+
+    updateUserData();
+    window.addEventListener("storage", updateUserData);
+
+    return () => window.removeEventListener("storage", updateUserData);
   }, []);
 
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setProfileImage(URL.createObjectURL(file));  // Set the selected image URL
-    }
+  const handleLogout = () => {
+    localStorage.removeItem("userId");
+    localStorage.removeItem("authToken");
+    localStorage.removeItem("userData");
+    setUserData(null);
+    setProfileImage(null);
+    navigate("/login");
   };
-
-  // Handle error if profile is not found
-  if (!profile) {
-    return (
-      <nav className="bg-blue-500 p-4 shadow-md">
-        <div className="container mx-auto flex justify-between items-center">
-          <h1 className="text-white font-bold text-xl tracking-wide">My App</h1>
-        </div>
-      </nav>
-    );
-  }
 
   return (
     <nav className="bg-blue-500 p-4 shadow-md">
@@ -47,11 +54,9 @@ const Navbar = () => {
           >
             {mobileMenuOpen ? <CloseIcon fontSize="large" /> : <MenuIcon fontSize="large" />}
           </button>
-          <h1 className="text-white font-bold text-xl tracking-wide">My App</h1>
+          <h1 className="text-white font-bold text-xl tracking-wide"></h1>
         </div>
-
         <div className="hidden lg:flex items-center space-x-6">
-        
           <button
             className="text-white hover:scale-110 transition-all"
             onClick={() => navigate("/AdminSettings")}
@@ -59,7 +64,6 @@ const Navbar = () => {
           >
             <SettingsIcon fontSize="large" />
           </button>
-
           <div className="relative">
             <button
               className="flex items-center space-x-2"
@@ -72,26 +76,33 @@ const Navbar = () => {
                   alt="Profile"
                   className="w-10 h-10 rounded-full object-cover"
                 />
+              ) : userData ? (
+                <div className="w-10 h-10 bg-yellow-400 text-white flex justify-center items-center rounded-full font-bold text-lg">
+                  {userData.name[0] || "U"}
+                </div>
               ) : (
                 <div className="w-10 h-10 bg-yellow-400 text-white flex justify-center items-center rounded-full font-bold text-lg">
-                  {profile?.initials || "SA"}
+                  UN
                 </div>
               )}
-              <span className="text-white hidden sm:inline font-medium">{profile?.username}</span>
+              {userData && (
+                <span className="text-white hidden sm:inline font-medium">
+                  {userData.name}
+                </span>
+              )}
             </button>
-
             {dropdownOpen && (
               <div className="absolute right-0 mt-2 w-52 bg-white rounded-lg shadow-lg py-2 z-50 animate-fade-in">
                 <button
                   className="block w-full text-left px-4 py-3 text-gray-800 hover:bg-blue-400 flex items-center font-medium"
-                  onClick={() => navigate("/AdminProfile", { state: { profileImage } })}
+                  onClick={() => navigate("/AdminProfile")}
                 >
                   <AccountBoxIcon className="mr-3 text-pink-500" />
                   My Profile
                 </button>
                 <button
                   className="block w-full text-left px-4 py-3 text-gray-800 hover:bg-blue-400 flex items-center font-medium"
-                  onClick={() => navigate("/")}
+                  onClick={handleLogout}
                   aria-label="Logout"
                 >
                   <LogoutIcon className="mr-3 text-red-500" />
@@ -102,7 +113,6 @@ const Navbar = () => {
           </div>
         </div>
       </div>
-
       {mobileMenuOpen && (
         <div className="lg:hidden fixed top-0 left-0 w-64 h-full bg-white shadow-md p-6 space-y-4 transform transition-transform duration-300">
           <button
@@ -122,14 +132,14 @@ const Navbar = () => {
           </button>
           <button
             className="flex items-center space-x-3 w-full text-gray-700 text-lg font-medium hover:bg-gray-100 p-3 rounded-lg"
-            onClick={() => navigate("/AdminProfile", { state: { profileImage } })}
+            onClick={() => navigate("/AdminProfile")}
           >
             <AccountBoxIcon className="text-purple-500" />
             <span>My Profile</span>
           </button>
           <button
             className="flex items-center space-x-3 w-full text-gray-700 text-lg font-medium hover:bg-gray-100 p-3 rounded-lg"
-            onClick={() => navigate("/")}
+            onClick={handleLogout}
             aria-label="Logout"
           >
             <LogoutIcon className="text-red-500" />

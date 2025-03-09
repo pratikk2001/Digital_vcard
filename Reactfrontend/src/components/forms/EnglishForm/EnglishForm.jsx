@@ -100,9 +100,7 @@ const EditVCard = () => {
         {/* Main Content */}
         <div className="flex flex-1 justify-center mt-4 lg:mt-0">
           <div className="w-full max-w-7xl p-4 lg:p-6">
-            <div className="w-full bg-white shadow-lg rounded-lg p-8">
-              <h1 className="text-2xl font-bold">Edit VCard</h1>
-            </div>
+            
 
             {/* Sidebar and Content */}
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 mt-6">

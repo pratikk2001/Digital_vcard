@@ -1,10 +1,11 @@
 const express = require("express");
 const router = express.Router();
-const AdminController = require("./admin.controller");
-const { body, validationResult } = require("express-validator");
-const asyncHandler = require("../../middlewares/asyncHandler");
+const AdminController = require("./admin.controller"); // Correct path: same directory
+const { body } = require("express-validator");
+const asyncHandler = require("../../middlewares/asyncHandler"); // Correct path: up two directories
+const authMiddleware = require("../../middlewares/authMiddleware"); // Correct path: up two directories
 
-const adminController = new AdminController(); // Instantiate the class
+const adminController = new AdminController();
 
 router.post(
   "/register",
@@ -26,8 +27,7 @@ router.post(
   asyncHandler(adminController.loginAdmin.bind(adminController))
 );
 
-// Optional: Add more routes
-router.get("/", asyncHandler(adminController.getAllAdmins.bind(adminController)));
-router.get("/:id", asyncHandler(adminController.getAdminById.bind(adminController)));
+router.get("/", authMiddleware, asyncHandler(adminController.getAllAdmins.bind(adminController)));
+router.get("/:id", authMiddleware, asyncHandler(adminController.getAdminById.bind(adminController)));
 
 module.exports = router;
