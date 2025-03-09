@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 
 const SocialImage = ({ formData: parentFormData, setFormData: setParentFormData }) => {
+
   const [existingImages, setExistingImages] = useState([]); // Stores fetched images with URLs and captions
   const [newImages, setNewImages] = useState([]); // Stores newly uploaded files
   const [captions, setCaptions] = useState({});
@@ -8,6 +9,7 @@ const SocialImage = ({ formData: parentFormData, setFormData: setParentFormData 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const userId = localStorage.getItem("userId");
 
+  // 
   const MAX_CAPTION_LENGTH = 100; // Max characters for captions
   const MAX_IMAGES = 5; // Max number of images allowed
 
@@ -21,10 +23,12 @@ const SocialImage = ({ formData: parentFormData, setFormData: setParentFormData 
         if (result.status_code === 200) {
           const { socialWorkImages } = result.data;
           if (socialWorkImages && socialWorkImages.length > 0) {
+
             const imagesWithUrls = socialWorkImages.map((img) => ({
               url: `${apiBaseUrl}/api/template/getSocialWorkImage/${img.imageUrl}`,
               caption: img.caption || "",
             }));
+
             setExistingImages(imagesWithUrls);
             const initialCaptions = {};
             imagesWithUrls.forEach((img, index) => {
@@ -42,39 +46,50 @@ const SocialImage = ({ formData: parentFormData, setFormData: setParentFormData 
 
   // ### Handle New Image Uploads
   const handleMultipleFileChange = (e) => {
+
     const files = Array.from(e.target.files).filter((file) => file.type.startsWith("image/"));
+
     if (files.length === 0) {
       alert("Please select valid image files.");
       return;
     }
 
     const totalImages = existingImages.length + newImages.length + files.length;
+
     if (totalImages > MAX_IMAGES) {
       alert(`Maximum ${MAX_IMAGES} images allowed.`);
       return;
     }
 
     const oversizedFiles = files.filter((file) => file.size > 5 * 1024 * 1024);
+
     if (oversizedFiles.length > 0) {
       alert(`Files exceeding 5MB: ${oversizedFiles.map((f) => f.name).join(", ")}`);
       return;
     }
 
     const updatedNewImages = [...newImages, ...files];
+
+
     setNewImages(updatedNewImages);
 
     const updatedCaptions = { ...captions };
+
     files.forEach((_, index) => {
       updatedCaptions[existingImages.length + newImages.length + index] = "";
     });
+
     setCaptions(updatedCaptions);
+
   };
 
   // ### Handle Caption Changes
   const handleCaptionChange = (index, text) => {
     if (text.length <= MAX_CAPTION_LENGTH) {
+
       setCaptions((prev) => ({ ...prev, [index]: text }));
       setCaptionErrors((prev) => ({ ...prev, [index]: "" }));
+
     } else {
       setCaptionErrors((prev) => ({
         ...prev,
@@ -85,20 +100,28 @@ const SocialImage = ({ formData: parentFormData, setFormData: setParentFormData 
 
   // ### Remove Images
   const handleRemoveImage = (index) => {
+
     if (index < existingImages.length) {
       setExistingImages((prev) => prev.filter((_, i) => i !== index));
-    } else {
+
+    }else {
+
       const adjustedIndex = index - existingImages.length;
       setNewImages((prev) => prev.filter((_, i) => i !== adjustedIndex));
+
     }
+
     const updatedCaptions = { ...captions };
+
     delete updatedCaptions[index];
     setCaptions(updatedCaptions);
+
     setCaptionErrors((prev) => {
       const updatedErrors = { ...prev };
       delete updatedErrors[index];
       return updatedErrors;
     });
+
   };
 
   // ### Save Images and Captions
@@ -115,6 +138,8 @@ const SocialImage = ({ formData: parentFormData, setFormData: setParentFormData 
 
     setIsSubmitting(true);
     const formData = new FormData();
+
+
     newImages.forEach((file) => {
       formData.append("socialwork", file);
     });
@@ -130,30 +155,45 @@ const SocialImage = ({ formData: parentFormData, setFormData: setParentFormData 
       });
 
       const result = await response.json();
+
       if (response.ok && result.status_code === 200) {
+
         alert("Social work images and captions saved successfully!");
+
         const fetchResponse = await fetch(`${apiBaseUrl}/api/template/getFormData/${userId}`);
+
         const fetchResult = await fetchResponse.json();
+
         if (fetchResult.status_code === 200) {
           const { socialWorkImages } = fetchResult.data;
+
           const imagesWithUrls = socialWorkImages.map((img) => ({
             url: `${apiBaseUrl}/api/template/getSocialWorkImage/${img.imageUrl}`,
             caption: img.caption || "",
           }));
+
           setExistingImages(imagesWithUrls);
+
           setNewImages([]);
           const updatedCaptions = {};
+
           imagesWithUrls.forEach((img, index) => {
             updatedCaptions[index] = img.caption;
           });
+
           setCaptions(updatedCaptions);
+
           setParentFormData((prev) => ({
             ...prev,
             socialWorkImages: imagesWithUrls.map((img) => img.url),
             captions: updatedCaptions,
           }));
+
         }
-      } else {
+
+      } 
+
+      else {
         throw new Error(result.message || "Failed to save social work images");
       }
     } catch (error) {
@@ -192,6 +232,7 @@ const SocialImage = ({ formData: parentFormData, setFormData: setParentFormData 
 
   // ### Render Component
   return (
+
     <div className="max-w-4xl mx-auto p-8 bg-white rounded-xl shadow-2xl border border-gray-100">
       <h2 className="text-2xl font-bold text-gray-800 mb-8">📸 Social Work Gallery</h2>
 
@@ -251,12 +292,14 @@ const SocialImage = ({ formData: parentFormData, setFormData: setParentFormData 
 
       <div className="flex justify-end gap-4 mt-8">
         <button
+
           onClick={handleSave}
           className="p-3 bg-green-500 hover:bg-green-400 rounded-md text-white disabled:bg-gray-400"
           disabled={isSubmitting || allImages.length === 0}
         >
           {isSubmitting ? "Saving..." : "💾 Save"}
         </button>
+
         <button
           onClick={handleReset}
           className="p-3 bg-gray-500 hover:bg-gray-400 rounded-md text-white"
@@ -264,6 +307,7 @@ const SocialImage = ({ formData: parentFormData, setFormData: setParentFormData 
         >
           🔄 Reset
         </button>
+        
       </div>
     </div>
   );

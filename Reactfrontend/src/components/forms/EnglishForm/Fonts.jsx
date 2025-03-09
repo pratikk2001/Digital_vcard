@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { FaSave, FaRedo } from "react-icons/fa";
 
 const Fonts = ({ formData: parentFormData, setFormData: setParentFormData }) => {
+  
   const initialFontSettings = {
     fontFamily: parentFormData.fontFamily || "Arial",
     fontSize: parentFormData.fontSize || "16px",
