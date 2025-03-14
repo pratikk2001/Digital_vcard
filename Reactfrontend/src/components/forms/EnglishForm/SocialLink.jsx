@@ -16,6 +16,7 @@ const SocialLinks = ({ formData: parentFormData, setFormData: setParentFormData 
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const userId = localStorage.getItem("userId");
+  const token = localStorage.getItem("authToken"); // Fetch the token
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -45,6 +46,11 @@ const SocialLinks = ({ formData: parentFormData, setFormData: setParentFormData 
       return;
     }
 
+    if (!token) {
+      alert("You are not authenticated. Please log in.");
+      return;
+    }
+
     setIsSubmitting(true);
     try {
       const apiBaseUrl = process.env.REACT_APP_API_BASE_URL || "http://localhost:4500";
@@ -53,6 +59,7 @@ const SocialLinks = ({ formData: parentFormData, setFormData: setParentFormData 
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`, // Add the token
         },
         body: JSON.stringify(socialLinks),
       });

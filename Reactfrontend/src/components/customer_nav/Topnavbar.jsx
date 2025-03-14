@@ -20,7 +20,13 @@ const Navbar = () => {
       const storedUserData = localStorage.getItem("userData");
       if (storedUserData) {
         const parsedData = JSON.parse(storedUserData);
-        setUserData(parsedData);
+        // Handle both camelCase (firstName) and snake_case (first_name)
+        setUserData({
+          firstName: parsedData.firstName || parsedData.first_name || "Unknown",
+          lastName: parsedData.lastName || parsedData.last_name || "User",
+          email: parsedData.email,
+          role: parsedData.role,
+        });
         console.log("User data updated in Navbar:", parsedData); // Debug log
       } else {
         setUserData(null);
@@ -31,16 +37,18 @@ const Navbar = () => {
     // Initial fetch
     updateUserData();
 
-    // Listen for changes to localStorage (e.g., login/logout)
+    // Listen for changes to localStorage (across tabs) and custom event (same tab)
     const handleStorageChange = () => {
       updateUserData();
     };
 
     window.addEventListener("storage", handleStorageChange);
+    window.addEventListener("storageUpdated", handleStorageChange);
 
-    // Cleanup listener on unmount
+    // Cleanup listeners on unmount
     return () => {
       window.removeEventListener("storage", handleStorageChange);
+      window.removeEventListener("storageUpdated", handleStorageChange);
     };
   }, []);
 

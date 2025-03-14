@@ -1,7 +1,8 @@
 const express = require("express");
 const app = express();
-const routes = require("./api/routes"); // General API routes
-const adminRoutes = require("./api/admin/admin.routes"); // Correct path to admin routes
+const routes = require("./api/routes");
+const adminRoutes = require("./api/admin/admin.routes");
+const templateRoutes = require("./api/template/template.routes");
 const connectDB = require("./config/db");
 require("dotenv").config();
 const port = 4500;
@@ -17,16 +18,30 @@ connectDB()
 
 // Middleware
 app.use(express.json({ extended: true }));
-app.use(cors());
+app.use(cors({ origin: "http://localhost:3000", credentials: true }));
 
 // Mount API routes
 app.use("/api", routes);
 app.use("/admin", adminRoutes);
+app.use("/template", templateRoutes);
 
 // Log all registered routes for debugging
-app._router.stack.forEach((route) => {
-  if (route.route) {
-    console.log(`Registered Route: ${route.route.path} [${route.route.methods}]`);
+app._router.stack.forEach((middleware) => {
+  if (middleware.route) {
+    const methods = Object.keys(middleware.route.methods).join(", ").toUpperCase();
+    // console.log(`Registered Route: ${middleware.route.path} [${methods}]`);
+  } else if (middleware.name === "router" && middleware.handle.stack) {
+    const basePath = middleware.regexp
+      .toString()
+      .replace("/^\\", "")
+      .replace("\\/?(?=\\/|$)/i", "")
+      .replace(/\\\//g, "/");
+    middleware.handle.stack.forEach((handler) => {
+      if (handler.route) {
+        const methods = Object.keys(handler.route.methods).join(", ").toUpperCase();
+        // console.log(`Registered Route: ${basePath}${handler.route.path} [${methods}]`);
+      }
+    });
   }
 });
 
@@ -44,7 +59,7 @@ app.get("/", (req, res) => {
   res.status(200).json({
     status_code: 200,
     message: "Welcome to the API",
-    available_endpoints: { health: "/health", api: "/api", admin: "/admin" },
+    available_endpoints: { health: "/health", api: "/api", admin: "/admin", template: "/template" },
   });
 });
 
@@ -59,7 +74,7 @@ app.use((req, res) => {
 
 // Global error handling middleware
 app.use((err, req, res, next) => {
-  console.error("Error:", err.stack);
+  // console.error("Error:", err.stack);
   res.status(500).json({
     status_code: 500,
     message: "Something went wrong!",

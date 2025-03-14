@@ -3,7 +3,6 @@ const jwt = require("jsonwebtoken");
 const Admin = require("./admin.model");
 
 class AdminController {
-  
   async getAllAdmins(req, res) {
     try {
       const admins = await Admin.find().select("-password");
@@ -35,7 +34,7 @@ class AdminController {
       }
 
       const saltRounds = 10;
-      const hashedPassword = await bcrypt.hash(String(password), saltRounds); // Ensure string
+      const hashedPassword = await bcrypt.hash(String(password), saltRounds);
 
       const newAdmin = new Admin({
         first_name,
@@ -159,6 +158,92 @@ class AdminController {
     }
   }
 
+  async updateAdminProfile(req, res) {
+    const { userId } = req.params;
+    const { first_name, last_name, email, phone } = req.body;
+
+    try {
+      const admin = await Admin.findById(userId);
+      if (!admin) {
+        return res.status(404).json({
+          status_code: 404,
+          message: "Admin not found",
+          data: null,
+        });
+      }
+
+      // Update only provided fields
+      if (first_name) admin.first_name = first_name;
+      if (last_name) admin.last_name = last_name;
+      if (email) admin.email = email;
+      if (phone) admin.phone = phone;
+
+      await admin.save();
+
+      res.status(200).json({
+        status_code: 200,
+        message: "Profile updated successfully",
+        data: {
+          _id: admin._id,
+          first_name: admin.first_name,
+          last_name: admin.last_name,
+          email: admin.email,
+          phone: admin.phone,
+          profileImage: admin.profileImage || null,
+          status: admin.status || "Active",
+        },
+      });
+    } catch (error) {
+      console.error("Error updating admin profile:", error);
+      res.status(500).json({
+        status_code: 500,
+        message: "Error updating admin profile",
+        error: process.env.NODE_ENV === "development" ? error.message : undefined,
+      });
+    }
+  }
+
+  async changePassword(req, res) {
+    const { userId } = req.params;
+    const { currentPassword, newPassword } = req.body;
+
+    try {
+      const admin = await Admin.findById(userId);
+      if (!admin) {
+        return res.status(404).json({
+          status_code: 404,
+          message: "Admin not found",
+          data: null,
+        });
+      }
+
+      const isMatch = await bcrypt.compare(currentPassword, admin.password);
+      if (!isMatch) {
+        return res.status(401).json({
+          status_code: 401,
+          message: "Current password is incorrect",
+          data: null,
+        });
+      }
+
+      const saltRounds = 10;
+      admin.password = await bcrypt.hash(newPassword, saltRounds);
+      await admin.save();
+
+      res.status(200).json({
+        status_code: 200,
+        message: "Password changed successfully",
+        data: null,
+      });
+    } catch (error) {
+      console.error("Error changing password:", error);
+      res.status(500).json({
+        status_code: 500,
+        message: "Error changing password",
+        error: process.env.NODE_ENV === "development" ? error.message : undefined,
+      });
+    }
+  }
 }
 
 module.exports = AdminController;

@@ -1,9 +1,9 @@
 const express = require("express");
 const router = express.Router();
-const AdminController = require("./admin.controller"); // Correct path: same directory
+const AdminController = require("./admin.controller");
 const { body } = require("express-validator");
-const asyncHandler = require("../../middlewares/asyncHandler"); // Correct path: up two directories
-const authMiddleware = require("../../middlewares/authMiddleware"); // Correct path: up two directories
+const asyncHandler = require("../../middlewares/asyncHandler");
+const authMiddleware = require("../../middlewares/authMiddleware");
 
 const adminController = new AdminController();
 
@@ -29,5 +29,7 @@ router.post(
 
 router.get("/", authMiddleware, asyncHandler(adminController.getAllAdmins.bind(adminController)));
 router.get("/:id", authMiddleware, asyncHandler(adminController.getAdminById.bind(adminController)));
+router.put("/:userId", authMiddleware, asyncHandler(adminController.updateAdminProfile.bind(adminController))); // Ensure this line exists
+router.post("/change-password/:userId", authMiddleware, asyncHandler(adminController.changePassword.bind(adminController)));
 
 module.exports = router;

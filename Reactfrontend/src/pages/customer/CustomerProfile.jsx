@@ -6,7 +6,7 @@ const fetchAdminProfile = async (userId, token) => {
   try {
     const apiBaseUrl = process.env.REACT_APP_API_BASE_URL || "http://localhost:4500";
     const endpoint = `${apiBaseUrl}/admin/${userId}`;
-    console.log("Fetching admin profile from:", endpoint, "with token:", token); // Debug log
+    console.log("Fetching admin profile from:", endpoint, "with token:", token);
 
     const response = await fetch(endpoint, {
       method: "GET",
@@ -17,7 +17,7 @@ const fetchAdminProfile = async (userId, token) => {
     });
 
     const data = await response.json();
-    console.log("API Response:", data); // Debug log
+    console.log("API Response:", data);
 
     if (!response.ok) {
       throw new Error(data.message || `HTTP error! Status: ${response.status}`);
@@ -33,7 +33,7 @@ const fetchAdminProfile = async (userId, token) => {
         profileImage: data.data.profileImage || "https://via.placeholder.com/150",
         status: data.data.status || "Active",
       };
-      localStorage.setItem("userData", JSON.stringify(userData)); // Store in localStorage
+      localStorage.setItem("userData", JSON.stringify(userData));
       return userData;
     } else {
       throw new Error(data.message || "Failed to fetch admin profile");
@@ -52,8 +52,82 @@ const fetchAdminProfile = async (userId, token) => {
   }
 };
 
+const updateAdminProfile = async (userId, token, updatedData) => {
+  try {
+    const apiBaseUrl = process.env.REACT_APP_API_BASE_URL || "http://localhost:4500";
+    const endpoint = `${apiBaseUrl}/admin/${userId}`;
+    console.log("Updating admin profile at:", endpoint, "with data:", updatedData);
+
+    const response = await fetch(endpoint, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`,
+      },
+      body: JSON.stringify(updatedData),
+    });
+
+    const data = await response.json();
+    console.log("Update API Response:", data);
+
+    if (!response.ok) {
+      throw new Error(data.message || `HTTP error! Status: ${response.status}`);
+    }
+
+    if (data.status_code === 200) {
+      return data;
+    } else {
+      throw new Error(data.message || "Failed to update admin profile");
+    }
+  } catch (error) {
+    console.error("Error updating admin profile:", error.message);
+    throw error;
+  }
+};
+
+const changeAdminPassword = async (userId, token, passwordData) => {
+  try {
+    const apiBaseUrl = process.env.REACT_APP_API_BASE_URL || "http://localhost:4500";
+    const endpoint = `${apiBaseUrl}/admin/change-password/${userId}`;
+    console.log("Changing password at:", endpoint, "with data:", passwordData);
+
+    const response = await fetch(endpoint, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`,
+      },
+      body: JSON.stringify(passwordData),
+    });
+
+    const data = await response.json();
+    console.log("Change Password API Response:", data);
+
+    if (!response.ok) {
+      throw new Error(data.message || `HTTP error! Status: ${response.status}`);
+    }
+
+    if (data.status_code === 200) {
+      return data;
+    } else {
+      throw new Error(data.message || "Failed to change password");
+    }
+  } catch (error) {
+    console.error("Error changing password:", error.message);
+    throw error;
+  }
+};
+
 const ProfilePage = () => {
   const [admin, setAdmin] = useState(null);
+  const [isEditing, setIsEditing] = useState(false);
+  const [formData, setFormData] = useState({});
+  const [showPasswordModal, setShowPasswordModal] = useState(false);
+  const [passwordData, setPasswordData] = useState({
+    currentPassword: "",
+    newPassword: "",
+  });
+  const [error, setError] = useState("");
   const userId = localStorage.getItem("userId");
   const token = localStorage.getItem("authToken");
 
@@ -78,9 +152,73 @@ const ProfilePage = () => {
 
       const data = await fetchAdminProfile(userId, token);
       setAdmin(data);
+      setFormData({
+        firstName: data.firstName,
+        lastName: data.lastName,
+        email: data.email,
+        phone: data.phone,
+      });
     };
     getAdminData();
   }, [userId, token]);
+
+  const handleEditToggle = () => {
+    setIsEditing((prev) => !prev);
+    setError("");
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSave = async () => {
+    try {
+      const updatedData = {
+        first_name: formData.firstName,
+        last_name: formData.lastName,
+        email: formData.email,
+        phone: formData.phone,
+      };
+      const response = await updateAdminProfile(userId, token, updatedData);
+      if (response.status_code === 200) {
+        const updatedUserData = {
+          firstName: response.data.first_name,
+          lastName: response.data.last_name,
+          email: response.data.email,
+          phone: response.data.phone,
+          password: "********",
+          profileImage: response.data.profileImage || admin.profileImage,
+          status: response.data.status || admin.status,
+        };
+        setAdmin(updatedUserData);
+        localStorage.setItem("userData", JSON.stringify(updatedUserData));
+        setIsEditing(false);
+        alert("Profile updated successfully!");
+      }
+    } catch (error) {
+      setError(error.message || "Failed to update profile");
+    }
+  };
+
+  const handlePasswordChangeInput = (e) => {
+    const { name, value } = e.target;
+    setPasswordData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handlePasswordChangeSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await changeAdminPassword(userId, token, passwordData);
+      if (response.status_code === 200) {
+        setShowPasswordModal(false);
+        setPasswordData({ currentPassword: "", newPassword: "" });
+        alert("Password changed successfully!");
+      }
+    } catch (error) {
+      setError(error.message || "Failed to change password");
+    }
+  };
 
   if (!admin) {
     return (
@@ -116,33 +254,141 @@ const ProfilePage = () => {
               </div>
             </div>
 
+            {/* Error Message */}
+            {error && (
+              <div className="mb-4 p-3 bg-red-100 text-red-700 rounded-md">{error}</div>
+            )}
+
             {/* Profile Details */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
-              <ProfileField label="First Name" value={admin.firstName} />
-              <ProfileField label="Last Name" value={admin.lastName} />
-              <ProfileField label="Email" value={admin.email} />
-              <ProfileField label="Phone" value={admin.phone} />
+              {isEditing ? (
+                <>
+                  <EditableField
+                    label="First Name"
+                    name="firstName"
+                    value={formData.firstName}
+                    onChange={handleInputChange}
+                  />
+                  <EditableField
+                    label="Last Name"
+                    name="lastName"
+                    value={formData.lastName}
+                    onChange={handleInputChange}
+                  />
+                  <EditableField
+                    label="Email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleInputChange}
+                  />
+                  <EditableField
+                    label="Phone"
+                    name="phone"
+                    value={formData.phone}
+                    onChange={handleInputChange}
+                  />
+                </>
+              ) : (
+                <>
+                  <ProfileField label="First Name" value={admin.firstName} />
+                  <ProfileField label="Last Name" value={admin.lastName} />
+                  <ProfileField label="Email" value={admin.email} />
+                  <ProfileField label="Phone" value={admin.phone} />
+                </>
+              )}
               <ProfileField label="Password" value={admin.password} />
             </div>
 
             {/* Action Buttons */}
             <div className="mt-8 flex justify-between">
-              <button
-                className="bg-blue-500 text-white px-6 py-3 rounded-lg text-sm font-medium hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
-                aria-label="Edit Profile"
-              >
-                Edit Profile
-              </button>
-              <button
-                className="bg-blue-400 text-white px-6 py-3 rounded-lg text-sm font-medium hover:bg-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50"
-                aria-label="Change Password"
-              >
-                Change Password
-              </button>
+              {isEditing ? (
+                <>
+                  <button
+                    onClick={handleSave}
+                    className="bg-green-500 text-white px-6 py-3 rounded-lg text-sm font-medium hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50"
+                    aria-label="Save Profile"
+                  >
+                    Save
+                  </button>
+                  <button
+                    onClick={handleEditToggle}
+                    className="bg-gray-400 text-white px-6 py-3 rounded-lg text-sm font-medium hover:bg-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50"
+                    aria-label="Cancel Edit"
+                  >
+                    Cancel
+                  </button>
+                </>
+              ) : (
+                <>
+                  <button
+                    onClick={handleEditToggle}
+                    className="bg-blue-500 text-white px-6 py-3 rounded-lg text-sm font-medium hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+                    aria-label="Edit Profile"
+                  >
+                    Edit Profile
+                  </button>
+                  <button
+                    onClick={() => setShowPasswordModal(true)}
+                    className="bg-blue-400 text-white px-6 py-3 rounded-lg text-sm font-medium hover:bg-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50"
+                    aria-label="Change Password"
+                  >
+                    Change Password
+                  </button>
+                </>
+              )}
             </div>
           </div>
         </div>
       </div>
+
+      {/* Password Change Modal */}
+      {showPasswordModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
+            <h2 className="text-xl font-semibold text-blue-800 mb-4">Change Password</h2>
+            <form onSubmit={handlePasswordChangeSubmit}>
+              <div className="mb-4">
+                <label className="block text-sm font-semibold text-blue-800">Current Password</label>
+                <input
+                  type="password"
+                  name="currentPassword"
+                  value={passwordData.currentPassword}
+                  onChange={handlePasswordChangeInput}
+                  className="w-full p-3 border border-blue-300 rounded-md mt-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  required
+                />
+              </div>
+              <div className="mb-4">
+                <label className="block text-sm font-semibold text-blue-800">New Password</label>
+                <input
+                  type="password"
+                  name="newPassword"
+                  value={passwordData.newPassword}
+                  onChange={handlePasswordChangeInput}
+                  className="w-full p-3 border border-blue-300 rounded-md mt-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  required
+                  minLength={6}
+                />
+              </div>
+              <div className="flex justify-between">
+                <button
+                  type="submit"
+                  className="bg-green-500 text-white px-6 py-3 rounded-lg text-sm font-medium hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50"
+                >
+                  Change Password
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setShowPasswordModal(false)}
+                  className="bg-gray-400 text-white px-6 py-3 rounded-lg text-sm font-medium hover:bg-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50"
+                >
+                  Cancel
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
@@ -154,6 +400,20 @@ const ProfileField = ({ label, value }) => (
     <div className="w-full p-3 border border-blue-300 rounded-md mt-2 bg-gray-100 text-gray-700">
       {value}
     </div>
+  </div>
+);
+
+// Reusable EditableField Component
+const EditableField = ({ label, name, value, onChange }) => (
+  <div>
+    <label className="block text-sm font-semibold text-blue-800">{label}</label>
+    <input
+      type="text"
+      name={name}
+      value={value}
+      onChange={onChange}
+      className="w-full p-3 border border-blue-300 rounded-md mt-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+    />
   </div>
 );
 

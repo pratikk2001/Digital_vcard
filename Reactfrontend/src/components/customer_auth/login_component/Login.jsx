@@ -41,15 +41,27 @@ const Login = () => {
         const token = data.data?.token;
         const role = data.data?.role;
         const userId = data.data?._id;
+        const firstName = data.data?.first_name || "Unknown";
+        const lastName = data.data?.last_name || "User";
+        const email = data.data?.email;
 
-        if (token && role && userId) {
+        if (token && role && userId && email) {
           localStorage.setItem("authToken", token); // Use consistent key name
           localStorage.setItem("role", role);
           localStorage.setItem("userId", userId);
-          console.log("Login successful, stored:", { userId, token, role }); // Debug log
-          navigate("/CustomerDashboard"); // Redirect to ProfilePage
+          localStorage.setItem(
+            "userData",
+            JSON.stringify({
+              firstName,
+              lastName,
+              email,
+              role,
+            })
+          );
+          console.log("Login successful, stored:", { userId, token, role, userData: { firstName, lastName, email, role } }); // Debug log
+          navigate("/CustomerDashboard"); // Redirect to Dashboard
         } else {
-          throw new Error("Missing token, role, or userId in response");
+          throw new Error("Missing token, role, userId, or email in response");
         }
       } else {
         setErrorMessage(
